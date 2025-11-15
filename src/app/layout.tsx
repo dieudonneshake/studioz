@@ -5,6 +5,9 @@ import { cn } from '@/lib/utils';
 import AppSidebar from '@/components/app-sidebar';
 import Header from '@/components/header';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
+import { GlobalLoader } from '@/components/global-loader';
+import { Suspense } from 'react';
+
 
 export const metadata: Metadata = {
   title: 'EduVerse',
@@ -36,6 +39,9 @@ export default function RootLayout({
           </div>
         </SidebarProvider>
         <Toaster />
+        <Suspense>
+          <GlobalLoader />
+        </Suspense>
       </body>
     </html>
   );
