@@ -51,7 +51,6 @@ const secondaryMenuItems = [
 
 const adminMenuItems = [
     { href: '/admin/dashboard', label: 'Admin Dashboard', icon: Shield, roles: ['admin'] },
-    { href: '/admin/users', label: 'Manage Users', icon: Users, roles: ['admin'] },
     { href: '/admin/content', label: 'Manage Content', icon: FileVideo, roles: ['admin'] },
 ]
 
