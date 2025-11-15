@@ -64,7 +64,7 @@ export default function DashboardPage() {
                 <CardHeader>
                     <CardTitle className="font-headline">Recent Activity</CardTitle>
                     <CardDescription>You completed 2 quizzes this week.</CardDescription>
-                </Header>
+                </CardHeader>
                 <CardContent>
                     <RecentActivities />
                 </CardContent>
