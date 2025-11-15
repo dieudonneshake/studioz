@@ -32,8 +32,8 @@ export function BottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden p-4">
-       <div className="grid h-16 grid-cols-5 items-center justify-around rounded-full border bg-background/80 px-2 backdrop-blur-md shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 p-4">
+       <div className="mx-auto max-w-sm grid h-16 grid-cols-5 items-center justify-around rounded-full border bg-background/80 px-2 backdrop-blur-md shadow-lg">
         {visibleNavItems.map((item) => {
           const isActive = pathname === item.href;
           return (
