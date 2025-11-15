@@ -1,4 +1,5 @@
 
+
 export type User = {
   id: string;
   name: string;
@@ -41,6 +42,7 @@ export type Video = {
   curriculum: string;
   level: string;
   subject: string;
+  unit?: string;
 };
 
 export type QuizQuestion = {

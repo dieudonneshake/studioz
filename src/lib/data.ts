@@ -1,4 +1,5 @@
 
+
 import { User, Video, Curriculum, Level, Subject, Quiz, WatchHistory } from './types';
 import { PlaceHolderImages } from './placeholder-images';
 
@@ -67,6 +68,7 @@ export const videos: Video[] = [
     curriculum: 'IB',
     level: 'Diploma Year 1',
     subject: 'Physics',
+    unit: 'Unit 1: Foundations',
   },
   {
     id: 'vid-2',
@@ -81,6 +83,7 @@ export const videos: Video[] = [
     curriculum: 'A-Levels',
     level: 'Year 12',
     subject: 'History',
+    unit: 'Unit 2: Medieval Britain',
   },
   {
     id: 'vid-3',
@@ -95,6 +98,7 @@ export const videos: Video[] = [
     curriculum: 'IB',
     level: 'Diploma Year 1',
     subject: 'Mathematics',
+    unit: 'Unit 3: Calculus',
   },
   {
     id: 'vid-4',
@@ -109,6 +113,7 @@ export const videos: Video[] = [
     curriculum: 'A-Levels',
     level: 'Year 12',
     subject: 'Literature',
+    unit: 'Unit 1: Shakespearean Tragedy',
   },
   {
     id: 'vid-5',
@@ -123,6 +128,7 @@ export const videos: Video[] = [
     curriculum: 'IB',
     level: 'Diploma Year 1',
     subject: 'Physics',
+    unit: 'Unit 2: Spacetime',
   },
   {
     id: 'vid-6',
@@ -137,6 +143,7 @@ export const videos: Video[] = [
     curriculum: 'A-Levels',
     level: 'Year 12',
     subject: 'History',
+    unit: 'Unit 3: Early Modern Europe',
   },
 ];
 

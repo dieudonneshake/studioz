@@ -55,6 +55,9 @@ export function VideoCard({ video }: VideoCardProps) {
                 <div className="flex-1">
                     <p className="font-bold text-base leading-tight font-headline line-clamp-2">{video.title}</p>
                     <p className="text-sm text-muted-foreground mt-1">{uploader?.name}</p>
+                    {video.subject && video.unit && (
+                      <p className="text-xs text-muted-foreground mt-1">{video.subject} &bull; {video.unit}</p>
+                    )}
                      <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                         <div className="flex items-center gap-1">
                             <Eye className="w-3 h-3"/>
