@@ -2,11 +2,9 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { videos } from '@/lib/data';
-import { useAuthStore } from '@/store/auth';
+import { videos, users } from '@/lib/data';
 
 export function RecentActivities() {
-    const { users } = useAuthStore();
     const recentActivities = [
         { studentId: 'user-3', videoId: 'vid-1', score: 95 },
         { studentId: 'user-3', videoId: 'vid-3', score: 88 },
