@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { videos } from "@/lib/data";
-import { Eye, Film, Star, Users, TrendingUp } from "lucide-react";
+import { Eye, Film, Star, Users, TrendingUp, HelpCircle, Bell } from "lucide-react";
 import { RecentActivities } from "@/components/dashboard/recent-activities";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -61,13 +61,13 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Performance</CardTitle>
-            <Star className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total Quizzes Generated</CardTitle>
+            <HelpCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">82%</div>
+            <div className="text-2xl font-bold">{teacherVideos.length}</div>
             <p className="text-xs text-muted-foreground">
-              Average score on all quizzes
+             Matching your video count
             </p>
           </CardContent>
         </Card>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
             </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-1 lg:col-span-4">
           <CardHeader>
             <CardTitle className="font-headline">Latest Content</CardTitle>
@@ -96,18 +96,17 @@ export default function DashboardPage() {
                     <TableRow>
                         <TableHead>Video</TableHead>
                         <TableHead className="hidden sm:table-cell">Status</TableHead>
-                        <TableHead className="text-right">Views</TableHead>
+                        <TableHead className="hidden md:table-cell text-right">Views</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {teacherVideos.slice(0,5).map(video => (
                         <TableRow key={video.id}>
                             <TableCell>
-                                <Link href={`/watch/${video.id}`} className="font-medium hover:underline">{video.title}</Link>
+                                <Link href={`/watch/${video.id}`} className="font-medium hover:underline line-clamp-2">{video.title}</Link>
                             </TableCell>
                             <TableCell className="hidden sm:table-cell"><Badge variant="outline">Published</Badge></TableCell>
-                            <TableCell className="text-right flex items-center justify-end gap-2">
-                                <Eye className="h-4 w-4 text-muted-foreground" />
+                            <TableCell className="hidden md:table-cell text-right">
                                 {video.views_count.toLocaleString()}
                             </TableCell>
                         </TableRow>
@@ -118,7 +117,10 @@ export default function DashboardPage() {
         </Card>
         <Card className="col-span-1 lg:col-span-3">
           <CardHeader>
-            <CardTitle className="font-headline">Recent Activity</CardTitle>
+            <CardTitle className="font-headline flex items-center gap-2">
+              <Bell className="h-5 w-5" />
+              Recent Activity
+            </CardTitle>
             <CardDescription>
               New quiz completions from your students.
             </CardDescription>
@@ -132,7 +134,7 @@ export default function DashboardPage() {
         <Card className="col-span-full">
             <CardHeader>
                 <CardTitle className="font-headline">Student Performance Overview</CardTitle>
-                <CardDescription>Average quiz scores over the last 6 months.</CardDescription>
+                <CardDescription>Average student quiz scores over the last 6 months.</CardDescription>
             </CardHeader>
             <CardContent className="pl-2">
                 <ProgressChart />
