@@ -132,7 +132,7 @@ export default function DashboardPage() {
                 <CardTitle className="font-headline">Student Performance Overview</CardTitle>
                 <CardDescription>Average quiz scores over the last 6 months.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pl-2">
                 <ProgressChart />
             </CardContent>
         </Card>
