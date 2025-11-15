@@ -20,11 +20,10 @@ import {
   Compass,
   LayoutDashboard,
   Flame,
-  Search,
   PlusSquare,
   Shield,
-  Users,
   FileVideo,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -52,6 +51,7 @@ const secondaryMenuItems = [
 const adminMenuItems = [
     { href: '/admin/dashboard', label: 'Admin Dashboard', icon: Shield, roles: ['admin'] },
     { href: '/admin/content', label: 'Manage Content', icon: FileVideo, roles: ['admin'] },
+    { href: '/admin/users', label: 'Manage Users', icon: Users, roles: ['admin'] },
 ]
 
 const helpMenuItems = [
@@ -162,7 +162,7 @@ export default function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-2">
          <div className="flex flex-col gap-1">
-            {visibleHelpMenuItems.map((item) => (
+            {helpMenuItems.map((item) => (
               <SidebarMenuItem key={item.label}>
                 <Link href={item.href}>
                   <SidebarMenuButton
