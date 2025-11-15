@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { GraduationCap, User, Briefcase, Shield } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -39,7 +38,8 @@ export default function SignupPage() {
     }
     
     if (role) {
-      const user = users.find(u => u.role === role);
+      // Find a pre-existing user of the selected role to log in as.
+      const user = users.find(u => u.role === role && u.status !== 'pending');
       if (user) {
         login(user);
         if (role === 'student') {

@@ -1,10 +1,15 @@
+
 export type User = {
   id: string;
   name: string;
   email: string;
   role: 'student' | 'teacher' | 'admin';
+  status?: 'approved' | 'pending' | 'rejected';
   profile_photo: string;
   bio?: string;
+  phone?: string;
+  subjects?: string[];
+  gradeLevels?: string[];
 };
 
 export type Curriculum = {

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -15,13 +16,17 @@ export default function LoginPage() {
   const { login } = useAuthStore();
 
   const handleLogin = (role: 'student' | 'teacher' | 'admin') => {
-    const user = users.find(u => u.role === role);
+    // Find an approved user for the selected role for login simulation
+    const user = users.find(u => u.role === role && u.status !== 'pending');
     if (user) {
       login(user);
       if (role === 'student') {
         router.push('/home');
-      } else {
+      } else if (role === 'teacher') {
         router.push('/dashboard');
+      }
+      else if (role === 'admin') {
+        router.push('/admin/dashboard');
       }
     }
   };
@@ -59,14 +64,16 @@ export default function LoginPage() {
               </div>
               <Input id="password" type="password" defaultValue="password" required />
             </div>
-            <Button onClick={() => handleLogin('student')} className="w-full">
-              Login as Student
-            </Button>
-             <Button onClick={() => handleLogin('teacher')} variant="secondary" className="w-full">
-              Login as Teacher
-            </Button>
-            <Button variant="outline" className="w-full" onClick={() => handleLogin('student')}>
-              Login with Google
+            <div className="grid grid-cols-2 gap-2">
+                <Button onClick={() => handleLogin('student')} className="w-full">
+                Login as Student
+                </Button>
+                <Button onClick={() => handleLogin('teacher')} variant="secondary" className="w-full">
+                Login as Teacher
+                </Button>
+            </div>
+             <Button onClick={() => handleLogin('admin')} variant="outline" className="w-full">
+              Login as Admin
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">

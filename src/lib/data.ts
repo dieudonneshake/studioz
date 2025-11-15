@@ -1,12 +1,15 @@
+
 import { User, Video, Curriculum, Level, Subject, Quiz, WatchHistory } from './types';
 import { PlaceHolderImages } from './placeholder-images';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
 
 export let users: User[] = [
-  { id: 'user-1', name: 'Dr. Evelyn Reed', email: 'e.reed@example.com', role: 'teacher', profile_photo: getImage('user-avatar-1'), bio: 'Passionate about making quantum physics accessible to everyone.' },
-  { id: 'user-2', name: 'Mr. Samuel Chen', email: 's.chen@example.com', role: 'teacher', profile_photo: getImage('user-avatar-2'), bio: 'Historian and educator focused on medieval Europe.' },
-  { id: 'user-3', name: 'Alex Johnson', email: 'a.johnson@example.com', role: 'student', profile_photo: getImage('user-avatar-3') },
+  { id: 'user-1', name: 'Dr. Evelyn Reed', email: 'e.reed@example.com', role: 'teacher', status: 'approved', profile_photo: getImage('user-avatar-1'), bio: 'Passionate about making quantum physics accessible to everyone.' },
+  { id: 'user-2', name: 'Mr. Samuel Chen', email: 's.chen@example.com', role: 'teacher', status: 'approved', profile_photo: getImage('user-avatar-2'), bio: 'Historian and educator focused on medieval Europe.' },
+  { id: 'user-3', name: 'Alex Johnson', email: 'a.johnson@example.com', role: 'student', status: 'approved', profile_photo: getImage('user-avatar-3') },
+  { id: 'user-4', name: 'Maria Garcia', email: 'm.garcia@example.com', role: 'teacher', status: 'pending', profile_photo: getImage('user-avatar-4'), subjects: ['Mathematics', 'Chemistry'], gradeLevels: ['Grade 9', 'Grade 10'] },
+  { id: 'user-5', name: 'Admin User', email: 'admin@example.com', role: 'admin', status: 'approved', profile_photo: getImage('user-avatar-5') }
 ];
 
 export let curricula: Curriculum[] = [
@@ -166,6 +169,25 @@ export const quizzes: Quiz[] = [
       },
     ],
   },
+  {
+    id: 'quiz-2',
+    video_id: 'vid-2',
+    questions: [
+        {
+            "id": "q-norman-1",
+            "type": "multiple_choice",
+            "prompt": "Who was the king of England who died in 1066, leading to the succession crisis?",
+            "options": [
+                "Harold Godwinson",
+                "William of Normandy",
+                "Edward the Confessor",
+                "Harald Hardrada"
+            ],
+            "correct_answer": "Edward the Confessor",
+            "explanation": "Edward the Confessor's death in January 1066 without a clear heir triggered the succession crisis that led to the Norman Conquest."
+        },
+    ]
+  }
 ];
 
 export const summaries = {
