@@ -20,8 +20,6 @@ import {
   LifeBuoy,
   Compass,
   LayoutDashboard,
-  Flame,
-  PlusSquare,
   Shield,
   FileVideo,
   Users,
