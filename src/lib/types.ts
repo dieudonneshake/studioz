@@ -27,6 +27,7 @@ export type Video = {
   id: string;
   title: string;
   description: string;
+  shortSummary: string;
   uploaded_by: string; // user id
   thumbnail_path: string;
   duration_seconds: number;

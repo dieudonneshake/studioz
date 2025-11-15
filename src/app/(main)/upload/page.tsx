@@ -27,7 +27,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { curricula, levels, subjects } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { UploadCloud } from "lucide-react";
+import { Loader2, UploadCloud } from "lucide-react";
+import { generateQuizzesFromNotes } from "@/ai/flows/generate-quizzes-from-notes";
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "Title must be at least 5 characters." }),
@@ -41,6 +42,16 @@ const formSchema = z.object({
   notesFile: z.any().refine(val => val.length > 0, "Please upload a notes file (PDF/DOCX)."),
   thumbnailFile: z.any().optional(),
 });
+
+// Helper to read file as text
+const readFileAsText = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsText(file);
+    });
+};
 
 export default function UploadPage() {
   const { toast } = useToast();
@@ -56,21 +67,49 @@ export default function UploadPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     toast({
-      title: "Processing Upload",
+      title: "Processing Upload...",
       description: "Your content is being uploaded and the AI quiz is being generated. This may take a moment.",
     });
+    
+    form.formState.isSubmitting = true;
 
-    // Simulate upload and AI processing
-    setTimeout(() => {
+    try {
+        const notesFile = values.notesFile[0];
+        if (notesFile) {
+            // In a real app, you'd parse PDF/DOCX on the server.
+            // For simulation, we'll read it as text.
+            const notesText = await readFileAsText(notesFile);
+            const level = levels.find(l => l.id === values.grade)?.name || 'default level';
+
+            // Call the Genkit flow
+            const quizData = await generateQuizzesFromNotes({
+                notesText,
+                level,
+            });
+
+            console.log("Generated Quiz:", quizData);
+            
+            // Here you would save the new video, notes, and quiz data to your database.
+        }
+
         toast({
             title: "Upload Successful!",
             description: "Your lesson is now live and the quiz has been generated.",
         });
         router.push("/dashboard");
-    }, 3000);
+
+    } catch(error) {
+        console.error("Error generating quiz:", error);
+        toast({
+            variant: "destructive",
+            title: "AI Error",
+            description: "There was a problem generating the quiz from your notes.",
+        });
+    } finally {
+        form.formState.isSubmitting = false;
+    }
   }
 
   return (
@@ -224,9 +263,9 @@ export default function UploadPage() {
                         <FormItem>
                         <FormLabel>Lesson Notes (Mandatory for AI Quiz)</FormLabel>
                         <FormControl>
-                            <Input type="file" accept=".pdf,.docx" onChange={(e) => onChange(e.target.files)} {...rest} />
+                            <Input type="file" accept=".pdf,.docx,.txt" onChange={(e) => onChange(e.target.files)} {...rest} />
                         </FormControl>
-                        <FormDescription>Upload the lesson notes (PDF, DOCX). The AI will use this to generate a quiz.</FormDescription>
+                        <FormDescription>Upload the lesson notes (PDF, DOCX, TXT). The AI will use this to generate a quiz.</FormDescription>
                         <FormMessage />
                         </FormItem>
                     )}
@@ -250,6 +289,7 @@ export default function UploadPage() {
 
               <div className="flex justify-end pt-8">
                 <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                   <UploadCloud className="mr-2 h-5 w-5" />
                   {form.formState.isSubmitting ? 'Uploading...' : 'Upload & Generate Quiz'}
                 </Button>

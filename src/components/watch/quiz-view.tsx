@@ -11,7 +11,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
+import { automaticallyGradeQuizzes } from '@/ai/flows/automatically-grade-quizzes';
+import { getSummary } from '@/lib/data';
+import { useAuthStore } from '@/store/auth';
 
 interface QuizViewProps {
   quiz: Quiz;
@@ -27,30 +30,52 @@ const createSchema = (questions: QuizQuestion[]) => {
 
 export default function QuizView({ quiz }: QuizViewProps) {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [results, setResults] = useState<{ score: number, feedback: Record<string, string>, userAnswers: Record<string,string> } | null>(null);
+  const { user } = useAuthStore();
 
   const formSchema = createSchema(quiz.questions);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Mocking AI grading
-    let correctAnswers = 0;
-    const feedback: Record<string, string> = {};
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    
+    const summary = getSummary(quiz.video_id);
+    if (!user || !summary) {
+        // Handle error: user or notes not found
+        setIsSubmitting(false);
+        return;
+    }
 
-    quiz.questions.forEach(q => {
-      if (values[q.id].toLowerCase() === q.correct_answer.toLowerCase()) {
-        correctAnswers++;
-        feedback[q.id] = `Correct! ${q.explanation}`;
-      } else {
-        feedback[q.id] = `Incorrect. The correct answer is ${q.correct_answer}. ${q.explanation}`;
-      }
-    });
+    try {
+        const gradingResult = await automaticallyGradeQuizzes({
+            quizId: quiz.id,
+            studentId: user.id,
+            answers: values,
+            questions: quiz.questions,
+            notesText: summary.notes,
+        });
 
-    const score = Math.round((correctAnswers / quiz.questions.length) * 100);
-    setResults({ score, feedback, userAnswers: values });
-    setSubmitted(true);
+        const transformedFeedback: Record<string, string> = {};
+        let correctCount = 0;
+
+        Object.keys(gradingResult.feedback).forEach(questionId => {
+            const isCorrect = gradingResult.feedback[questionId].toLowerCase().startsWith('correct');
+            if (isCorrect) correctCount++;
+            transformedFeedback[questionId] = gradingResult.feedback[questionId];
+        });
+        
+        setResults({ score: gradingResult.score, feedback: transformedFeedback, userAnswers: values });
+        setSubmitted(true);
+
+    } catch (error) {
+        console.error("Error grading quiz:", error);
+        // Optionally, show a toast or error message to the user
+    } finally {
+        setIsSubmitting(false);
+    }
   }
 
   if (submitted && results) {
@@ -131,7 +156,10 @@ export default function QuizView({ quiz }: QuizViewProps) {
                 )}
               />
             ))}
-            <Button type="submit" className="w-full">Submit Quiz</Button>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isSubmitting ? 'Grading...' : 'Submit Quiz'}
+            </Button>
           </form>
         </Form>
       </CardContent>
