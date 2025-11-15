@@ -82,8 +82,8 @@ export default function DashboardPage() {
             </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-full lg:col-span-4">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
+        <Card className="col-span-1 lg:col-span-4">
           <CardHeader>
             <CardTitle className="font-headline">Latest Content</CardTitle>
             <CardDescription>
@@ -116,7 +116,7 @@ export default function DashboardPage() {
             </Table>
           </CardContent>
         </Card>
-        <Card className="col-span-full lg:col-span-3">
+        <Card className="col-span-1 lg:col-span-3">
           <CardHeader>
             <CardTitle className="font-headline">Recent Activity</CardTitle>
             <CardDescription>
@@ -127,6 +127,8 @@ export default function DashboardPage() {
             <RecentActivities />
           </CardContent>
         </Card>
+      </div>
+       <div className="grid gap-4 grid-cols-1">
         <Card className="col-span-full">
             <CardHeader>
                 <CardTitle className="font-headline">Student Performance Overview</CardTitle>

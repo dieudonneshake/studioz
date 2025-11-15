@@ -20,8 +20,8 @@ export function RecentActivities() {
                   <AvatarImage src={student?.profile_photo} alt="Avatar" />
                   <AvatarFallback>{student?.name.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                <div className="flex-1 grid gap-1">
+                  <p className="text-sm font-medium leading-none line-clamp-2">
                       {student?.name} completed the quiz for "{video?.title}"
                   </p>
                   <div className="flex items-center justify-between">
