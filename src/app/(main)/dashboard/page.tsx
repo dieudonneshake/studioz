@@ -24,7 +24,9 @@ export default function DashboardPage() {
           Welcome back, {userName}!
         </h2>
         <div className="flex items-center space-x-2">
-            <Button>Upload Content</Button>
+            <Button asChild>
+                <Link href="/upload">Upload Content</Link>
+            </Button>
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -80,7 +82,7 @@ export default function DashboardPage() {
         </Card>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
+        <Card className="col-span-full">
           <CardHeader>
             <CardTitle className="font-headline">Latest Content</CardTitle>
             <CardDescription>
@@ -113,7 +115,7 @@ export default function DashboardPage() {
             </Table>
           </CardContent>
         </Card>
-        <Card className="col-span-4 lg:col-span-3">
+        <Card className="col-span-full">
           <CardHeader>
             <CardTitle className="font-headline">Recent Activity</CardTitle>
             <CardDescription>
