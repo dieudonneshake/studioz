@@ -24,7 +24,6 @@ import { useToast } from "@/hooks/use-toast";
 import { type Video } from "@/lib/types";
 import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface ContentActionsProps {
   video: Video;
@@ -33,7 +32,6 @@ interface ContentActionsProps {
 export function ContentActionsMenu({ video }: ContentActionsProps) {
   const { toast } = useToast();
   const router = useRouter();
-  const [dialogAction, setDialogAction] = useState<"delete" | null>(null);
 
   const handleRemoveContent = () => {
     // In a real app, this would be an API call to delete the video.
@@ -42,27 +40,11 @@ export function ContentActionsMenu({ video }: ContentActionsProps) {
       title: "Content Removed",
       description: `"${video.title}" has been removed from the platform.`,
     });
-    setDialogAction(null);
     router.refresh();
   };
 
   return (
-    <>
-      <AlertDialog open={!!dialogAction} onOpenChange={(open) => !open && setDialogAction(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the video "{video.title}" and its associated data.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleRemoveContent}>Delete</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
+    <AlertDialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button aria-haspopup="true" size="icon" variant="ghost">
@@ -75,10 +57,23 @@ export function ContentActionsMenu({ video }: ContentActionsProps) {
           <DropdownMenuItem>View Details</DropdownMenuItem>
           <DropdownMenuItem>Flag for Review</DropdownMenuItem>
           <AlertDialogTrigger asChild>
-            <DropdownMenuItem className="text-destructive" onClick={() => setDialogAction("delete")}>Remove</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">Remove</DropdownMenuItem>
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the video "{video.title}" and its associated data.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleRemoveContent}>Delete</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
