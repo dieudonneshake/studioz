@@ -11,7 +11,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight font-headline">Welcome back, Alex!</h2>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Average Score</CardTitle>
@@ -43,8 +43,8 @@ export default function DashboardPage() {
                 </CardContent>
             </Card>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
+            <Card className="col-span-1 lg:col-span-4">
                 <CardHeader>
                     <CardTitle className="font-headline">Progress Over Time</CardTitle>
                     <CardDescription>Your quiz scores for the last 6 months.</CardDescription>
@@ -53,7 +53,7 @@ export default function DashboardPage() {
                     <ProgressChart />
                 </CardContent>
             </Card>
-            <Card className="col-span-4 lg:col-span-3">
+            <Card className="col-span-1 lg:col-span-3">
                 <CardHeader>
                     <CardTitle className="font-headline">Recent Activity</CardTitle>
                     <CardDescription>You completed 2 quizzes this week.</CardDescription>
