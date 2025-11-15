@@ -6,16 +6,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   // TODO: Add check for authentication. If not authenticated, redirect to /login
   return (
     <SidebarProvider>
-      <div className="flex h-full w-full">
+      <div className="flex h-screen w-full">
         <AppSidebar />
-        <div className="flex flex-col flex-1">
+        <SidebarInset>
           <Header />
           <main className="flex-1 overflow-y-auto">
-            <SidebarInset>
               {children}
-            </SidebarInset>
           </main>
-        </div>
+        </SidebarInset>
       </div>
     </SidebarProvider>
   );

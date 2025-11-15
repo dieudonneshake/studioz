@@ -2,7 +2,6 @@ import { Search, Upload, Bell, GraduationCap, Mic } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { SidebarTrigger } from './ui/sidebar';
-import { ThemeToggle } from './theme-toggle';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
 
@@ -22,16 +21,13 @@ export default function Header() {
       </div>
       
       <div className="flex w-full items-center justify-center gap-2">
-        <div className="relative w-full max-w-xl">
+        <div className="relative w-full max-w-2xl">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search"
-            className="w-full rounded-full bg-secondary pl-4 pr-16 h-10"
+            className="w-full rounded-full bg-secondary pl-12 pr-4 h-10"
           />
-          <Button variant="secondary" size="icon" className="absolute right-[4px] top-1/2 -translate-y-1/2 h-8 w-12 rounded-full">
-            <Search className="h-5 w-5 text-muted-foreground" />
-            <span className="sr-only">Search</span>
-          </Button>
         </div>
         <Button variant="secondary" size="icon" className="rounded-full flex-shrink-0">
           <Mic className="h-5 w-5" />
@@ -50,7 +46,7 @@ export default function Header() {
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
             </Button>
-            <UserNav />
+            <UserNav isCollapsed />
           </>
         ) : (
           <>
@@ -62,7 +58,6 @@ export default function Header() {
                     <Link href="/signup">Sign Up</Link>
                 </Button>
             </div>
-            <ThemeToggle />
           </>
         )}
       </div>
