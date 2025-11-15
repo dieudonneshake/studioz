@@ -13,7 +13,7 @@ import {
   Clapperboard,
   Video,
   Library,
-  Book,
+  History,
   Settings,
   LifeBuoy,
   Compass,
@@ -34,7 +34,7 @@ const mainMenuItems = [
 
 const libraryMenuItems = [
     { href: '/library', label: 'Library', icon: Library },
-    { href: '/history', label: 'History', icon: Book },
+    { href: '/history', label: 'History', icon: History },
     { href: '/my-videos', label: 'Your Videos', icon: Video },
     { href: '/watch-later', label: 'Watch Later', icon: PlusSquare },
     { href: '/liked-videos', 'label': 'Liked Videos', icon: Flame },
