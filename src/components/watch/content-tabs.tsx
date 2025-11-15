@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,9 +15,9 @@ export default function ContentTabs({ summary, quiz }: ContentTabsProps) {
   return (
     <Tabs defaultValue="quiz" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="quiz">Quiz</TabsTrigger>
+        <TabsTrigger value="quiz">AI Quiz</TabsTrigger>
         <TabsTrigger value="summary">Summary</TabsTrigger>
-        <TabsTrigger value="notes">Notes</TabsTrigger>
+        <TabsTrigger value="notes">Lesson Notes</TabsTrigger>
       </TabsList>
       <TabsContent value="quiz">
         <QuizView quiz={quiz} />

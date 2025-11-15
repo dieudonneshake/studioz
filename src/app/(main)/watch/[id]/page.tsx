@@ -1,3 +1,4 @@
+
 "use client";
 
 import { notFound } from 'next/navigation';
@@ -27,20 +28,15 @@ export default function WatchPage({ params }: { params: { id: string } }) {
         <div className="lg:col-span-2">
           <VideoPlayer video={video} />
           <VideoDetails video={video} uploader={uploader} />
-          <div className="lg:hidden mt-8">
+           <div className="mt-8">
             {summary && quiz && <ContentTabs summary={summary} quiz={quiz} />}
           </div>
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold tracking-tight font-headline">Related Videos</h2>
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {relatedVideos.map(relatedVideo => (
-                <VideoCard key={relatedVideo.id} video={relatedVideo} />
-              ))}
-            </div>
-          </div>
         </div>
-        <div className="hidden lg:block">
-          {summary && quiz && <ContentTabs summary={summary} quiz={quiz} />}
+        <div className="space-y-4">
+           <h2 className="text-xl font-bold tracking-tight font-headline">Related Videos</h2>
+            {relatedVideos.map(relatedVideo => (
+              <VideoCard key={relatedVideo.id} video={relatedVideo} />
+            ))}
         </div>
       </div>
     </div>
