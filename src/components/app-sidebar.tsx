@@ -14,30 +14,35 @@ import {
   Video,
   Library,
   Book,
-  Flame,
   Settings,
   LifeBuoy,
   Compass,
   LayoutDashboard,
+  Flame,
+  Search,
+  PlusSquare,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const mainMenuItems = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/browse', label: 'Browse', icon: Compass },
-  { href: '/subscriptions', label: 'Subscriptions', icon: Video },
-  { href: '/history', label: 'History', icon: Book },
+    { href: '/home', label: 'Home', icon: Home },
+    { href: '/browse', label: 'Browse', icon: Compass },
+    { href: '/shorts', label: 'Shorts', icon: Clapperboard },
+    { href: '/subscriptions', label: 'Subscriptions', icon: Video },
 ];
 
 const libraryMenuItems = [
     { href: '/library', label: 'Library', icon: Library },
+    { href: '/history', label: 'History', icon: Book },
     { href: '/my-videos', label: 'Your Videos', icon: Video },
-    { href: '/watch-later', label: 'Watch Later', icon: Book },
+    { href: '/watch-later', label: 'Watch Later', icon: PlusSquare },
     { href: '/liked-videos', 'label': 'Liked Videos', icon: Flame },
 ];
 
+const secondaryMenuItems = [
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+]
 
 const helpMenuItems = [
   { href: '/settings', label: 'Settings', icon: Settings },
@@ -51,7 +56,7 @@ export default function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader className="p-4 justify-center items-center h-16 border-b hidden md:flex">
          <SidebarMenuButton icon={<div />} tooltip="EduVerse" asChild>
-            <Link href="/" className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
+            <Link href="/home" className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
               <span className="font-bold text-primary-foreground text-lg">E</span>
             </Link>
          </SidebarMenuButton>
@@ -75,6 +80,22 @@ export default function AppSidebar() {
         <SidebarMenu>
           <h2 className="px-4 py-2 text-lg font-semibold tracking-tight group-data-[collapsible=icon]:hidden">Library</h2>
           {libraryMenuItems.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <Link href={item.href}>
+                <SidebarMenuButton
+                  isActive={pathname === item.href}
+                  icon={<item.icon />}
+                  tooltip={item.label}
+                >
+                  {item.label}
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+         <SidebarMenu>
+          <h2 className="px-4 py-2 text-lg font-semibold tracking-tight group-data-[collapsible=icon]:hidden">You</h2>
+           {secondaryMenuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
               <Link href={item.href}>
                 <SidebarMenuButton

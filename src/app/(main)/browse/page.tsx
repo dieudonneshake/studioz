@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { curricula, levels, subjects, units, videos } from '@/lib/data';
+import { curricula, levels, subjects } from '@/lib/data';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -21,7 +21,7 @@ export default function BrowsePage() {
                     <h3 className="font-semibold mb-2">{level.name}</h3>
                     <div className="space-y-2">
                       {subjects.map(subject => (
-                        <Link href="#" key={subject.id}>
+                        <Link href="#" key={subject.id} className="block">
                           <div className="flex items-center justify-between p-3 rounded-md bg-secondary hover:bg-secondary/80 transition-colors">
                             <span>{subject.name}</span>
                             <ChevronRight className="h-4 w-4" />
