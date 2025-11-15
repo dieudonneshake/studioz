@@ -26,6 +26,8 @@ import {
   FileVideo,
   Users,
   ThumbsUp,
+  Clock,
+  Youtube,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -41,8 +43,8 @@ const mainMenuItems = [
 const libraryMenuItems = [
     { href: '/library', label: 'Library', icon: Library, roles: ['student'] },
     { href: '/history', label: 'History', icon: History, roles: ['student'] },
-    { href: '/my-videos', label: 'Your Videos', icon: Video, roles: ['teacher'] },
-    { href: '/watch-later', label: 'Watch Later', icon: PlusSquare, roles: ['student'] },
+    { href: '/my-videos', label: 'Your Videos', icon: Youtube, roles: ['teacher'] },
+    { href: '/watch-later', label: 'Watch Later', icon: Clock, roles: ['student'] },
     { href: '/liked-videos', 'label': 'Liked Videos', icon: ThumbsUp, roles: ['student'] },
 ];
 
