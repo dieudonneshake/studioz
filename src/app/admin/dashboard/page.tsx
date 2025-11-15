@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -8,31 +9,46 @@ import { Button } from "@/components/ui/button";
 import { videos, quizzes } from "@/lib/data";
 import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/hooks/use-toast";
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { type User } from "@/lib/types";
 
 export default function AdminDashboardPage() {
   const { users, updateUserStatus } = useAuthStore();
   const { toast } = useToast();
+  const [selectedTeacher, setSelectedTeacher] = useState<User | null>(null);
 
   const totalStudents = users.filter(u => u.role === 'student').length;
   const totalTeachers = users.filter(u => u.role === 'teacher' && u.status === 'approved').length;
   const pendingTeachers = users.filter(u => u.role === 'teacher' && u.status === 'pending');
   
-  const handleApproveTeacher = (teacherId: string) => {
-    updateUserStatus(teacherId, 'approved');
-    toast({
-      title: "Teacher Approved",
-      description: "The teacher's account has been activated.",
-    })
+  const handleApproveTeacher = () => {
+    if (selectedTeacher) {
+      updateUserStatus(selectedTeacher.id, 'approved');
+      toast({
+        title: "Teacher Approved",
+        description: `${selectedTeacher.name}'s account has been activated.`,
+      });
+      setSelectedTeacher(null);
+    }
   };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+      <div className="flex flex-col sm:gap-4 sm:py-4">
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-                <Card x-chunk="dashboard-05-chunk-0">
+                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+                <Card>
                     <CardHeader className="pb-2">
                         <CardDescription>Total Teachers</CardDescription>
                         <CardTitle className="text-4xl">{totalTeachers}</CardTitle>
@@ -43,7 +59,7 @@ export default function AdminDashboardPage() {
                         </div>
                     </CardContent>
                 </Card>
-                <Card x-chunk="dashboard-05-chunk-1">
+                <Card>
                     <CardHeader className="pb-2">
                         <CardDescription>Total Students</CardDescription>
                         <CardTitle className="text-4xl">{totalStudents}</CardTitle>
@@ -54,7 +70,7 @@ export default function AdminDashboardPage() {
                         </div>
                     </CardContent>
                 </Card>
-                <Card x-chunk="dashboard-05-chunk-2">
+                <Card>
                     <CardHeader className="pb-2">
                         <CardDescription>Total Videos</CardDescription>
                         <CardTitle className="text-4xl">{videos.length}</CardTitle>
@@ -65,7 +81,7 @@ export default function AdminDashboardPage() {
                         </div>
                     </CardContent>
                 </Card>
-                <Card x-chunk="dashboard-05-chunk-3">
+                <Card>
                     <CardHeader className="pb-2">
                         <CardDescription>Total Quizzes</CardDescription>
                         <CardTitle className="text-4xl">{quizzes.length}</CardTitle>
@@ -77,10 +93,9 @@ export default function AdminDashboardPage() {
                     </CardContent>
                 </Card>
                 </div>
-                <div>
-                <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-4">
+                <Card>
                     <CardHeader className="pb-3">
-                    <CardTitle>Teacher Applications</CardTitle>
+                    <CardTitle className="font-headline">Teacher Applications</CardTitle>
                     <CardDescription className="max-w-lg text-balance leading-relaxed">
                         Review and approve new teacher applications to allow them to start uploading content.
                     </CardDescription>
@@ -115,7 +130,23 @@ export default function AdminDashboardPage() {
                                         <TableCell className="text-right">
                                             <div className="flex gap-2 justify-end">
                                                 <Button size="sm" variant="outline">View Details</Button>
-                                                <Button size="sm" onClick={() => handleApproveTeacher(teacher.id)}>Approve</Button>
+                                                <AlertDialog>
+                                                  <AlertDialogTrigger asChild>
+                                                    <Button size="sm" onClick={() => setSelectedTeacher(teacher)}>Approve</Button>
+                                                  </AlertDialogTrigger>
+                                                  <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                      <AlertDialogDescription>
+                                                        This action will approve {selectedTeacher?.name} and allow them to start creating content. Are you sure you want to proceed?
+                                                      </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                      <AlertDialogAction onClick={handleApproveTeacher}>Approve</AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                  </AlertDialogContent>
+                                                </AlertDialog>
                                             </div>
                                         </TableCell>
                                     </TableRow>
@@ -128,7 +159,6 @@ export default function AdminDashboardPage() {
                         </Table>
                     </CardContent>
                 </Card>
-                </div>
             </div>
         </main>
       </div>
