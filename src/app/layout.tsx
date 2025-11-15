@@ -7,6 +7,7 @@ import Header from '@/components/header';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { GlobalLoader } from '@/components/global-loader';
 import { Suspense } from 'react';
+import { BottomNav } from '@/components/bottom-nav';
 
 
 export const metadata: Metadata = {
@@ -32,12 +33,13 @@ export default function RootLayout({
             <AppSidebar />
             <SidebarInset className="overflow-x-hidden">
               <Header />
-              <main className="flex-1 overflow-y-auto">
+              <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
                 {children}
               </main>
             </SidebarInset>
           </div>
         </SidebarProvider>
+        <BottomNav />
         <Toaster />
         <Suspense>
           <GlobalLoader />
