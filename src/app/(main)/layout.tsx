@@ -6,8 +6,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <SidebarProvider>
       <AppSidebar />
-      <Header />
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset>
+        <Header />
+        {children}
+      </SidebarInset>
     </SidebarProvider>
   );
 }
