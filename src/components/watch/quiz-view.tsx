@@ -124,33 +124,40 @@ export default function QuizView({ quiz }: QuizViewProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-semibold">{index + 1}. {q.prompt}</FormLabel>
-                    <FormControl>
+                    
                       {q.type === 'multiple_choice' && q.options && (
-                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="space-y-2">
-                          {q.options.map(option => (
-                            <FormItem key={option} className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value={option} />
-                              </FormControl>
-                              <FormLabel className="font-normal">{option}</FormLabel>
-                            </FormItem>
-                          ))}
-                        </RadioGroup>
+                        <FormControl>
+                          <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="space-y-2">
+                            {q.options.map(option => (
+                              <FormItem key={option} className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value={option} />
+                                </FormControl>
+                                <FormLabel className="font-normal">{option}</FormLabel>
+                              </FormItem>
+                            ))}
+                          </RadioGroup>
+                        </FormControl>
                       )}
                       {q.type === 'true_false' && (
-                        <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="space-y-2">
-                           <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="space-y-2">
+                            <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl><RadioGroupItem value="True" /></FormControl>
                                 <FormLabel className="font-normal">True</FormLabel>
                             </FormItem>
-                             <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl><RadioGroupItem value="False" /></FormControl>
                                 <FormLabel className="font-normal">False</FormLabel>
                             </FormItem>
-                        </RadioGroup>
+                          </RadioGroup>
+                        </FormControl>
                       )}
-                      {q.type === 'short_answer' && <Input {...field} />}
-                    </FormControl>
+                      {q.type === 'short_answer' && 
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>}
+                    
                     <FormMessage />
                   </FormItem>
                 )}
