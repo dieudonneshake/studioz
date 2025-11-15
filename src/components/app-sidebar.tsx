@@ -54,11 +54,12 @@ export default function AppSidebar() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
-              <Link href={item.href} passHref legacyBehavior>
+              <Link href={item.href}>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
                   icon={<item.icon />}
                   tooltip={item.label}
+                  asChild={false} 
                 >
                   {item.label}
                 </SidebarMenuButton>
@@ -71,11 +72,12 @@ export default function AppSidebar() {
          <div className="flex flex-col gap-1">
             {helpMenuItems.map((item) => (
               <SidebarMenuItem key={item.label}>
-                <Link href={item.href} passHref legacyBehavior>
+                <Link href={item.href}>
                   <SidebarMenuButton
                     isActive={pathname === item.href}
                     icon={<item.icon />}
                     tooltip={item.label}
+                    asChild={false}
                   >
                     {item.label}
                   </SidebarMenuButton>
