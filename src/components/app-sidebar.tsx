@@ -10,20 +10,18 @@ import {
 } from '@/components/ui/sidebar';
 import {
   Home,
-  LayoutDashboard,
-  Compass,
+  Clapperboard,
   Video,
-  Book,
-  LifeBuoy,
-  Settings,
-  GraduationCap,
   Library,
+  Book,
   Flame,
   Music,
-  Clapperboard,
   Gamepad2,
   Newspaper,
-  Trophy
+  Trophy,
+  Settings,
+  LifeBuoy,
+  Compass,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -31,6 +29,7 @@ import { UserNav } from './user-nav';
 
 const mainMenuItems = [
   { href: '/', label: 'Home', icon: Home },
+  { href: '/browse', label: 'Browse', icon: Compass },
   { href: '/shorts', label: 'Shorts', icon: Clapperboard },
   { href: '/subscriptions', label: 'Subscriptions', icon: Video },
 ];
@@ -63,13 +62,8 @@ export default function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="p-4">
-        <Link href="/" className="flex items-center gap-2">
-          <GraduationCap className="w-8 h-8 text-primary" />
-          <h1 className="text-xl font-bold text-foreground font-headline group-data-[collapsible=icon]:hidden">
-            EduVerse
-          </h1>
-        </Link>
+      <SidebarHeader className="p-4 justify-center items-center h-16 border-b">
+         {/* The SidebarTrigger is now in the main Header component */}
       </SidebarHeader>
       <SidebarContent className="flex-1 p-2">
         <SidebarMenu>
@@ -80,7 +74,6 @@ export default function AppSidebar() {
                   isActive={pathname === item.href}
                   icon={<item.icon />}
                   tooltip={item.label}
-                  asChild={false} 
                 >
                   {item.label}
                 </SidebarMenuButton>
@@ -96,7 +89,6 @@ export default function AppSidebar() {
                   isActive={pathname === item.href}
                   icon={<item.icon />}
                   tooltip={item.label}
-                  asChild={false} 
                 >
                   {item.label}
                 </SidebarMenuButton>
@@ -105,7 +97,7 @@ export default function AppSidebar() {
           ))}
         </SidebarMenu>
         <SidebarMenu>
-            <h2 className="px-4 py-2 text-lg font-semibold tracking-tight">Explore</h2>
+            <h2 className="px-4 py-2 text-lg font-semibold tracking-tight group-data-[collapsible=icon]:hidden">Explore</h2>
           {exploreMenuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
               <Link href={item.href}>
@@ -113,7 +105,6 @@ export default function AppSidebar() {
                   isActive={pathname === item.href}
                   icon={<item.icon />}
                   tooltip={item.label}
-                  asChild={false} 
                 >
                   {item.label}
                 </SidebarMenuButton>
@@ -131,7 +122,6 @@ export default function AppSidebar() {
                     isActive={pathname === item.href}
                     icon={<item.icon />}
                     tooltip={item.label}
-                    asChild={false}
                   >
                     {item.label}
                   </SidebarMenuButton>
