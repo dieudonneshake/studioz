@@ -10,6 +10,7 @@ import { Eye, Film, Star, Users, TrendingUp } from "lucide-react";
 import { RecentActivities } from "@/components/dashboard/recent-activities";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ProgressChart } from "@/components/dashboard/progress-chart";
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
@@ -82,7 +83,7 @@ export default function DashboardPage() {
         </Card>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-full">
+        <Card className="col-span-full lg:col-span-4">
           <CardHeader>
             <CardTitle className="font-headline">Latest Content</CardTitle>
             <CardDescription>
@@ -94,7 +95,7 @@ export default function DashboardPage() {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Video</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead className="hidden sm:table-cell">Status</TableHead>
                         <TableHead className="text-right">Views</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -104,7 +105,7 @@ export default function DashboardPage() {
                             <TableCell>
                                 <Link href={`/watch/${video.id}`} className="font-medium hover:underline">{video.title}</Link>
                             </TableCell>
-                            <TableCell><Badge variant="outline">Published</Badge></TableCell>
+                            <TableCell className="hidden sm:table-cell"><Badge variant="outline">Published</Badge></TableCell>
                             <TableCell className="text-right flex items-center justify-end gap-2">
                                 <Eye className="h-4 w-4 text-muted-foreground" />
                                 {video.views_count.toLocaleString()}
@@ -115,7 +116,7 @@ export default function DashboardPage() {
             </Table>
           </CardContent>
         </Card>
-        <Card className="col-span-full">
+        <Card className="col-span-full lg:col-span-3">
           <CardHeader>
             <CardTitle className="font-headline">Recent Activity</CardTitle>
             <CardDescription>
@@ -125,6 +126,15 @@ export default function DashboardPage() {
           <CardContent>
             <RecentActivities />
           </CardContent>
+        </Card>
+        <Card className="col-span-full">
+            <CardHeader>
+                <CardTitle className="font-headline">Student Performance Overview</CardTitle>
+                <CardDescription>Average quiz scores over the last 6 months.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ProgressChart />
+            </CardContent>
         </Card>
       </div>
     </div>

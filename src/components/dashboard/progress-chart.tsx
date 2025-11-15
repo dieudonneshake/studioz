@@ -27,16 +27,16 @@ export function ProgressChart() {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
         <ResponsiveContainer width="100%" height={350}>
-        <BarChart data={data}>
+        <BarChart data={data} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
             <XAxis
             dataKey="month"
-            stroke="#888888"
+            stroke="hsl(var(--muted-foreground))"
             fontSize={12}
             tickLine={false}
             axisLine={false}
             />
             <YAxis
-            stroke="#888888"
+            stroke="hsl(var(--muted-foreground))"
             fontSize={12}
             tickLine={false}
             axisLine={false}
