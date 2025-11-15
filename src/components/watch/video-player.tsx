@@ -1,5 +1,7 @@
 
+
 import { type Video } from '@/lib/types';
+import { PlayIcon } from 'lucide-react';
 
 interface VideoPlayerProps {
   video: Video;

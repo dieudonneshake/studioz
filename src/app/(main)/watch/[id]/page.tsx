@@ -1,10 +1,11 @@
+
 import { notFound } from 'next/navigation';
 import { getVideo, getUploader, getQuiz, getSummary, users } from '@/lib/data';
-import VideoPlayer from '@/components/watch/video-player';
 import VideoDetails from '@/components/watch/video-details';
 import ContentTabs from '@/components/watch/content-tabs';
 import { VideoCard } from '@/components/video-card';
 import { videos } from '@/lib/data';
+import CustomVideoPlayer from '@/components/watch/custom-video-player';
 
 export default function WatchPage({ params }: { params: { id: string } }) {
   const video = getVideo(params.id);
@@ -23,7 +24,7 @@ export default function WatchPage({ params }: { params: { id: string } }) {
     <div className="mx-auto max-w-screen-2xl p-4 md:p-6 lg:p-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <VideoPlayer video={video} />
+          <CustomVideoPlayer video={video} />
           <VideoDetails video={video} uploader={uploader} />
            <div className="mt-8">
             {summary && quiz && <ContentTabs summary={summary} quiz={quiz} />}
