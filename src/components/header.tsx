@@ -1,4 +1,4 @@
-import { Search, Bell, Mic, GraduationCap } from 'lucide-react';
+import { Search, Bell, Mic, GraduationCap, Video } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { SidebarTrigger } from './ui/sidebar';
@@ -37,6 +37,10 @@ export default function Header() {
       <div className="flex items-center gap-2">
         {isAuthenticated ? (
           <>
+            <Button variant="ghost" size="icon" className="hidden md:flex">
+              <Video className="h-5 w-5" />
+              <span className="sr-only">Upload Video</span>
+            </Button>
             <Button variant="ghost" size="icon" className="hidden md:flex">
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
