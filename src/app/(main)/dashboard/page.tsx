@@ -4,8 +4,12 @@ import { Overview } from "@/components/dashboard/overview";
 import { ProgressChart } from "@/components/dashboard/progress-chart";
 import { RecentActivities } from "@/components/dashboard/recent-activities";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/store/auth";
-import { BookOpen, Target, Film } from "lucide-react";
+import { users } from "@/lib/data";
+import { BookOpen, Target, Film, Users } from "lucide-react";
 
 
 export default function DashboardPage() {
@@ -70,6 +74,45 @@ export default function DashboardPage() {
                 </CardContent>
             </Card>
         </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              User Management
+            </CardTitle>
+            <CardDescription>View and manage all users in the system.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>User</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Role</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users.map((u) => (
+                  <TableRow key={u.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-9 w-9">
+                          <AvatarImage src={u.profile_photo} alt={u.name} />
+                          <AvatarFallback>{u.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{u.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>{u.email}</TableCell>
+                    <TableCell>
+                      <Badge variant={u.role === 'teacher' ? 'default' : 'secondary'}>{u.role}</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
     </div>
   );
 }
