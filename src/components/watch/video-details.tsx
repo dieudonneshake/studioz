@@ -1,9 +1,13 @@
 
+'use client';
+
+import { useState } from 'react';
 import { type Video, type User } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ThumbsUp, ThumbsDown, Share2, PlusSquare } from 'lucide-react';
 import { Badge } from '../ui/badge';
+import { cn } from '@/lib/utils';
 
 interface VideoDetailsProps {
   video: Video;
@@ -11,6 +15,8 @@ interface VideoDetailsProps {
 }
 
 export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <div className="mt-4">
       <div className="flex flex-wrap gap-2">
@@ -40,12 +46,17 @@ export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
             <Button variant="secondary"><PlusSquare className="mr-2 h-5 w-5" /> Save</Button>
         </div>
       </div>
-      <div className="mt-4 bg-secondary rounded-lg p-4">
+      <div className="mt-4 bg-secondary rounded-lg p-4 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
         <div className="flex items-center gap-4 text-sm font-semibold">
             <p>{video.views_count.toLocaleString()} views</p>
             <p>{new Date(video.created_at).toLocaleDateString()}</p>
         </div>
-        <p className="mt-2 text-sm text-foreground/80">{video.description}</p>
+        <p className={cn("mt-2 text-sm text-foreground/80 whitespace-pre-wrap", !isExpanded && "line-clamp-2")}>
+            {video.description}
+        </p>
+        <button className="font-semibold text-sm mt-2">
+            {isExpanded ? 'Show less' : '...more'}
+        </button>
       </div>
     </div>
   );
