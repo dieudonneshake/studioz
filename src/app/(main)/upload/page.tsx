@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,19 +17,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { curricula, levels, subjects } from "@/lib/data";
+import { curricula, levels, subjects, addCurriculum, addLevel, addSubject } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Loader2, UploadCloud } from "lucide-react";
 import { generateQuizzesFromNotes } from "@/ai/flows/generate-quizzes-from-notes";
+import { CreatableSelect } from "@/components/creatable-select";
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "Title must be at least 5 characters." }),
@@ -56,6 +51,10 @@ const readFileAsText = (file: File): Promise<string> => {
 export default function UploadPage() {
   const { toast } = useToast();
   const router = useRouter();
+  
+  // Force re-render when data changes
+  const [dataVersion, setDataVersion] = useState(0);
+  const forceRerender = () => setDataVersion(v => v + 1);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -169,18 +168,19 @@ export default function UploadPage() {
                             name="curriculum"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>Curriculum</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select curriculum" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                    {curricula.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
+                                    <FormLabel>Curriculum</FormLabel>
+                                    <CreatableSelect
+                                        field={field}
+                                        options={curricula}
+                                        placeholder="Select curriculum"
+                                        createLabel="Create new curriculum"
+                                        onCreate={async (name) => {
+                                            const newCurriculum = await addCurriculum({ name, description: `User-created curriculum: ${name}` });
+                                            field.onChange(newCurriculum.id);
+                                            forceRerender();
+                                        }}
+                                    />
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -189,18 +189,19 @@ export default function UploadPage() {
                             name="grade"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>Grade Level</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select grade" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                    {levels.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
+                                    <FormLabel>Grade Level</FormLabel>
+                                     <CreatableSelect
+                                        field={field}
+                                        options={levels}
+                                        placeholder="Select grade"
+                                        createLabel="Create new grade level"
+                                        onCreate={async (name) => {
+                                            const newLevel = await addLevel({ name });
+                                            field.onChange(newLevel.id);
+                                            forceRerender();
+                                        }}
+                                    />
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -210,16 +211,17 @@ export default function UploadPage() {
                             render={({ field }) => (
                                 <FormItem>
                                 <FormLabel>Subject</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select subject" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                    {subjects.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
+                                 <CreatableSelect
+                                    field={field}
+                                    options={subjects}
+                                    placeholder="Select subject"
+                                    createLabel="Create new subject"
+                                    onCreate={async (name) => {
+                                        const newSubject = await addSubject({ name });
+                                        field.onChange(newSubject.id);
+                                        forceRerender();
+                                    }}
+                                />
                                 <FormMessage />
                                 </FormItem>
                             )}

@@ -3,28 +3,52 @@ import { PlaceHolderImages } from './placeholder-images';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
 
-export const users: User[] = [
+export let users: User[] = [
   { id: 'user-1', name: 'Dr. Evelyn Reed', email: 'e.reed@example.com', role: 'teacher', profile_photo: getImage('user-avatar-1'), bio: 'Passionate about making quantum physics accessible to everyone.' },
   { id: 'user-2', name: 'Mr. Samuel Chen', email: 's.chen@example.com', role: 'teacher', profile_photo: getImage('user-avatar-2'), bio: 'Historian and educator focused on medieval Europe.' },
   { id: 'user-3', name: 'Alex Johnson', email: 'a.johnson@example.com', role: 'student', profile_photo: getImage('user-avatar-3') },
 ];
 
-export const curricula: Curriculum[] = [
+export let curricula: Curriculum[] = [
   { id: 'cur-1', name: 'International Baccalaureate (IB)', description: 'A globally recognized curriculum.' },
   { id: 'cur-2', name: 'A-Levels', description: 'UK-based advanced level qualifications.' },
 ];
 
-export const levels: Level[] = [
+export let levels: Level[] = [
   { id: 'lvl-1', name: 'IB Diploma Year 1' },
   { id: 'lvl-2', name: 'A-Level Year 12' },
 ];
 
-export const subjects: Subject[] = [
+export let subjects: Subject[] = [
   { id: 'sub-1', name: 'Physics' },
   { id: 'sub-2', name: 'History' },
   { id: 'sub-3', name: 'Mathematics' },
   { id: 'sub-4', name: 'Literature' },
 ];
+
+// Functions to add new items to the mock data
+// In a real app, these would be API calls to your backend.
+export async function addCurriculum(curriculum: Omit<Curriculum, 'id'>): Promise<Curriculum> {
+  const newCurriculum = { ...curriculum, id: `cur-${Date.now()}` };
+  curricula.push(newCurriculum);
+  console.log("Added curriculum:", newCurriculum);
+  return newCurriculum;
+}
+
+export async function addLevel(level: Omit<Level, 'id'>): Promise<Level> {
+  const newLevel = { ...level, id: `lvl-${Date.now()}` };
+  levels.push(newLevel);
+  console.log("Added level:", newLevel);
+  return newLevel;
+}
+
+export async function addSubject(subject: Omit<Subject, 'id'>): Promise<Subject> {
+  const newSubject = { ...subject, id: `sub-${Date.now()}` };
+  subjects.push(newSubject);
+  console.log("Added subject:", newSubject);
+  return newSubject;
+}
+
 
 export const videos: Video[] = [
   {
