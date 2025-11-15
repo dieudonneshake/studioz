@@ -45,7 +45,7 @@ const libraryMenuItems = [
     { href: '/history', label: 'History', icon: History, roles: ['student'] },
     { href: '/my-videos', label: 'Your Videos', icon: Youtube, roles: ['teacher'] },
     { href: '/watch-later', label: 'Watch Later', icon: Clock, roles: ['student'] },
-    { href: '/liked-videos', 'label': 'Liked Videos', icon: ThumbsUp, roles: ['student'] },
+    { href: '/liked-videos', label: 'Liked Videos', icon: ThumbsUp, roles: ['student'] },
 ];
 
 const secondaryMenuItems = [
@@ -71,7 +71,7 @@ const filterMenuByRole = (menu: any[], role: string | undefined) => {
 
 export default function AppSidebar() {
   const pathname = usePathname();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const role = user?.role;
 
   const visibleMainMenuItems = filterMenuByRole(mainMenuItems, role);
