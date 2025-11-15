@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-30 flex h-14 w-full shrink-0 items-center justify-between gap-2 border-b bg-background px-2 sm:px-4">
       <div className='flex items-center gap-1 sm:gap-2'>
-        <SidebarTrigger className="flex" />
+        <SidebarTrigger className="flex md:hidden" />
         <Link href="/" className="flex items-center gap-2">
             <GraduationCap className="h-7 w-7 text-primary" />
             <span className="font-bold text-lg hidden sm:inline-block">EduVerse</span>
@@ -32,10 +32,6 @@ export default function Header() {
             <Search className="h-5 w-5 text-muted-foreground" />
            </div>
         </div>
-        <Button variant="secondary" size="icon" className="rounded-full flex-shrink-0">
-          <Mic className="h-5 w-5" />
-          <span className="sr-only">Search with voice</span>
-        </Button>
       </div>
 
       <div className="flex items-center gap-2">
