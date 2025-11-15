@@ -1,16 +1,14 @@
 "use client";
 
 import { notFound } from 'next/navigation';
-import { getVideo, getUploader, getQuiz, getSummary } from '@/lib/data';
+import { getVideo, getUploader, getQuiz, getSummary, users } from '@/lib/data';
 import VideoPlayer from '@/components/watch/video-player';
 import VideoDetails from '@/components/watch/video-details';
 import ContentTabs from '@/components/watch/content-tabs';
 import { VideoCard } from '@/components/video-card';
 import { videos } from '@/lib/data';
-import { useAuthStore } from '@/store/auth';
 
 export default function WatchPage({ params }: { params: { id: string } }) {
-  const { users } = useAuthStore();
   const video = getVideo(params.id);
   
   if (!video) {

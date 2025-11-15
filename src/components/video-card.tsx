@@ -3,10 +3,9 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { type Video } from '@/lib/types';
-import { getUploader } from '@/lib/data';
+import { getUploader, users } from '@/lib/data';
 import { Clock, Eye } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { useAuthStore } from '@/store/auth';
 
 interface VideoCardProps {
   video: Video;
@@ -25,7 +24,6 @@ function formatViews(views: number) {
 }
 
 export function VideoCard({ video }: VideoCardProps) {
-  const { users } = useAuthStore();
   const uploader = getUploader(video.uploaded_by, users);
   const uploaderImage = PlaceHolderImages.find(img => img.imageUrl === uploader?.profile_photo);
   const videoImage = PlaceHolderImages.find(img => img.imageUrl === video.thumbnail_path);
