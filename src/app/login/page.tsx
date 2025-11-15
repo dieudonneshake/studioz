@@ -6,13 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/store/auth";
+import { users } from "@/lib/data";
 import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, users } = useAuthStore();
+  const { login } = useAuthStore();
 
   const handleLogin = (role: 'student' | 'teacher' | 'admin') => {
     // Find an approved user for the selected role for login simulation
