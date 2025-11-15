@@ -1,13 +1,15 @@
+"use client";
+
 import { Search, Bell, Mic, GraduationCap, Video } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { SidebarTrigger } from './ui/sidebar';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
-import { YouTubeLogo } from './youtube-logo';
+import { useAuthStore } from '@/store/auth';
 
 export default function Header() {
-  const isAuthenticated = false; // MOCK: Replace with real auth check
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <header className="sticky top-0 z-30 flex h-14 w-full shrink-0 items-center justify-between gap-2 border-b bg-background px-2 sm:px-4">
@@ -24,14 +26,11 @@ export default function Header() {
           <Input
             type="search"
             placeholder="Search"
-            className="w-full rounded-full border-border bg-secondary h-10 pl-4 pr-12 sm:pl-12"
+            className="w-full rounded-full border-border bg-secondary h-10 pl-10 pr-4 sm:pl-12"
           />
-           <div className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2">
-            <Search className="h-5 w-5 text-muted-foreground hidden sm:flex" />
+           <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2">
+            <Search className="h-5 w-5 text-muted-foreground" />
            </div>
-          <Button variant="ghost" size="icon" className="rounded-full absolute right-1 top-1/2 -translate-y-1/2">
-            <Search className="h-5 w-5 text-muted-foreground sm:hidden" />
-          </Button>
         </div>
         <Button variant="secondary" size="icon" className="rounded-full flex-shrink-0">
           <Mic className="h-5 w-5" />

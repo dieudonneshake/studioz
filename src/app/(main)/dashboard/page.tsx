@@ -1,15 +1,22 @@
+"use client";
+
 import { Overview } from "@/components/dashboard/overview";
 import { ProgressChart } from "@/components/dashboard/progress-chart";
 import { RecentActivities } from "@/components/dashboard/recent-activities";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuthStore } from "@/store/auth";
 import { BookOpen, Target, Film } from "lucide-react";
 
 
 export default function DashboardPage() {
+  const { user } = useAuthStore();
+
+  const userName = user ? user.name.split(' ')[0] : 'there';
+
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
         <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight font-headline">Welcome back, Alex!</h2>
+            <h2 className="text-3xl font-bold tracking-tight font-headline">Welcome back, {userName}!</h2>
         </div>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <Card>
@@ -57,7 +64,7 @@ export default function DashboardPage() {
                 <CardHeader>
                     <CardTitle className="font-headline">Recent Activity</CardTitle>
                     <CardDescription>You completed 2 quizzes this week.</CardDescription>
-                </CardHeader>
+                </Header>
                 <CardContent>
                     <RecentActivities />
                 </CardContent>

@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,12 +11,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { users } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useAuthStore } from '@/store/auth';
+import { useRouter } from 'next/navigation';
 
 export function UserNav() {
-  const user = users.find(u => u.role === 'student'); // Mock student user
+  const { user, logout } = useAuthStore();
+  const router = useRouter();
+  
   const userImage = PlaceHolderImages.find(img => img.id === 'user-avatar-3');
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
 
   if (!user || !userImage) {
     return null;
@@ -25,7 +35,7 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={userImage.imageUrl} alt={user.name} data-ai-hint={userImage.imageHint}/>
+            <AvatarImage src={user.profile_photo} alt={user.name} data-ai-hint={userImage.imageHint}/>
             <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
           </Avatar>
         </Button>
@@ -44,7 +54,7 @@ export function UserNav() {
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

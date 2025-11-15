@@ -8,11 +8,31 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { GraduationCap, User, Briefcase, Shield } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth";
+import { users } from "@/lib/data";
 
 type Role = "student" | "teacher" | "admin";
 
 export default function SignupPage() {
   const [role, setRole] = useState<Role | null>(null);
+  const router = useRouter();
+  const { login } = useAuthStore();
+
+  const handleSignup = () => {
+    if (role) {
+      const user = users.find(u => u.role === role);
+      if (user) {
+        login(user);
+        if (role === 'student') {
+          router.push('/home');
+        } else {
+          router.push('/dashboard');
+        }
+      }
+    }
+  };
+
 
   const RoleSelection = () => (
     <Card className="mx-auto max-w-sm text-center">
@@ -90,10 +110,10 @@ export default function SignupPage() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" />
           </div>
-          <Button type="submit" className="w-full">
+          <Button onClick={handleSignup} type="submit" className="w-full">
             Create an account
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button onClick={handleSignup} variant="outline" className="w-full">
             Sign up with Google
           </Button>
         </div>
