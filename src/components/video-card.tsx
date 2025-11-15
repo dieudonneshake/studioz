@@ -55,10 +55,12 @@ export function VideoCard({ video }: VideoCardProps) {
                 <div className="flex-1">
                     <p className="font-bold text-base leading-tight font-headline line-clamp-2">{video.title}</p>
                     <p className="text-sm text-muted-foreground mt-1">{uploader?.name}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {video.subject} &bull; {video.level}
-                    </p>
-                     <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                    <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                      <p><span className="font-semibold">Grade:</span> {video.level}</p>
+                      <p><span className="font-semibold">Lesson:</span> {video.subject}</p>
+                      {video.unit && <p><span className="font-semibold">Unit:</span> {video.unit}</p>}
+                    </div>
+                     <div className="flex items-center gap-2 text-xs text-muted-foreground mt-2 pt-2 border-t">
                         <div className="flex items-center gap-1">
                             <Eye className="w-3 h-3"/>
                             <span>{formatViews(video.views_count)} views</span>
