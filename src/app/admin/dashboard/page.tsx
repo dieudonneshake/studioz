@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { videos, quizzes } from "@/lib/data";
+import { videos, quizzes, users } from "@/lib/data";
 import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -23,7 +23,7 @@ import {
 import { type User } from "@/lib/types";
 
 export default function AdminDashboardPage() {
-  const { users, updateUserStatus } = useAuthStore();
+  const { updateUserStatus } = useAuthStore();
   const { toast } = useToast();
   const [selectedTeacher, setSelectedTeacher] = useState<User | null>(null);
 
