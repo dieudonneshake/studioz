@@ -32,8 +32,8 @@ export function BottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40">
-       <div className="grid h-16 grid-cols-5 items-center justify-around gap-x-4 rounded-full border bg-background/80 px-4 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] shadow-primary/30">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
+       <div className="grid h-16 grid-cols-5 items-center justify-around border-t bg-background/80 px-2 backdrop-blur-md">
         {visibleNavItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -41,8 +41,8 @@ export function BottomNav() {
               key={item.label}
               href={item.href}
               className={cn(
-                'flex flex-col items-center justify-center gap-1 text-xs w-14 h-14 rounded-full transition-colors duration-200 ease-in-out',
-                isActive ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-foreground'
+                'flex flex-col items-center justify-center gap-1 text-xs w-full h-full transition-colors duration-200 ease-in-out',
+                isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               )}
             >
               <item.icon className="h-6 w-6" strokeWidth={isActive ? 2.5 : 2} />
