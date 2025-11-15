@@ -1,6 +1,3 @@
-
-"use client";
-
 import { notFound } from 'next/navigation';
 import { getVideo, getUploader, getQuiz, getSummary, users } from '@/lib/data';
 import VideoPlayer from '@/components/watch/video-player';
