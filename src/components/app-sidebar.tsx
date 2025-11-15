@@ -23,6 +23,7 @@ import {
   Search,
   PlusSquare,
   Shield,
+  Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -45,7 +46,11 @@ const libraryMenuItems = [
 
 const secondaryMenuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['teacher'] },
-    { href: '/admin/dashboard', label: 'Admin', icon: Shield, roles: ['admin'] },
+]
+
+const adminMenuItems = [
+    { href: '/admin/dashboard', label: 'Admin Dashboard', icon: Shield, roles: ['admin'] },
+    { href: '/admin/users', label: 'Manage Users', icon: Users, roles: ['admin'] },
 ]
 
 const helpMenuItems = [
@@ -67,6 +72,7 @@ export default function AppSidebar() {
   const visibleMainMenuItems = filterMenuByRole(mainMenuItems, role);
   const visibleLibraryMenuItems = filterMenuByRole(libraryMenuItems, role);
   const visibleSecondaryMenuItems = filterMenuByRole(secondaryMenuItems, role);
+  const visibleAdminMenuItems = filterMenuByRole(adminMenuItems, role);
   const visibleHelpMenuItems = filterMenuByRole(helpMenuItems, role);
 
 
@@ -119,6 +125,25 @@ export default function AppSidebar() {
             <SidebarMenu>
             <h2 className="px-4 py-2 text-lg font-semibold tracking-tight group-data-[collapsible=icon]:hidden">You</h2>
             {visibleSecondaryMenuItems.map((item) => (
+                <SidebarMenuItem key={item.label}>
+                <Link href={item.href}>
+                    <SidebarMenuButton
+                    isActive={pathname.startsWith(item.href)}
+                    icon={<item.icon />}
+                    tooltip={item.label}
+                    >
+                    {item.label}
+                    </SidebarMenuButton>
+                </Link>
+                </SidebarMenuItem>
+            ))}
+            </SidebarMenu>
+         )}
+
+         {visibleAdminMenuItems.length > 0 && (
+            <SidebarMenu>
+            <h2 className="px-4 py-2 text-lg font-semibold tracking-tight group-data-[collapsible=icon]:hidden">Admin</h2>
+            {visibleAdminMenuItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                 <Link href={item.href}>
                     <SidebarMenuButton

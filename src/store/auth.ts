@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 import { User } from '@/lib/types';
 import { persist, createJSONStorage } from 'zustand/middleware';
@@ -10,6 +11,7 @@ interface AuthState {
   login: (user: User) => void;
   logout: () => void;
   updateUserStatus: (userId: string, status: 'approved' | 'pending' | 'rejected') => void;
+  removeUser: (userId: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -24,6 +26,9 @@ export const useAuthStore = create<AuthState>()(
         users: state.users.map(user => 
           user.id === userId ? { ...user, status } : user
         )
+      })),
+      removeUser: (userId: string) => set((state) => ({
+        users: state.users.filter(user => user.id !== userId)
       })),
     }),
     {
