@@ -75,7 +75,7 @@ export default function CustomVideoPlayer({ video }: CustomVideoPlayerProps) {
         onClick={togglePlay}
       />
       <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" onClick={togglePlay}>
-        {!isPlaying && <Play className="h-20 w-20 text-white fill-white" />}
+        {!isPlaying && <Play className="h-16 w-16 text-white fill-white" />}
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -90,28 +90,28 @@ export default function CustomVideoPlayer({ video }: CustomVideoPlayerProps) {
             <div className="flex items-center justify-between text-white">
                 <div className="flex items-center gap-4">
                     <button onClick={togglePlay}>
-                        {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+                        {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                     </button>
                     <button onClick={() => handleSkip(-10)}>
-                        <Rewind className="h-6 w-6" />
+                        <Rewind className="h-5 w-5" />
                     </button>
                     <button onClick={() => handleSkip(10)}>
-                        <FastForward className="h-6 w-6" />
+                        <FastForward className="h-5 w-5" />
                     </button>
                     <div className="flex items-center gap-2">
-                        <Volume2 className="h-6 w-6" />
+                        <Volume2 className="h-5 w-5" />
                     </div>
-                     <div className="text-sm font-mono">
+                     <div className="text-xs font-mono">
                         {formatTime(currentTime)} / {formatTime(duration)}
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4">
                     <button>
-                        <PictureInPicture2 className="h-6 w-6" />
+                        <PictureInPicture2 className="h-5 w-5" />
                     </button>
                     <button>
-                        <Maximize className="h-6 w-6" />
+                        <Maximize className="h-5 w-5" />
                     </button>
                 </div>
             </div>
