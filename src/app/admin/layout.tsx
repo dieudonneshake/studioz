@@ -1,8 +1,5 @@
 
 "use client";
-import AppSidebar from "@/components/app-sidebar";
-import Header from "@/components/header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
@@ -27,17 +24,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <SidebarProvider>
-        <div className="flex h-screen w-full">
-            <AppSidebar />
-            <SidebarInset className="overflow-x-hidden">
-              <Header />
-              <main className="flex-1 overflow-y-auto bg-muted/40">
-                {children}
-              </main>
-            </SidebarInset>
-          </div>
-        <Toaster />
-    </SidebarProvider>
+    <>
+      {children}
+      <Toaster />
+    </>
   );
 }
