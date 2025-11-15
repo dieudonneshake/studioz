@@ -1,4 +1,5 @@
 
+
 'use client';
 import {
   Sidebar,
@@ -24,6 +25,7 @@ import {
   Shield,
   FileVideo,
   Users,
+  ThumbsUp,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -41,7 +43,7 @@ const libraryMenuItems = [
     { href: '/history', label: 'History', icon: History, roles: ['student'] },
     { href: '/my-videos', label: 'Your Videos', icon: Video, roles: ['teacher'] },
     { href: '/watch-later', label: 'Watch Later', icon: PlusSquare, roles: ['student'] },
-    { href: '/liked-videos', 'label': 'Liked Videos', icon: Flame, roles: ['student'] },
+    { href: '/liked-videos', 'label': 'Liked Videos', icon: ThumbsUp, roles: ['student'] },
 ];
 
 const secondaryMenuItems = [
@@ -162,7 +164,7 @@ export default function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-2">
          <div className="flex flex-col gap-1">
-            {helpMenuItems.map((item) => (
+            {visibleHelpMenuItems.map((item) => (
               <SidebarMenuItem key={item.label}>
                 <Link href={item.href}>
                   <SidebarMenuButton
