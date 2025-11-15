@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -11,15 +12,32 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { users } from "@/lib/data";
+import { useToast } from "@/hooks/use-toast";
 
 type Role = "student" | "teacher" | "admin";
 
 export default function SignupPage() {
+  const [step, setStep] = useState(1);
   const [role, setRole] = useState<Role | null>(null);
   const router = useRouter();
   const { login } = useAuthStore();
+  const { toast } = useToast();
+
+  const handleRoleSelect = (selectedRole: Role) => {
+    setRole(selectedRole);
+    setStep(2);
+  };
 
   const handleSignup = () => {
+    if (role === 'teacher') {
+        toast({
+            title: "Registration Submitted",
+            description: "Your teacher account is pending approval by an administrator.",
+        });
+        router.push('/login');
+        return;
+    }
+    
     if (role) {
       const user = users.find(u => u.role === role);
       if (user) {
@@ -42,32 +60,20 @@ export default function SignupPage() {
         <CardDescription>First, tell us who you are.</CardDescription>
       </CardHeader>
       <CardContent>
-        <RadioGroup defaultValue={role ?? undefined} onValueChange={(value) => setRole(value as Role)} className="grid gap-4">
-          <Label
-            htmlFor="student"
-            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-          >
-            <RadioGroupItem value="student" id="student" className="sr-only" />
-            <User className="mb-3 h-6 w-6" />
-            I am a Student
-          </Label>
-          <Label
-            htmlFor="teacher"
-            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-          >
-            <RadioGroupItem value="teacher" id="teacher" className="sr-only" />
-            <Briefcase className="mb-3 h-6 w-6" />
-            I am a Teacher
-          </Label>
-           <Label
-            htmlFor="admin"
-            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-          >
-            <RadioGroupItem value="admin" id="admin" className="sr-only" />
-            <Shield className="mb-3 h-6 w-6" />
-            I am an Admin
-          </Label>
-        </RadioGroup>
+        <div className="grid gap-4">
+          <Button variant="outline" className="w-full justify-start py-6" onClick={() => handleRoleSelect('student')}>
+            <User className="mr-4 h-6 w-6" />
+            <span className="text-lg">I am a Student</span>
+          </Button>
+          <Button variant="outline" className="w-full justify-start py-6" onClick={() => handleRoleSelect('teacher')}>
+            <Briefcase className="mr-4 h-6 w-6" />
+             <span className="text-lg">I am a Teacher</span>
+          </Button>
+           <Button variant="outline" className="w-full justify-start py-6" onClick={() => handleRoleSelect('admin')}>
+            <Shield className="mr-4 h-6 w-6" />
+             <span className="text-lg">I am an Admin</span>
+          </Button>
+        </div>
          <div className="mt-6 text-center text-sm">
             Already have an account?{" "}
             <Link href="/login" className="underline">
@@ -110,6 +116,24 @@ export default function SignupPage() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" />
           </div>
+
+          {role === 'teacher' && (
+            <>
+                <div className="grid gap-2">
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" required />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="subjects">Subject(s)</Label>
+                    <Input id="subjects" placeholder="e.g., Physics, History" required />
+                </div>
+                <div className="grid gap-2">
+                    <Label htmlFor="grades">Grade Levels</Label>
+                    <Input id="grades" placeholder="e.g., Grade 10, A-Level" required />
+                </div>
+            </>
+          )}
+
           <Button onClick={handleSignup} type="submit" className="w-full">
             Create an account
           </Button>
@@ -118,7 +142,7 @@ export default function SignupPage() {
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          <Button variant="link" onClick={() => setRole(null)}>
+          <Button variant="link" onClick={() => setStep(1)}>
             Back to role selection
           </Button>
         </div>
@@ -128,7 +152,7 @@ export default function SignupPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
-      {role ? <SignupForm /> : <RoleSelection />}
+      {step === 1 ? <RoleSelection /> : <SignupForm />}
     </div>
   );
 }
