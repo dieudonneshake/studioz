@@ -10,7 +10,6 @@ import { GraduationCap, User, Briefcase, Shield } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
-import { users } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 
 type Role = "student" | "teacher" | "admin";
@@ -19,7 +18,7 @@ export default function SignupPage() {
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<Role | null>(null);
   const router = useRouter();
-  const { login } = useAuthStore();
+  const { login, users } = useAuthStore();
   const { toast } = useToast();
 
   const handleRoleSelect = (selectedRole: Role) => {
@@ -33,6 +32,7 @@ export default function SignupPage() {
             title: "Registration Submitted",
             description: "Your teacher account is pending approval by an administrator.",
         });
+        // Here you would typically send data to a backend to create a pending user
         router.push('/login');
         return;
     }

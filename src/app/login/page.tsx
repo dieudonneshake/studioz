@@ -9,11 +9,10 @@ import { useAuthStore } from "@/store/auth";
 import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { users } from "@/lib/data";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuthStore();
+  const { login, users } = useAuthStore();
 
   const handleLogin = (role: 'student' | 'teacher' | 'admin') => {
     // Find an approved user for the selected role for login simulation

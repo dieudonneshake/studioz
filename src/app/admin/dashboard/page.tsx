@@ -1,15 +1,30 @@
 
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { users, videos, quizzes } from "@/lib/data";
-import { Activity, ArrowUpRight, BookOpen, Film, Users, UserCheck, Clock } from "lucide-react";
+import { videos, quizzes } from "@/lib/data";
+import { useAuthStore } from "@/store/auth";
+import { useToast } from "@/hooks/use-toast";
+
 
 export default function AdminDashboardPage() {
+  const { users, updateUserStatus } = useAuthStore();
+  const { toast } = useToast();
+
   const totalStudents = users.filter(u => u.role === 'student').length;
   const totalTeachers = users.filter(u => u.role === 'teacher' && u.status === 'approved').length;
   const pendingTeachers = users.filter(u => u.role === 'teacher' && u.status === 'pending');
+  
+  const handleApproveTeacher = (teacherId: string) => {
+    updateUserStatus(teacherId, 'approved');
+    toast({
+      title: "Teacher Approved",
+      description: "The teacher's account has been activated.",
+    })
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -82,7 +97,7 @@ export default function AdminDashboardPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {pendingTeachers.map(teacher => (
+                                {pendingTeachers.length > 0 ? pendingTeachers.map(teacher => (
                                      <TableRow key={teacher.id}>
                                         <TableCell>
                                             <div className="font-medium">{teacher.name}</div>
@@ -100,11 +115,15 @@ export default function AdminDashboardPage() {
                                         <TableCell className="text-right">
                                             <div className="flex gap-2 justify-end">
                                                 <Button size="sm" variant="outline">View Details</Button>
-                                                <Button size="sm">Approve</Button>
+                                                <Button size="sm" onClick={() => handleApproveTeacher(teacher.id)}>Approve</Button>
                                             </div>
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                )) : (
+                                    <TableRow>
+                                        <TableCell colSpan={5} className="text-center">No pending applications.</TableCell>
+                                    </TableRow>
+                                )}
                             </TableBody>
                         </Table>
                     </CardContent>

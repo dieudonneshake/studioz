@@ -1,3 +1,5 @@
+"use client";
+
 import { notFound } from 'next/navigation';
 import { getVideo, getUploader, getQuiz, getSummary } from '@/lib/data';
 import VideoPlayer from '@/components/watch/video-player';
@@ -5,15 +7,17 @@ import VideoDetails from '@/components/watch/video-details';
 import ContentTabs from '@/components/watch/content-tabs';
 import { VideoCard } from '@/components/video-card';
 import { videos } from '@/lib/data';
+import { useAuthStore } from '@/store/auth';
 
 export default function WatchPage({ params }: { params: { id: string } }) {
+  const { users } = useAuthStore();
   const video = getVideo(params.id);
   
   if (!video) {
     notFound();
   }
 
-  const uploader = getUploader(video.uploaded_by);
+  const uploader = getUploader(video.uploaded_by, users);
   const quiz = getQuiz(video.id);
   const summary = getSummary(video.id);
 
@@ -43,10 +47,4 @@ export default function WatchPage({ params }: { params: { id: string } }) {
       </div>
     </div>
   );
-}
-
-export async function generateStaticParams() {
-  return videos.map((video) => ({
-    id: video.id,
-  }));
 }
