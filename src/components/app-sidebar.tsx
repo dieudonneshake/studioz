@@ -18,23 +18,44 @@ import {
   Settings,
   GraduationCap,
   Library,
+  Flame,
+  Music,
+  Clapperboard,
+  Gamepad2,
+  Newspaper,
+  Trophy
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UserNav } from './user-nav';
 
-const menuItems = [
+const mainMenuItems = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/browse', label: 'Browse', icon: Compass },
-  { href: '/explore', label: 'Explore', icon: Library },
-  { href: '/library', label: 'My Library', icon: Video },
-  { href: '/courses', label: 'My Courses', icon: Book },
+  { href: '/shorts', label: 'Shorts', icon: Clapperboard },
+  { href: '/subscriptions', label: 'Subscriptions', icon: Video },
+];
+
+const libraryMenuItems = [
+    { href: '/library', label: 'Library', icon: Library },
+    { href: '/history', label: 'History', icon: Book },
+    { href: '/my-videos', label: 'Your Videos', icon: Video },
+    { href: '/watch-later', label: 'Watch Later', icon: Book },
+    { href: '/liked-videos', label: 'Liked Videos', icon: Flame },
+];
+
+const exploreMenuItems = [
+    { href: '/trending', label: 'Trending', icon: Flame },
+    { href: '/music', label: 'Music', icon: Music },
+    { href: '/gaming', label: 'Gaming', icon: Gamepad2 },
+    { href: '/news', label: 'News', icon: Newspaper },
+    { href: '/sports', label: 'Sports', icon: Trophy },
 ];
 
 const helpMenuItems = [
-  { href: '/help', label: 'Help & Support', icon: LifeBuoy },
   { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/report-history', label: 'Report History', icon: Book },
+  { href: '/help', label: 'Help', icon: LifeBuoy },
+  { href: '/send-feedback', label: 'Send Feedback', icon: Book },
 ];
 
 export default function AppSidebar() {
@@ -52,7 +73,40 @@ export default function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="flex-1 p-2">
         <SidebarMenu>
-          {menuItems.map((item) => (
+          {mainMenuItems.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <Link href={item.href}>
+                <SidebarMenuButton
+                  isActive={pathname === item.href}
+                  icon={<item.icon />}
+                  tooltip={item.label}
+                  asChild={false} 
+                >
+                  {item.label}
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+         <SidebarMenu>
+          {libraryMenuItems.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <Link href={item.href}>
+                <SidebarMenuButton
+                  isActive={pathname === item.href}
+                  icon={<item.icon />}
+                  tooltip={item.label}
+                  asChild={false} 
+                >
+                  {item.label}
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+        <SidebarMenu>
+            <h2 className="px-4 py-2 text-lg font-semibold tracking-tight">Explore</h2>
+          {exploreMenuItems.map((item) => (
             <SidebarMenuItem key={item.label}>
               <Link href={item.href}>
                 <SidebarMenuButton
