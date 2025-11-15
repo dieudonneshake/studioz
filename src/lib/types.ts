@@ -1,0 +1,70 @@
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: 'student' | 'teacher' | 'admin';
+  profile_photo: string;
+  bio?: string;
+};
+
+export type Curriculum = {
+  id: string;
+  name: string;
+  description: string;
+};
+
+export type Level = {
+  id: string;
+  name: string;
+};
+
+export type Subject = {
+  id: string;
+  name: string;
+};
+
+export type Video = {
+  id: string;
+  title: string;
+  description: string;
+  uploaded_by: string; // user id
+  thumbnail_path: string;
+  duration_seconds: number;
+  views_count: number;
+  created_at: string;
+  curriculum: string;
+  level: string;
+  subject: string;
+};
+
+export type QuizQuestion = {
+  id: string;
+  type: 'multiple_choice' | 'true_false' | 'short_answer';
+  prompt: string;
+  options?: string[];
+  correct_answer: string;
+  explanation: string;
+};
+
+export type Quiz = {
+  id: string;
+  video_id: string;
+  questions: QuizQuestion[];
+};
+
+export type QuizResult = {
+  id: string;
+  quiz_id: string;
+  student_id: string;
+  answers: Record<string, string>;
+  score: number;
+  feedback: Record<string, string>;
+  created_at: string;
+};
+
+export type WatchHistory = {
+  id: string;
+  student_id: string;
+  video_id: string;
+  watched_at: string;
+};

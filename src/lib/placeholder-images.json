@@ -1,3 +1,70 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "thumbnail-1",
+      "description": "Abstract shapes and colors",
+      "imageUrl": "https://images.unsplash.com/photo-1762326866764-1ef1a008e0ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGxlYXJuaW5nfGVufDB8fHx8MTc2MzEzNzg5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract learning"
+    },
+    {
+      "id": "thumbnail-2",
+      "description": "A person studying at a desk",
+      "imageUrl": "https://images.unsplash.com/photo-1581092336206-b9e5146be6f7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzY2llbmNlJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3NjMxNzQ5OTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "science technology"
+    },
+    {
+      "id": "thumbnail-3",
+      "description": "Close up of a textbook",
+      "imageUrl": "https://images.unsplash.com/photo-1754304342371-29b232189f05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtYXRoZW1hdGljcyUyMGJvb2t8ZW58MHx8fHwxNzYzMjI5NDQ2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mathematics book"
+    },
+    {
+      "id": "thumbnail-4",
+      "description": "A classroom with students",
+      "imageUrl": "https://images.unsplash.com/photo-1636772523547-5577d04e8dc1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3J5JTIwY2xhc3Nyb29tfGVufDB8fHx8MTc2MzIyOTQ0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "history classroom"
+    },
+    {
+      "id": "thumbnail-5",
+      "description": "Art supplies on a table",
+      "imageUrl": "https://images.unsplash.com/photo-1648536524290-590fb42a04aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxhcnQlMjBsaXRlcmF0dXJlfGVufDB8fHx8MTc2MzIyOTQ0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "art literature"
+    },
+    {
+      "id": "thumbnail-6",
+      "description": "A computer with code on screen",
+      "imageUrl": "https://images.unsplash.com/photo-1675495277087-10598bf7bcd1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cHJvZ3JhbW1pbmclMjBjb2RlfGVufDB8fHx8MTc2MzEzODI5Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "programming code"
+    },
+    {
+      "id": "thumbnail-7",
+      "description": "A person writing on a whiteboard",
+      "imageUrl": "https://images.unsplash.com/photo-1758685733737-71f8945decf1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwaHlzaWNzJTIwbGVzc29ufGVufDB8fHx8MTc2MzIyOTQ0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "physics lesson"
+    },
+    {
+      "id": "thumbnail-8",
+      "description": "A globe and compass",
+      "imageUrl": "https://images.unsplash.com/photo-1628710127020-5877ea96b7de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxnZW9ncmFwaHklMjBleHBsb3JhdGlvbnxlbnwwfHx8fDE3NjMyMjk0NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "geography exploration"
+    },
+    {
+      "id": "user-avatar-1",
+      "description": "Profile picture of a user",
+      "imageUrl": "https://images.unsplash.com/photo-1521119989659-a83eee488004?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjMxNDEzMjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "user-avatar-2",
+      "description": "Profile picture of a user",
+      "imageUrl": "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwZXJzb24lMjBzbWlsaW5nfGVufDB8fHx8MTc2MzIxOTY1OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person smiling"
+    },
+    {
+      "id": "user-avatar-3",
+      "description": "Profile picture of a user",
+      "imageUrl": "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHRlYWNoZXJ8ZW58MHx8fHwxNzYzMTg1MjA1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman teacher"
+    }
+  ]
 }
