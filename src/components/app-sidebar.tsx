@@ -17,6 +17,7 @@ import {
   LifeBuoy,
   Settings,
   GraduationCap,
+  Library,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -25,7 +26,8 @@ import { UserNav } from './user-nav';
 const menuItems = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/explore', label: 'Explore', icon: Compass },
+  { href: '/browse', label: 'Browse', icon: Compass },
+  { href: '/explore', label: 'Explore', icon: Library },
   { href: '/library', label: 'My Library', icon: Video },
   { href: '/courses', label: 'My Courses', icon: Book },
 ];
