@@ -199,6 +199,9 @@ export const videos: Video[] = [
   },
 ];
 
+export const homePageVideos = videos.slice(0, 8);
+
+
 export const quizzes: Quiz[] = [
   {
     id: 'quiz-1',
