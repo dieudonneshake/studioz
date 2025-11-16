@@ -1,4 +1,5 @@
 
+
 import { User, Video, Curriculum, Level, Subject, Quiz, WatchHistory, Cycle, Stream } from './types';
 import { PlaceHolderImages } from './placeholder-images';
 
@@ -64,21 +65,22 @@ export let subjects: Subject[] = [
   { id: 'sub-24', name: 'Creative Arts' },
 
   // A-Level Combinations (as subjects)
-  { id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)' },
-  { id: 'sub-combo-pcm', name: 'PCM (Physics, Chemistry, Mathematics)' },
-  { id: 'sub-combo-mcb', name: 'MCB (Mathematics, Chemistry, Biology)' },
-  { id: 'sub-combo-mpc', name: 'MPC (Mathematics, Physics, Computer Science)' },
-  { id: 'sub-combo-mpg', name: 'MPG (Mathematics, Physics, Geography)' },
-  { id: 'sub-combo-bcm', name: 'BCM (Biology, Chemistry, Mathematics)' },
-  { id: 'sub-combo-heg', name: 'HEG (History, Economics, Geography)' },
-  { id: 'sub-combo-hel', name: 'HEL (History, Economics, Literature)' },
-  { id: 'sub-combo-hgl', name: 'HGL (History, Geography, Literature)' },
-  { id: 'sub-combo-heps', name: 'HEPS (History, Economics, Political Science)' },
-  { id: 'sub-combo-hek', name: 'HEK (History, Economics, Kiswahili)' },
-  { id: 'sub-combo-klf', name: 'KLF (Kinyarwanda, Literature, French)' },
-  { id: 'sub-combo-elf', name: 'ELF (English, Literature, French)' },
-  { id: 'sub-combo-kle', name: 'KLE (Kinyarwanda, Literature, English)' },
-  { id: 'sub-combo-gel', name: 'GEL (Geography, Economics, Literature)' },
+  { id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)', subjects: [{id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}] },
+  { id: 'sub-combo-pcm', name: 'PCM (Physics, Chemistry, Mathematics)', subjects: [{id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-3', name: 'Mathematics'}] },
+  { id: 'sub-combo-mcb', name: 'MCB (Mathematics, Chemistry, Biology)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}] },
+  { id: 'sub-combo-mpc', name: 'MPC (Mathematics, Physics, Computer Science)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-1', name: 'Physics'}, {id: 'sub-30', name: 'Computer Science'}] },
+  { id: 'sub-combo-mpg', name: 'MPG (Mathematics, Physics, Geography)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-1', name: 'Physics'}, {id: 'sub-28', name: 'Geography'}] },
+  { id: 'sub-combo-bcm', name: 'BCM (Biology, Chemistry, Mathematics)', subjects: [{id: 'sub-26', name: 'Biology'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-3', name: 'Mathematics'}] },
+  { id: 'sub-combo-heg', name: 'HEG (History, Economics, Geography)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-28', name: 'Geography'}] },
+  { id: 'sub-combo-hel', name: 'HEL (History, Economics, Literature)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-4', name: 'Literature'}] },
+  { id: 'sub-combo-hgl', name: 'HGL (History, Geography, Literature)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-28', name: 'Geography'}, {id: 'sub-4', name: 'Literature'}] },
+  { id: 'sub-combo-heps', name: 'HEPS (History, Economics, Political Science)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-32', name: 'Political Science'}] },
+  { id: 'sub-combo-hek', name: 'HEK (History, Economics, Kiswahili)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-27', name: 'Kiswahili'}] },
+  { id: 'sub-combo-klf', name: 'KLF (Kinyarwanda, Literature, French)', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-23', name: 'French'}] },
+  { id: 'sub-combo-elf', name: 'ELF (English, Literature, French)', subjects: [{id: 'sub-15', name: 'English'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-23', name: 'French'}] },
+  { id: 'sub-combo-kle', name: 'KLE (Kinyarwanda, Literature, English)', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-15', name: 'English'}] },
+  { id: 'sub-combo-gel', name: 'GEL (Geography, Economics, Literature)', subjects: [{id: 'sub-28', name: 'Geography'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-4', name: 'Literature'}] },
+
 
   // TTC Specializations (as subjects)
   { id: 'sub-ttc-lang', name: 'Education in Languages' },
@@ -138,9 +140,9 @@ const rwanOLevels: Level[] = [
 const rwanALevelStreams: Stream[] = [
     {id: 'stream-gen-ed', name: 'General Education (Academic Pathway)', 
         subjects: [
-            {id: 'sub-stream-sci', name: 'Science Combinations', subjects: [{id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)'}, {id: 'sub-combo-pcm', name: 'PCM (Physics, Chemistry, Mathematics)'}, {id: 'sub-combo-mcb', name: 'MCB (Mathematics, Chemistry, Biology)'}, {id: 'sub-combo-mpc', name: 'MPC (Mathematics, Physics, Computer Science)'}, {id: 'sub-combo-mpg', name: 'MPG (Mathematics, Physics, Geography)'}, {id: 'sub-combo-bcm', name: 'BCM (Biology, Chemistry, Mathematics)'}]},
-            {id: 'sub-stream-arts', name: 'Arts & Humanities Combinations', subjects: [{id: 'sub-combo-heg', name: 'HEG (History, Economics, Geography)'}, {id: 'sub-combo-hel', name: 'HEL (History, Economics, Literature)'}, {id: 'sub-combo-hgl', name: 'HGL (History, Geography, Literature)'}, {id: 'sub-combo-heps', name: 'HEPS (History, Economics, Political Science)'}, {id: 'sub-combo-hek', name: 'HEK (History, Economics, Kiswahili)'}]},
-            {id: 'sub-stream-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-combo-klf', name: 'KLF (Kinyarwanda, Literature, French)'}, {id: 'sub-combo-elf', name: 'ELF (English, Literature, French)'}, {id: 'sub-combo-kle', name: 'KLE (Kinyarwanda, Literature, English)'}, {id: 'sub-combo-gel', name: 'GEL (Geography, Economics, Literature)'}]},
+            {id: 'sub-stream-sci', name: 'Science Combinations', subjects: [{id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)', subjects: [{id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}]}, {id: 'sub-combo-pcm', name: 'PCM (Physics, Chemistry, Mathematics)', subjects: [{id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-3', name: 'Mathematics'}]}, {id: 'sub-combo-mcb', name: 'MCB (Mathematics, Chemistry, Biology)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}]}, {id: 'sub-combo-mpc', name: 'MPC (Mathematics, Physics, Computer Science)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-1', name: 'Physics'}, {id: 'sub-30', name: 'Computer Science'}]}, {id: 'sub-combo-mpg', name: 'MPG (Mathematics, Physics, Geography)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-1', name: 'Physics'}, {id: 'sub-28', name: 'Geography'}]}, {id: 'sub-combo-bcm', name: 'BCM (Biology, Chemistry, Mathematics)', subjects: [{id: 'sub-26', name: 'Biology'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-3', name: 'Mathematics'}]}]},
+            {id: 'sub-stream-arts', name: 'Arts & Humanities Combinations', subjects: [{id: 'sub-combo-heg', name: 'HEG (History, Economics, Geography)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-28', name: 'Geography'}]}, {id: 'sub-combo-hel', name: 'HEL (History, Economics, Literature)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-4', name: 'Literature'}]}, {id: 'sub-combo-hgl', name: 'HGL (History, Geography, Literature)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-28', name: 'Geography'}, {id: 'sub-4', name: 'Literature'}]}, {id: 'sub-combo-heps', name: 'HEPS (History, Economics, Political Science)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-32', name: 'Political Science'}]}, {id: 'sub-combo-hek', name: 'HEK (History, Economics, Kiswahili)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-27', name: 'Kiswahili'}]}]},
+            {id: 'sub-stream-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-combo-klf', name: 'KLF (Kinyarwanda, Literature, French)', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-23', name: 'French'}]}, {id: 'sub-combo-elf', name: 'ELF (English, Literature, French)', subjects: [{id: 'sub-15', name: 'English'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-23', name: 'French'}]}, {id: 'sub-combo-kle', name: 'KLE (Kinyarwanda, Literature, English)', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-15', name: 'English'}]}, {id: 'sub-combo-gel', name: 'GEL (Geography, Economics, Literature)', subjects: [{id: 'sub-28', name: 'Geography'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-4', name: 'Literature'}]}]},
         ]
     },
     {id: 'stream-ttc', name: 'TTC (Teacher Training College)', subjects: [{id: 'sub-ttc-lang', name: 'Education in Languages'}, {id: 'sub-ttc-sci', name: 'Education in Mathematics & Science'}, {id: 'sub-ttc-social', name: 'Education in Social Studies'}, {id: 'sub-ttc-ecd', name: 'Early Childhood Development (ECD)'}, {id: 'sub-ttc-sne', name: 'Inclusive & Special Needs Education'}]},
