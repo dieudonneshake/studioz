@@ -6,6 +6,7 @@ import { rwandaCurriculum } from './curricula/rwanda';
 import { burundiCurriculum } from './curricula/burundi';
 import { kenyaCurriculum } from './curricula/kenya';
 import { ugandaCurriculum } from './curricula/uganda';
+import { drcCurriculum } from './curricula/drc';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
 
@@ -33,7 +34,8 @@ const allSubjects: Subject[] = [
   ...rwandaCurriculum.subjects,
   ...burundiCurriculum.subjects,
   ...kenyaCurriculum.subjects,
-  ...ugandaCurriculum.subjects
+  ...ugandaCurriculum.subjects,
+  ...drcCurriculum.subjects
 ];
 
 // Remove duplicates
@@ -45,6 +47,7 @@ const allCycles: Cycle[] = [
     ...burundiCurriculum.cycles,
     ...kenyaCurriculum.cycles,
     ...ugandaCurriculum.cycles,
+    ...drcCurriculum.cycles,
     // Placeholder for other curricula
     { id: 'cycle-generic-1', curriculumId: 'cur-9', name: 'Secondary', levels: [ {id: 'lvl-g1', name: 'Grade 10', subjects: [{id:'sub-1', name: 'Physics'}] }, {id: 'lvl-g2', name: 'Grade 11', subjects: [{id:'sub-2', name: 'History'}] } ] },
     { id: 'cycle-generic-2', curriculumId: 'cur-9', name: 'University', levels: [ {id: 'lvl-u1', name: 'Year 1', subjects: [{id:'sub-3', name: 'Mathematics'}] } ] }
@@ -56,7 +59,8 @@ const allLevels: Level[] = [
   ...rwandaCurriculum.levels,
   ...burundiCurriculum.levels,
   ...kenyaCurriculum.levels,
-  ...ugandaCurriculum.levels
+  ...ugandaCurriculum.levels,
+  ...drcCurriculum.levels
 ];
 export const levels: Level[] = allLevels;
 
@@ -269,3 +273,6 @@ export function getSummary(videoId: string) {
 
     
 
+
+
+    
