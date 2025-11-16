@@ -1,7 +1,4 @@
 
-
-
-
 export type User = {
   id: string;
   name: string;
@@ -24,12 +21,23 @@ export type Curriculum = {
 export type Cycle = {
   id: string;
   name: string;
+  curriculumId: string;
+  levels: Level[];
 };
 
 export type Level = {
   id: string;
   name: string;
+  age?: string;
+  subjects?: Subject[];
+  streams?: Stream[];
 };
+
+export type Stream = {
+  id: string;
+  name: string;
+  subjects: Subject[];
+}
 
 export type Subject = {
   id: string;

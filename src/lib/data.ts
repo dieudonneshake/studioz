@@ -1,7 +1,5 @@
 
-
-
-import { User, Video, Curriculum, Level, Subject, Quiz, WatchHistory, Cycle } from './types';
+import { User, Video, Curriculum, Level, Subject, Quiz, WatchHistory, Cycle, Stream } from './types';
 import { PlaceHolderImages } from './placeholder-images';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
@@ -26,29 +24,111 @@ export let curricula: Curriculum[] = [
     { id: 'cur-9', name: 'Cambridge International Curriculum', description: 'Globally recognized curriculum from Cambridge Assessment International Education.' }
 ];
 
-export let cycles: Cycle[] = [
-    { id: 'cycle-1', name: 'Nursery' },
-    { id: 'cycle-2', name: 'Primary' },
-    { id: 'cycle-3', name: 'Secondary' },
-    { id: 'cycle-4', name: 'College' },
-    { id: 'cycle-5', name: 'University' },
-    { id: 'cycle-6', name: 'A-Level' },
-    { id: 'cycle-7', name: 'IB Diploma' },
-];
-
-export let levels: Level[] = [
-  { id: 'lvl-1', name: 'IB Diploma Year 1' },
-  { id: 'lvl-2', name: 'A-Level Year 12' },
-  { id: 'lvl-3', name: 'Grade 10' },
-  { id: 'lvl-4', name: 'Grade 11' },
-];
-
 export let subjects: Subject[] = [
   { id: 'sub-1', name: 'Physics' },
   { id: 'sub-2', name: 'History' },
   { id: 'sub-3', name: 'Mathematics' },
   { id: 'sub-4', name: 'Literature' },
+  { id: 'sub-5', name: 'Pre-reading & pre-writing skills' },
+  { id: 'sub-6', name: 'Songs, games, drawing, motor skills' },
+  { id: 'sub-7', name: 'Oral language (Kinyarwanda)' },
+  { id: 'sub-8', name: 'Counting' },
+  { id: 'sub-9', name: 'Social behavior' },
+  { id: 'sub-10', name: 'Art & play' },
+  { id: 'sub-11', name: 'Early literacy (Kinyarwanda & English intro)' },
+  { id: 'sub-12', name: 'Basic math' },
+  { id: 'sub-13', name: 'Morals & hygiene' },
+  { id: 'sub-14', name: 'Kinyarwanda' },
+  { id: 'sub-15', name: 'English' },
+  { id: 'sub-16', name: 'Social & Religious Education (SRE)' },
+  { id: 'sub-17', name: 'Science & Elementary Technology (SET)' },
+  { id: 'sub-18', name: 'Creative Arts & Music' },
+  { id: 'sub-19', name: 'Physical Education' },
+  { id: 'sub-20', name: 'Science & Elementary Technology' },
+  { id: 'sub-21', name: 'Social & Religious Studies' },
+  { id: 'sub-22', name: 'ICT' },
+  { id: 'sub-23', name: 'French' },
+  { id: 'sub-24', name: 'Creative Arts' },
+  { id: 'sub-25', name: 'Chemistry' },
+  { id: 'sub-26', name: 'Biology' },
+  { id: 'sub-27', name: 'Kiswahili' },
+  { id: 'sub-28', name: 'Geography' },
+  { id: 'sub-29', name: 'Entrepreneurship' },
+  { id: 'sub-30', name: 'Computer' },
+  { id: 'sub-31', name: 'Economics' },
+  { id: 'sub-32', name: 'Political Science' },
+  { id: 'sub-33', name: 'Software Development' },
+  { id: 'sub-34', name: 'Networking' },
+  { id: 'sub-35', name: 'Masonry' },
+  { id: 'sub-36', name: 'Plumbing' },
+  { id: 'sub-37', name: 'Civil Engineering' },
+  { id: 'sub-38', name: 'Culinary Arts' },
+  { id: 'sub-39', name: 'Hotel Operations' },
+  { id: 'sub-40', name: 'Crop Production' },
+  { id: 'sub-41', name: 'Animal Husbandry' },
+  { id: 'sub-42', name: 'Electrical Installation' },
+  { id: 'sub-43', name: 'Electronics Maintenance' },
+  { id: 'sub-44', name: 'Tailoring' },
+  { id: 'sub-45', name: 'Garment Technology' },
+  { id: 'sub-46', name: 'Welding' },
+  { id: 'sub-47', name: 'Automobile Mechanics' },
+  { id: 'sub-48', name: 'Finance' },
+  { id: 'sub-49', name: 'Cooperative Management' },
+  { id: 'sub-50', name: 'Cosmetology' },
+  { id: 'sub-51', name: 'Photography' },
+  { id: 'sub-52', name: 'Video Production' },
 ];
+
+const rwanNurseryLevels: Level[] = [
+    { id: 'lvl-n1', name: 'Nursery 1 (Baby Class)', age: '3-4 yrs', subjects: [{id: 'sub-5', name: 'Pre-reading & pre-writing skills'}, {id: 'sub-6', name: 'Songs, games, drawing, motor skills'}] },
+    { id: 'lvl-n2', name: 'Nursery 2 (Middle Class)', age: '4-5 yrs', subjects: [{id: 'sub-7', name: 'Oral language (Kinyarwanda)'}, {id: 'sub-8', name: 'Counting'}, {id: 'sub-9', name: 'Social behavior'}, {id: 'sub-10', name: 'Art & play'}] },
+    { id: 'lvl-n3', name: 'Nursery 3 (Top Class)', age: '5-6 yrs', subjects: [{id: 'sub-11', name: 'Early literacy (Kinyarwanda & English intro)'}, {id: 'sub-12', name: 'Basic math'}, {id: 'sub-13', name: 'Morals & hygiene'}] },
+];
+
+const rwanPrimaryLevels: Level[] = [
+    { id: 'lvl-p1', name: 'P1', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-15', name: 'English'}, {id: 'sub-3', name: 'Mathematics'}, {id: 'sub-16', name: 'Social & Religious Education (SRE)'}, {id: 'sub-17', name: 'Science & Elementary Technology (SET)'}, {id: 'sub-18', name: 'Creative Arts & Music'}, {id: 'sub-19', name: 'Physical Education'}] },
+    { id: 'lvl-p2', name: 'P2', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-15', name: 'English'}, {id: 'sub-3', name: 'Mathematics'}, {id: 'sub-16', name: 'Social & Religious Education (SRE)'}, {id: 'sub-17', name: 'Science & Elementary Technology (SET)'}, {id: 'sub-18', name: 'Creative Arts & Music'}, {id: 'sub-19', name: 'Physical Education'}] },
+    { id: 'lvl-p3', name: 'P3', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-15', name: 'English'}, {id: 'sub-3', name: 'Mathematics'}, {id: 'sub-16', name: 'Social & Religious Education (SRE)'}, {id: 'sub-17', name: 'Science & Elementary Technology (SET)'}, {id: 'sub-18', name: 'Creative Arts & Music'}, {id: 'sub-19', name: 'Physical Education'}] },
+    { id: 'lvl-p4', name: 'P4', subjects: [{id: 'sub-15', name: 'English'}, {id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-3', name: 'Mathematics'}, {id: 'sub-20', name: 'Science & Elementary Technology'}, {id: 'sub-21', name: 'Social & Religious Studies'}, {id: 'sub-22', name: 'ICT (basic)'}, {id: 'sub-23', name: 'French (optional)'}, {id: 'sub-24', name: 'Creative Arts'}, {id: 'sub-19', name: 'Physical Education'}] },
+    { id: 'lvl-p5', name: 'P5', subjects: [{id: 'sub-15', name: 'English'}, {id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-3', name: 'Mathematics'}, {id: 'sub-20', name: 'Science & Elementary Technology'}, {id: 'sub-21', name: 'Social & Religious Studies'}, {id: 'sub-22', name: 'ICT (basic)'}, {id: 'sub-23', name: 'French (optional)'}, {id: 'sub-24', name: 'Creative Arts'}, {id: 'sub-19', name: 'Physical Education'}] },
+    { id: 'lvl-p6', name: 'P6', subjects: [{id: 'sub-15', name: 'English'}, {id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-3', name: 'Mathematics'}, {id: 'sub-20', name: 'Science & Elementary Technology'}, {id: 'sub-21', name: 'Social & Religious Studies'}, {id: 'sub-22', name: 'ICT (basic)'}, {id: 'sub-23', name: 'French (optional)'}, {id: 'sub-24', name: 'Creative Arts'}, {id: 'sub-19', name: 'Physical Education'}] },
+];
+
+const rwanOLevelSubjects: Subject[] = [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}, {id: 'sub-15', name: 'English'}, {id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-23', name: 'French'}, {id: 'sub-27', name: 'Kiswahili'}, {id: 'sub-2', name: 'History'}, {id: 'sub-28', name: 'Geography'}, {id: 'sub-29', name: 'Entrepreneurship'}, {id: 'sub-22', name: 'ICT'}, {id: 'sub-21', name: 'Religious Education (optional)'}, {id: 'sub-19', name: 'Physical Education'}];
+
+const rwanOLevels: Level[] = [
+    { id: 'lvl-s1', name: 'S1', subjects: rwanOLevelSubjects },
+    { id: 'lvl-s2', name: 'S2', subjects: rwanOLevelSubjects },
+    { id: 'lvl-s3', name: 'S3', subjects: rwanOLevelSubjects },
+];
+
+const rwanALevelStreams: Stream[] = [
+    {id: 'stream-gen-sci', name: 'Sciences', subjects: [{id: 'sub-1', name: 'PCB'}, {id: 'sub-1', name: 'PCM'}, {id: 'sub-1', name: 'MCB'}, {id: 'sub-1', name: 'MPC'}, {id: 'sub-1', name: 'MPG'}, {id: 'sub-1', name: 'BCM'}]},
+    {id: 'stream-gen-arts', name: 'Arts & Humanities', subjects: [{id: 'sub-2', name: 'HEG'}, {id: 'sub-2', name: 'HEL'}, {id: 'sub-2', name: 'HGL'}, {id: 'sub-2', name: 'HEK'}, {id: 'sub-2', name: 'HEPS'}]},
+    {id: 'stream-gen-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-4', name: 'KLF'}, {id: 'sub-4', name: 'ELF'}, {id: 'sub-4', name: 'KLE'}, {id: 'sub-4', name: 'GEL'}]},
+    {id: 'stream-ttc', name: 'TTC (Teacher Training College)', subjects: [{id: 'sub-15', name: 'Education in Languages'}, {id: 'sub-3', name: 'Education in Mathematics & Science'}, {id: 'sub-21', name: 'Education in Social Studies'}, {id: 'sub-11', name: 'Early Childhood Development (ECD)'}, {id: 'sub-16', name: 'Inclusive & Special Needs Education'}]},
+    {id: 'stream-tvet', name: 'TVET (Technical & Vocational)', subjects: [{id: 'sub-33', name: 'Software Development'}, {id: 'sub-34', name: 'Networking'}, {id: 'sub-35', name: 'Masonry'}, {id: 'sub-36', name: 'Plumbing'}, {id: 'sub-37', name: 'Civil Engineering'}, {id: 'sub-38', name: 'Culinary Arts'}, {id: 'sub-39', name: 'Hotel Operations'}, {id: 'sub-40', name: 'Crop Production'}, {id: 'sub-41', name: 'Animal Husbandry'}, {id: 'sub-42', name: 'Electrical Installation'}, {id: 'sub-43', name: 'Electronics Maintenance'}, {id: 'sub-44', name: 'Tailoring'}, {id: 'sub-45', name: 'Garment Technology'}, {id: 'sub-46', name: 'Welding'}, {id: 'sub-47', name: 'Automobile Mechanics'}, {id: 'sub-48', name: 'Finance'}, {id: 'sub-49', name: 'Cooperative Management'}, {id: 'sub-50', name: 'Cosmetology'}, {id: 'sub-51', name: 'Photography'}, {id: 'sub-52', name: 'Video Production'}]},
+];
+
+const rwanALevels: Level[] = [
+    { id: 'lvl-s4', name: 'S4', streams: rwanALevelStreams },
+    { id: 'lvl-s5', name: 'S5', streams: rwanALevelStreams },
+    { id: 'lvl-s6', name: 'S6', streams: rwanALevelStreams },
+];
+
+
+export let cycles: Cycle[] = [
+    { id: 'cycle-rwa-1', name: 'Pre-Primary (Nursery)', curriculumId: 'cur-1', levels: rwanNurseryLevels },
+    { id: 'cycle-rwa-2', name: 'Primary Education (P1 - P6)', curriculumId: 'cur-1', levels: rwanPrimaryLevels },
+    { id: 'cycle-rwa-3', name: 'Ordinary Level (O-Level)', curriculumId: 'cur-1', levels: rwanOLevels },
+    { id: 'cycle-rwa-4', name: 'Advanced Level (A-Level)', curriculumId: 'cur-1', levels: rwanALevels },
+
+    // Placeholder for other curricula
+    { id: 'cycle-generic-1', name: 'Secondary', curriculumId: 'cur-9', levels: [ {id: 'lvl-g1', name: 'Grade 10', subjects: [{id:'sub-1', name: 'Physics'}] }, {id: 'lvl-g2', name: 'Grade 11', subjects: [{id:'sub-2', name: 'History'}] } ] },
+    { id: 'cycle-generic-2', name: 'University', curriculumId: 'cur-9', levels: [ {id: 'lvl-u1', name: 'Year 1', subjects: [{id:'sub-3', name: 'Mathematics'}] } ] }
+];
+
+export let levels: Level[] = [...rwanNurseryLevels, ...rwanPrimaryLevels, ...rwanOLevels, ...rwanALevels];
 
 // Functions to add new items to the mock data
 // In a real app, these would be API calls to your backend.
