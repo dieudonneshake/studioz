@@ -1,5 +1,6 @@
 
 
+
 export type User = {
   id: string;
   name: string;
@@ -44,6 +45,17 @@ export type Video = {
   level: string;
   subject: string;
   unit?: string;
+};
+
+export type Short = {
+    id: string;
+    title: string;
+    uploaderId: string;
+    videoUrl: string;
+    thumbnail_path: string;
+    likes: number;
+    comments: number;
+    shares: number;
 };
 
 export type QuizQuestion = {
