@@ -42,6 +42,7 @@ export type Stream = {
 export type Subject = {
   id: string;
   name: string;
+  subjects?: Subject[]; // For nested subject groups
 };
 
 export type Video = {
@@ -103,3 +104,5 @@ export type WatchHistory = {
   video_id: string;
   watched_at: string;
 };
+
+    

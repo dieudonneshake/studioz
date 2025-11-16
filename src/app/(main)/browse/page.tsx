@@ -4,6 +4,38 @@ import { Card } from '@/components/ui/card';
 import { curricula, cycles } from '@/lib/data';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { Subject } from '@/lib/types';
+
+const renderSubjects = (subjects: Subject[] | undefined, levelName: string) => {
+    if (!subjects) return null;
+    return subjects.map(subject => {
+        if (subject.subjects) { // This is a nested group of subjects
+            return (
+                <Accordion type="multiple" key={subject.id} className="w-full space-y-2">
+                    <AccordionItem value={subject.id} className="border rounded-md bg-secondary/80">
+                        <AccordionTrigger className="px-4 py-2 font-medium hover:no-underline text-sm">
+                            {subject.name}
+                        </AccordionTrigger>
+                        <AccordionContent className="p-4 border-t">
+                            <div className="space-y-2">
+                                {renderSubjects(subject.subjects, levelName)}
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            );
+        }
+        // This is a direct subject link
+        return (
+            <Link href={`/browse/results?subject=${subject.name}&level=${levelName}`} key={subject.id} className="block">
+                <div className="flex items-center justify-between p-3 rounded-md bg-background hover:bg-secondary transition-colors">
+                    <span>{subject.name}</span>
+                    <ChevronRight className="h-4 w-4" />
+                </div>
+            </Link>
+        );
+    });
+};
 
 export default function BrowsePage() {
   return (
@@ -37,14 +69,7 @@ export default function BrowsePage() {
                                              </AccordionTrigger>
                                              <AccordionContent className="p-4 border-t">
                                                <div className="space-y-2">
-                                                 {level.subjects && level.subjects.map(subject => (
-                                                   <Link href={`/browse/results?subject=${subject.name}&level=${level.name}`} key={subject.id} className="block">
-                                                     <div className="flex items-center justify-between p-3 rounded-md bg-secondary hover:bg-secondary/80 transition-colors">
-                                                       <span>{subject.name}</span>
-                                                       <ChevronRight className="h-4 w-4" />
-                                                     </div>
-                                                   </Link>
-                                                 ))}
+                                                 {level.subjects && renderSubjects(level.subjects, level.name)}
                                                  {level.streams && level.streams.map(stream => (
                                                     <Accordion type="multiple" key={stream.id} className="w-full space-y-2">
                                                         <AccordionItem value={stream.id} className="border rounded-md bg-secondary/80">
@@ -53,14 +78,7 @@ export default function BrowsePage() {
                                                             </AccordionTrigger>
                                                             <AccordionContent className="p-4 border-t">
                                                                 <div className="space-y-2">
-                                                                {stream.subjects.map(subject => (
-                                                                    <Link href={`/browse/results?subject=${subject.name}&level=${level.name}`} key={subject.id} className="block">
-                                                                        <div className="flex items-center justify-between p-3 rounded-md bg-background hover:bg-secondary transition-colors">
-                                                                        <span>{subject.name}</span>
-                                                                        <ChevronRight className="h-4 w-4" />
-                                                                        </div>
-                                                                    </Link>
-                                                                ))}
+                                                                    {renderSubjects(stream.subjects, level.name)}
                                                                 </div>
                                                             </AccordionContent>
                                                         </AccordionItem>
@@ -85,3 +103,5 @@ export default function BrowsePage() {
     </div>
   );
 }
+
+    
