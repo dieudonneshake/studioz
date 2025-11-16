@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -27,9 +28,18 @@ const shareOptions = [
 
 export function ShareSheet({ open, onOpenChange, shortId }: ShareSheetProps) {
   const { toast } = useToast();
-  const shareUrl = `${window.location.origin}/shorts/${shortId}`;
+  const [shareUrl, setShareUrl] = useState('');
+
+  useEffect(() => {
+    // This code will only run on the client, after the component has mounted.
+    if (typeof window !== 'undefined') {
+      setShareUrl(`${window.location.origin}/shorts/${shortId}`);
+    }
+  }, [shortId]);
+
 
   const handleCopy = () => {
+    if (!shareUrl) return;
     navigator.clipboard.writeText(shareUrl);
     toast({
       title: "Copied to clipboard!",
@@ -60,8 +70,8 @@ export function ShareSheet({ open, onOpenChange, shortId }: ShareSheetProps) {
             ))}
         </div>
         <div className="mt-8 flex items-center gap-2">
-            <Input value={shareUrl} readOnly />
-            <Button size="icon" variant="secondary" onClick={handleCopy}>
+            <Input value={shareUrl} readOnly placeholder="Generating share link..." />
+            <Button size="icon" variant="secondary" onClick={handleCopy} disabled={!shareUrl}>
                 <Copy className="h-4 w-4" />
             </Button>
         </div>
