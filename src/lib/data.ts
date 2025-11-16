@@ -93,6 +93,29 @@ export let subjects: Subject[] = [
   { id: 'sub-bi-26', name: 'Workshop practice' },
   { id: 'sub-bi-27', name: 'Hospitality' },
   { id: 'sub-bi-28', name: 'Catering' },
+  
+  // Kenya Subjects
+  { id: 'sub-ke-1', name: 'Environmental Studies (Kenya)' },
+  { id: 'sub-ke-2', name: 'Religious Education (Kenya)' },
+  { id: 'sub-ke-3', name: 'Science (Kenya)' },
+  { id: 'sub-ke-4', name: 'Social Studies (Kenya)' },
+  { id: 'sub-ke-5', name: 'Art & Music (Kenya)' },
+  { id: 'sub-ke-6', name: 'Literature in English' },
+  { id: 'sub-ke-7', name: 'CRE / Islamic Studies' },
+  { id: 'sub-ke-8', name: 'Technical Drawing' },
+  { id: 'sub-ke-9', name: 'Agriculture' },
+  { id: 'sub-ke-10', name: 'German / Arabic / Local Languages' },
+  { id: 'sub-ke-11', name: 'Digital Literacy' },
+  { id: 'sub-ke-12', name: 'Mechanics' },
+  { id: 'sub-ke-13', name: 'Electrical Technology' },
+  { id: 'sub-ke-14', name: 'Crop Science' },
+  { id: 'sub-ke-15', name: 'Animal Husbandry' },
+  { id: 'sub-ke-16', name: 'Agribusiness' },
+  { id: 'sub-ke-17', name: 'Tourism Geography' },
+  { id: 'sub-ke-18', name: 'Commerce' },
+  { id: 'sub-ke-19', name: 'Nursing' },
+  { id: 'sub-ke-20', name: 'First Aid' },
+  { id: 'sub-ke-21', name: 'Community Health' },
 
   // A-Level Combinations (as subjects)
   { id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)', subjects: [{id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}] },
@@ -168,26 +191,37 @@ const rwanOLevels: Level[] = [
 ];
 
 const rwanALevelStreams: Stream[] = [
-    {id: 'stream-gen-ed', name: 'General Education (Academic Pathway)', 
+    {
+        id: 'stream-gen-ed', name: '1. GENERAL EDUCATION (Academic Pathway)',
         subjects: [
-            {id: 'sub-stream-sci', name: 'Science Combinations', subjects: [{id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)', subjects: [{id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}]}, {id: 'sub-combo-pcm', name: 'PCM (Physics, Chemistry, Mathematics)', subjects: [{id: 'sub-1', name: 'Physics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-3', name: 'Mathematics'}]}, {id: 'sub-combo-mcb', name: 'MCB (Mathematics, Chemistry, Biology)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-26', name: 'Biology'}]}, {id: 'sub-combo-mpc', name: 'MPC (Mathematics, Physics, Computer Science)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-1', name: 'Physics'}, {id: 'sub-30', name: 'Computer Science'}]}, {id: 'sub-combo-mpg', name: 'MPG (Mathematics, Physics, Geography)', subjects: [{id: 'sub-3', name: 'Mathematics'}, {id: 'sub-1', name: 'Physics'}, {id: 'sub-28', name: 'Geography'}]}, {id: 'sub-combo-bcm', name: 'BCM (Biology, Chemistry, Mathematics)', subjects: [{id: 'sub-26', name: 'Biology'}, {id: 'sub-25', name: 'Chemistry'}, {id: 'sub-3', name: 'Mathematics'}]}]},
-            {id: 'sub-stream-arts', name: 'Arts & Humanities Combinations', subjects: [{id: 'sub-combo-heg', name: 'HEG (History, Economics, Geography)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-28', name: 'Geography'}]}, {id: 'sub-combo-hel', name: 'HEL (History, Economics, Literature)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-4', name: 'Literature'}]}, {id: 'sub-combo-hgl', name: 'HGL (History, Geography, Literature)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-28', name: 'Geography'}, {id: 'sub-4', name: 'Literature'}]}, {id: 'sub-combo-heps', name: 'HEPS (History, Economics, Political Science)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-32', name: 'Political Science'}]}, {id: 'sub-combo-hek', name: 'HEK (History, Economics, Kiswahili)', subjects: [{id: 'sub-2', name: 'History'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-27', name: 'Kiswahili'}]}]},
-            {id: 'sub-stream-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-combo-klf', name: 'KLF (Kinyarwanda, Literature, French)', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-23', name: 'French'}]}, {id: 'sub-combo-elf', name: 'ELF (English, Literature, French)', subjects: [{id: 'sub-15', name: 'English'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-23', name: 'French'}]}, {id: 'sub-combo-kle', name: 'KLE (Kinyarwanda, Literature, English)', subjects: [{id: 'sub-14', name: 'Kinyarwanda'}, {id: 'sub-4', name: 'Literature'}, {id: 'sub-15', name: 'English'}]}, {id: 'sub-combo-gel', name: 'GEL (Geography, Economics, Literature)', subjects: [{id: 'sub-28', name: 'Geography'}, {id: 'sub-31', name: 'Economics'}, {id: 'sub-4', name: 'Literature'}]}]},
+            { id: 'sub-stream-sci', name: 'Science Combinations', subjects: [{ id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)', subjects: [{ id: 'sub-1', name: 'Physics' }, { id: 'sub-25', name: 'Chemistry' }, { id: 'sub-26', name: 'Biology' }] }, { id: 'sub-combo-pcm', name: 'PCM (Physics, Chemistry, Mathematics)', subjects: [{ id: 'sub-1', name: 'Physics' }, { id: 'sub-25', name: 'Chemistry' }, { id: 'sub-3', name: 'Mathematics' }] }, { id: 'sub-combo-mcb', name: 'MCB (Mathematics, Chemistry, Biology)', subjects: [{ id: 'sub-3', name: 'Mathematics' }, { id: 'sub-25', name: 'Chemistry' }, { id: 'sub-26', name: 'Biology' }] }, { id: 'sub-combo-mpc', name: 'MPC (Mathematics, Physics, Computer Science)', subjects: [{ id: 'sub-3', name: 'Mathematics' }, { id: 'sub-1', name: 'Physics' }, { id: 'sub-30', name: 'Computer Science' }] }, { id: 'sub-combo-mpg', name: 'MPG (Mathematics, Physics, Geography)', subjects: [{ id: 'sub-3', name: 'Mathematics' }, { id: 'sub-1', name: 'Physics' }, { id: 'sub-28', name: 'Geography' }] }, { id: 'sub-combo-bcm', name: 'BCM (Biology, Chemistry, Mathematics)', subjects: [{ id: 'sub-26', name: 'Biology' }, { id: 'sub-25', name: 'Chemistry' }, { id: 'sub-3', name: 'Mathematics' }] }] },
+            { id: 'sub-stream-arts', name: 'Arts & Humanities Combinations', subjects: [{ id: 'sub-combo-heg', name: 'HEG (History, Economics, Geography)', subjects: [{ id: 'sub-2', name: 'History' }, { id: 'sub-31', name: 'Economics' }, { id: 'sub-28', name: 'Geography' }] }, { id: 'sub-combo-hel', name: 'HEL (History, Economics, Literature)', subjects: [{ id: 'sub-2', name: 'History' }, { id: 'sub-31', name: 'Economics' }, { id: 'sub-4', name: 'Literature' }] }, { id: 'sub-combo-hgl', name: 'HGL (History, Geography, Literature)', subjects: [{ id: 'sub-2', name: 'History' }, { id: 'sub-28', name: 'Geography' }, { id: 'sub-4', name: 'Literature' }] }, { id: 'sub-combo-heps', name: 'HEPS (History, Economics, Political Science)', subjects: [{ id: 'sub-2', name: 'History' }, { id: 'sub-31', name: 'Economics' }, { id: 'sub-32', name: 'Political Science' }] }, { id: 'sub-combo-hek', name: 'HEK (History, Economics, Kiswahili)', subjects: [{ id: 'sub-2', name: 'History' }, { id: 'sub-31', name: 'Economics' }, { id: 'sub-27', name: 'Kiswahili' }] }] },
+            { id: 'sub-stream-lang', name: 'Languages / Social Sciences', subjects: [{ id: 'sub-combo-klf', name: 'KLF (Kinyarwanda, Literature, French)', subjects: [{ id: 'sub-14', name: 'Kinyarwanda' }, { id: 'sub-4', name: 'Literature' }, { id: 'sub-23', name: 'French' }] }, { id: 'sub-combo-elf', name: 'ELF (English, Literature, French)', subjects: [{ id: 'sub-15', name: 'English' }, { id: 'sub-4', name: 'Literature' }, { id: 'sub-23', name: 'French' }] }, { id: 'sub-combo-kle', name: 'KLE (Kinyarwanda, Literature, English)', subjects: [{ id: 'sub-14', name: 'Kinyarwanda' }, { id: 'sub-4', name: 'Literature' }, { id: 'sub-15', name: 'English' }] }, { id: 'sub-combo-gel', name: 'GEL (Geography, Economics, Literature)', subjects: [{ id: 'sub-28', name: 'Geography' }, { id: 'sub-31', name: 'Economics' }, { id: 'sub-4', name: 'Literature' }] }] },
         ]
     },
-    {id: 'stream-ttc', name: 'TTC (Teacher Training College)', subjects: [{id: 'sub-ttc-lang', name: 'Education in Languages'}, {id: 'sub-ttc-sci', name: 'Education in Mathematics & Science'}, {id: 'sub-ttc-social', name: 'Education in Social Studies'}, {id: 'sub-ttc-ecd', name: 'Early Childhood Development (ECD)'}, {id: 'sub-ttc-sne', name: 'Inclusive & Special Needs Education'}]},
-    {id: 'stream-tvet', name: 'TVET (Technical & Vocational Education)', 
+    {
+        id: 'stream-ttc', name: '2. TTC (Teacher Training College)',
         subjects: [
-            {id: 'sub-stream-ict', name: 'ICT', subjects: [{id: 'sub-tvet-soft', name: 'Software Development'}, {id: 'sub-tvet-net', name: 'Networking'}]},
-            {id: 'sub-stream-construct', name: 'Construction', subjects: [{id: 'sub-tvet-mason', name: 'Masonry'}, {id: 'sub-tvet-plumb', name: 'Plumbing'}, {id: 'sub-tvet-civil', name: 'Civil Engineering'}]},
-            {id: 'sub-stream-hospitality', name: 'Hospitality & Tourism', subjects: [{id: 'sub-tvet-culinary', name: 'Culinary Arts'}, {id: 'sub-tvet-hotel', name: 'Hotel Management'}]},
-            {id: 'sub-stream-agri', name: 'Agriculture', subjects: [{id: 'sub-tvet-crop', name: 'Crop Production'}, {id: 'sub-tvet-animal', name: 'Animal Production'}, {id: 'sub-tvet-agro', name: 'Agro-processing'}]},
-            {id: 'sub-stream-elec', name: 'Electricity & Electronics', subjects: [{id: 'sub-tvet-elec', name: 'Electrical Installation'}, {id: 'sub-tvet-repair', name: 'Electronics Repair'}]},
-            {id: 'sub-stream-mech', name: 'Mechanical Engineering', subjects: [{id: 'sub-tvet-weld', name: 'Welding'}, {id: 'sub-tvet-mech', name: 'Motor Vehicle Mechanics'}]},
-            {id: 'sub-stream-fashion', name: 'Fashion & Design', subjects: [{id: 'sub-tvet-tailor', name: 'Tailoring'}, {id: 'sub-tvet-garment', name: 'Garment Technology'}]},
-            {id: 'sub-stream-biz', name: 'Business & Accounting', subjects: [{id: 'sub-tvet-finance', name: 'Finance'}, {id: 'sub-tvet-coop', name: 'Cooperative Management'}]},
-            {id: 'sub-stream-beauty', name: 'Beauty & Hairdressing', subjects: [{id: 'sub-tvet-cosmo', name: 'Cosmetology'}]},
-            {id: 'sub-stream-media', name: 'Creative Arts / Media Production', subjects: [{id: 'sub-tvet-media', name: 'Creative Arts / Media Production'}]},
+            { id: 'sub-ttc-lang', name: 'Education in Languages' },
+            { id: 'sub-ttc-sci', name: 'Education in Mathematics & Science' },
+            { id: 'sub-ttc-social', name: 'Education in Social Studies' },
+            { id: 'sub-ttc-ecd', name: 'Early Childhood Development (ECD)' },
+            { id: 'sub-ttc-sne', name: 'Inclusive & Special Needs Education' },
+        ]
+    },
+    {
+        id: 'stream-tvet', name: '3. TVET (Technical & Vocational)',
+        subjects: [
+            { id: 'sub-stream-ict', name: 'ICT', subjects: [{ id: 'sub-tvet-soft', name: 'Software Development' }, { id: 'sub-tvet-net', name: 'Networking' }] },
+            { id: 'sub-stream-construct', name: 'Construction', subjects: [{ id: 'sub-tvet-mason', name: 'Masonry' }, { id: 'sub-tvet-plumb', name: 'Plumbing' }, { id: 'sub-tvet-civil', name: 'Civil Engineering' }] },
+            { id: 'sub-stream-hospitality', name: 'Hospitality & Tourism', subjects: [{ id: 'sub-tvet-culinary', name: 'Culinary Arts' }, { id: 'sub-tvet-hotel', name: 'Hotel Management' }] },
+            { id: 'sub-stream-agri', name: 'Agriculture', subjects: [{ id: 'sub-tvet-crop', name: 'Crop Production' }, { id: 'sub-tvet-animal', name: 'Animal Production' }, { id: 'sub-tvet-agro', name: 'Agro-processing' }] },
+            { id: 'sub-stream-elec', name: 'Electricity & Electronics', subjects: [{ id: 'sub-tvet-elec', name: 'Electrical Installation' }, { id: 'sub-tvet-repair', name: 'Electronics Repair' }] },
+            { id: 'sub-stream-mech', name: 'Mechanical Engineering', subjects: [{ id: 'sub-tvet-weld', name: 'Welding' }, { id: 'sub-tvet-mech', name: 'Motor Vehicle Mechanics' }] },
+            { id: 'sub-stream-fashion', name: 'Fashion & Design', subjects: [{ id: 'sub-tvet-tailor', name: 'Tailoring' }, { id: 'sub-tvet-garment', name: 'Garment Technology' }] },
+            { id: 'sub-stream-biz', name: 'Business & Accounting', subjects: [{ id: 'sub-tvet-finance', name: 'Finance' }, { id: 'sub-tvet-coop', name: 'Cooperative Management' }] },
+            { id: 'sub-stream-beauty', name: 'Beauty & Hairdressing', subjects: [{ id: 'sub-tvet-cosmo', name: 'Cosmetology' }] },
+            { id: 'sub-stream-media', name: 'Creative Arts / Media Production', subjects: [{ id: 'sub-tvet-media', name: 'Creative Arts / Media Production' }] },
         ]
     },
 ];
@@ -200,7 +234,7 @@ const rwanALevels: Level[] = [
 
 const rwanUniversityLevels: Level[] = [
     {
-        id: 'lvl-u-cert', name: 'Certificate Programs', subjects: [
+        id: 'lvl-u-cert', name: 'A. Certificate Programs', subjects: [
             { id: 'sub-u-cert-ict', name: 'Certificate in ICT' },
             { id: 'sub-u-cert-biz', name: 'Certificate in Business Communication' },
             { id: 'sub-u-cert-ent', name: 'Certificate in Entrepreneurship' },
@@ -209,7 +243,7 @@ const rwanUniversityLevels: Level[] = [
         ]
     },
     {
-        id: 'lvl-u-dip', name: 'Diploma Programs', subjects: [
+        id: 'lvl-u-dip', name: 'B. Diploma Programs', subjects: [
             { id: 'sub-u-dip-edu', name: 'Diploma in Education' },
             { id: 'sub-u-dip-nurse', name: 'Diploma in Nursing' },
             { id: 'sub-u-dip-ict', name: 'Diploma in ICT' },
@@ -219,7 +253,7 @@ const rwanUniversityLevels: Level[] = [
         ]
     },
     {
-        id: 'lvl-u-undergrad', name: 'Undergraduate Degrees (Bachelor’s)', subjects: [
+        id: 'lvl-u-undergrad', name: 'C. Undergraduate Degrees (Bachelor’s)', subjects: [
             {
                 id: 'sub-u-sbe', name: 'School of Business & Economics (SBE)', subjects: [
                     { id: 'sub-u-bba-acc', name: 'BBA – Accounting' },
@@ -351,7 +385,7 @@ const rwanUniversityLevels: Level[] = [
 
 // Burundi Curriculum Data
 const burundiPrePrimaryLevels: Level[] = [
-    { id: 'lvl-bi-n1', name: 'M1', age: '3-4', subjects: [{ id: 'sub-5', name: 'Psychomotor skills' }, { id: 'sub-bi-1', name: 'Kirundi' }, { id: 'sub-12', name: 'early maths' }, { id: 'sub-13', name: 'hygiene' }, { id: 'sub-24', name: 'creative arts' }] },
+    { id: 'lvl-bi-n1', name: 'M1', age: '3-4', subjects: [{ id: 'sub-6', name: 'Psychomotor skills' }, { id: 'sub-bi-1', name: 'Kirundi' }, { id: 'sub-12', name: 'early maths' }, { id: 'sub-13', name: 'hygiene' }, { id: 'sub-24', name: 'creative arts' }] },
     { id: 'lvl-bi-n2', name: 'M2', age: '4-5', subjects: [{ id: 'sub-7', name: 'Language development' }, { id: 'sub-8', name: 'numeracy' }, { id: 'sub-bi-4', name: 'Art' }, { id: 'sub-bi-2', name: 'environment' }] },
     { id: 'lvl-bi-n3', name: 'M3', age: '5-6', subjects: [{ id: 'sub-5', name: 'Pre-reading' }, { id: 'sub-5', name: 'pre-writing' }, { id: 'sub-8', name: 'numeracy' }, { id: 'sub-bi-3', name: 'social & moral education' }, { id: 'sub-bi-10', name: 'Arts' }] },
 ];
@@ -380,12 +414,12 @@ const burundiLowerSecondaryLevels: Level[] = [
 ];
 
 const burundiUpperSecondaryStreams: Stream[] = [
-    { id: 'stream-bi-gen', name: 'General Education', subjects: [
+    { id: 'stream-bi-gen', name: 'A. General Education Stream', subjects: [
         { id: 'sub-stream-bi-sci', name: 'Sciences', subjects: [{ id: 'sub-1', name: 'Physics' }, { id: 'sub-25', name: 'Chemistry' }, { id: 'sub-26', name: 'Biology' }] },
         { id: 'sub-stream-bi-hum', name: 'Humanities', subjects: [{ id: 'sub-2', name: 'History' }, { id: 'sub-28', name: 'Geography' }, { id: 'sub-31', name: 'Economics' }, { id: 'sub-bi-11', name: 'Philosophy' }] },
         { id: 'sub-stream-bi-lang', name: 'Languages', subjects: [{ id: 'sub-23', name: 'French' }, { id: 'sub-15', name: 'English' }, { id: 'sub-bi-1', name: 'Kirundi' }, { id: 'sub-4', name: 'Literature' }] },
     ]},
-    { id: 'stream-bi-tvet', name: 'Technical & Vocational (A2 Technique)', subjects: [
+    { id: 'stream-bi-tvet', name: 'B. Technical & Vocational Stream (A2 Technique)', subjects: [
         { id: 'sub-bi-tvet-ped', name: 'Pedagogy', subjects: [{ id: 'sub-bi-14', name: 'Psychology' }, { id: 'sub-bi-13', name: 'Pedagogy' }, { id: 'sub-bi-15', name: 'Child Development' }] },
         { id: 'sub-bi-tvet-acc', name: 'Accounting', subjects: [{ id: 'sub-bi-16', name: 'Accounting' }, { id: 'sub-bi-17', name: 'Management' }, { id: 'sub-bi-18', name: 'Finance' }] },
         { id: 'sub-bi-tvet-it', name: 'IT', subjects: [{ id: 'sub-bi-19', name: 'Programming' }, { id: 'sub-bi-20', name: 'Networks' }, { id: 'sub-bi-21', name: 'Operating Systems' }] },
@@ -402,6 +436,66 @@ const burundiUpperSecondaryLevels: Level[] = [
     { id: 'lvl-bi-s13', name: 'Grade 13', streams: burundiUpperSecondaryStreams },
 ];
 
+// Kenya Curriculum Data
+const kenyaPrePrimaryLevels: Level[] = [
+    { id: 'lvl-ke-pp1', name: 'Pre-primary 1 (PP1)', age: '4-5', subjects: [{ id: 'sub-5', name: 'Early literacy & numeracy' }, { id: 'sub-6', name: 'motor skills' }, { id: 'sub-9', name: 'social-emotional development' }, { id: 'sub-6', name: 'songs & play' }] },
+    { id: 'lvl-ke-pp2', name: 'Pre-primary 2 (PP2)', age: '5-6', subjects: [{ id: 'sub-5', name: 'Early reading & writing' }, { id: 'sub-8', name: 'counting' }, { id: 'sub-ke-1', name: 'environment exploration' }, { id: 'sub-13', name: 'moral values' }, { id: 'sub-24', name: 'creative arts' }] },
+];
+
+const kenyaPrimarySubjects: Subject[] = [{ id: 'sub-27', name: 'Kiswahili' }, { id: 'sub-15', name: 'English' }, { id: 'sub-3', name: 'Mathematics' }, { id: 'sub-ke-1', name: 'Environmental Studies' }, { id: 'sub-ke-2', name: 'Religious Education' }, { id: 'sub-ke-5', name: 'Music & Art' }, { id: 'sub-19', name: 'Physical Education' }];
+const kenyaUpperPrimarySubjects: Subject[] = [{ id: 'sub-27', name: 'Kiswahili' }, { id: 'sub-15', name: 'English' }, { id: 'sub-3', name: 'Mathematics' }, { id: 'sub-ke-3', name: 'Science' }, { id: 'sub-ke-4', name: 'Social Studies' }, { id: 'sub-ke-2', name: 'Religious Education' }, { id: 'sub-ke-5', name: 'Music & Art' }, { id: 'sub-19', name: 'Physical Education' }];
+
+const kenyaPrimaryLevels: Level[] = [
+    { id: 'lvl-ke-g1', name: 'Grade 1', subjects: kenyaPrimarySubjects },
+    { id: 'lvl-ke-g2', name: 'Grade 2', subjects: kenyaPrimarySubjects },
+    { id: 'lvl-ke-g3', name: 'Grade 3', subjects: kenyaPrimarySubjects },
+    { id: 'lvl-ke-g4', name: 'Grade 4', subjects: kenyaUpperPrimarySubjects },
+    { id: 'lvl-ke-g5', name: 'Grade 5', subjects: kenyaUpperPrimarySubjects },
+    { id: 'lvl-ke-g6', name: 'Grade 6', subjects: kenyaUpperPrimarySubjects },
+];
+
+const kenyaJuniorSecondarySubjects: Subject[] = [{ id: 'sub-27', name: 'Kiswahili' }, { id: 'sub-15', name: 'English' }, { id: 'sub-3', name: 'Mathematics' }, { id: 'sub-ke-3', name: 'Science (Biology, Chemistry, Physics intro)' }, { id: 'sub-ke-4', name: 'Social Studies' }, { id: 'sub-ke-2', name: 'Religious Education' }, { id: 'sub-22', name: 'ICT' }, { id: 'sub-19', name: 'Physical Education' }, { id: 'sub-ke-5', name: 'Art & Music' }];
+
+const kenyaJuniorSecondaryLevels: Level[] = [
+    { id: 'lvl-ke-g7', name: 'Grade 7', subjects: kenyaJuniorSecondarySubjects },
+    { id: 'lvl-ke-g8', name: 'Grade 8', subjects: kenyaJuniorSecondarySubjects },
+    { id: 'lvl-ke-g9', name: 'Grade 9', subjects: kenyaJuniorSecondarySubjects },
+];
+
+const kenyaSeniorSecondaryStreams: Stream[] = [
+    {
+        id: 'stream-ke-sci', name: 'A. Science Stream', subjects: [
+            { id: 'sub-3', name: 'Mathematics' }, { id: 'sub-1', name: 'Physics' }, { id: 'sub-25', name: 'Chemistry' }, { id: 'sub-26', name: 'Biology' }, { id: 'sub-27', name: 'Kiswahili' }, { id: 'sub-15', name: 'English' }, { id: 'sub-22', name: 'ICT / Computer Studies (Optional)' }, { id: 'sub-ke-9', name: 'Agriculture / Technical Drawing (Optional)' }, { id: 'sub-ke-2', name: 'Religious Education (Optional)' }
+        ]
+    },
+    {
+        id: 'stream-ke-hum', name: 'B. Humanities / Arts Stream', subjects: [
+            { id: 'sub-2', name: 'History' }, { id: 'sub-28', name: 'Geography' }, { id: 'sub-31', name: 'Economics' }, { id: 'sub-ke-6', name: 'Literature in English' }, { id: 'sub-27', name: 'Kiswahili' }, { id: 'sub-15', name: 'English' }, { id: 'sub-ke-7', name: 'CRE / Islamic Studies (Optional)' }, { id: 'sub-22', name: 'ICT / Technical Drawing (Optional)' }
+        ]
+    },
+    {
+        id: 'stream-ke-lang', name: 'C. Languages Stream', subjects: [
+            { id: 'sub-15', name: 'English' }, { id: 'sub-27', name: 'Kiswahili' }, { id: 'sub-23', name: 'French (Optional)' }, { id: 'sub-ke-10', name: 'German / Arabic / Local Languages (Optional)' }, { id: 'sub-4', name: 'Literature' }, { id: 'sub-22', name: 'ICT (Optional)' }
+        ]
+    },
+    {
+        id: 'stream-ke-tvet', name: 'D. Technical / Vocational Stream (TVET)', subjects: [
+            { id: 'sub-tvet-net', name: 'Information Technology', subjects: [{ id: 'sub-bi-19', name: 'Programming' }, { id: 'sub-bi-20', name: 'Networking' }, { id: 'sub-ke-11', name: 'Digital Literacy' }] },
+            { id: 'sub-tvet-civil', name: 'Engineering', subjects: [{ id: 'sub-ke-12', name: 'Mechanics' }, { id: 'sub-ke-13', name: 'Electrical Technology' }, { id: 'sub-bi-26', name: 'Workshop Practice' }] },
+            { id: 'sub-tvet-agri', name: 'Agriculture', subjects: [{ id: 'sub-ke-14', name: 'Crop Science' }, { id: 'sub-ke-15', name: 'Animal Husbandry' }, { id: 'sub-ke-16', name: 'Agribusiness' }] },
+            { id: 'sub-tvet-hosp', name: 'Hospitality & Tourism', subjects: [{ id: 'sub-bi-28', name: 'Catering' }, { id: 'sub-ke-17', name: 'Tourism Geography' }, { id: 'sub-bi-27', name: 'Hospitality' }] },
+            { id: 'sub-tvet-biz', name: 'Business Studies', subjects: [{ id: 'sub-bi-16', name: 'Accounting' }, { id: 'sub-ke-18', name: 'Commerce' }, { id: 'sub-29', name: 'Entrepreneurship' }] },
+            { id: 'sub-tvet-health', name: 'Health Sciences', subjects: [{ id: 'sub-ke-19', name: 'Nursing' }, { id: 'sub-ke-20', name: 'First Aid' }, { id: 'sub-ke-21', name: 'Community Health' }] }
+        ]
+    }
+];
+
+const kenyaSeniorSecondaryLevels: Level[] = [
+    { id: 'lvl-ke-g10', name: 'Grade 10', streams: kenyaSeniorSecondaryStreams },
+    { id: 'lvl-ke-g11', name: 'Grade 11', streams: kenyaSeniorSecondaryStreams },
+    { id: 'lvl-ke-g12', name: 'Grade 12', streams: kenyaSeniorSecondaryStreams },
+];
+
 
 export let cycles: Cycle[] = [
     // Rwanda
@@ -414,11 +508,16 @@ export let cycles: Cycle[] = [
 
     // Burundi
     { id: 'cycle-bi-1', name: 'Pre-Primary (École Maternelle)', curriculumId: 'cur-2', levels: burundiPrePrimaryLevels },
-    { id: 'cycle-bi-2', name: 'Lower Primary (Cycle 1)', curriculumId: 'cur-2', levels: burundiPrimaryLowerLevels },
-    { id: 'cycle-bi-3', name: 'Upper Primary (Cycle 2)', curriculumId: 'cur-2', levels: burundiPrimaryUpperLevels },
-    { id: 'cycle-bi-4', name: 'Lower Secondary (Cycle 3)', curriculumId: 'cur-2', levels: burundiLowerSecondaryLevels },
-    { id: 'cycle-bi-5', name: 'Upper Secondary (A2)', curriculumId: 'cur-2', levels: burundiUpperSecondaryLevels },
+    { id: 'cycle-bi-2', name: 'Primary (Cycle 1 & 2)', curriculumId: 'cur-2', levels: [...burundiPrimaryLowerLevels, ...burundiPrimaryUpperLevels] },
+    { id: 'cycle-bi-3', name: 'Lower Secondary (Cycle 3)', curriculumId: 'cur-2', levels: burundiLowerSecondaryLevels },
+    { id: 'cycle-bi-4', name: 'Upper Secondary (A2)', curriculumId: 'cur-2', levels: burundiUpperSecondaryLevels },
     
+    // Kenya
+    { id: 'cycle-ke-1', name: 'Pre-primary (ECE)', curriculumId: 'cur-3', levels: kenyaPrePrimaryLevels },
+    { id: 'cycle-ke-2', name: 'Primary Education (Grades 1-6)', curriculumId: 'cur-3', levels: kenyaPrimaryLevels },
+    { id: 'cycle-ke-3', name: 'Lower Secondary (Grades 7-9)', curriculumId: 'cur-3', levels: kenyaJuniorSecondaryLevels },
+    { id: 'cycle-ke-4', name: 'Upper Secondary (Grades 10-12)', curriculumId: 'cur-3', levels: kenyaSeniorSecondaryLevels },
+
     // Placeholder for other curricula
     { id: 'cycle-generic-1', name: 'Secondary', curriculumId: 'cur-9', levels: [ {id: 'lvl-g1', name: 'Grade 10', subjects: [{id:'sub-1', name: 'Physics'}] }, {id: 'lvl-g2', name: 'Grade 11', subjects: [{id:'sub-2', name: 'History'}] } ] },
     { id: 'cycle-generic-2', name: 'University', curriculumId: 'cur-9', levels: [ {id: 'lvl-u1', name: 'Year 1', subjects: [{id:'sub-3', name: 'Mathematics'}] } ] }
@@ -427,6 +526,7 @@ export let cycles: Cycle[] = [
 export let levels: Level[] = [
     ...rwanNurseryLevels, ...rwanPrimaryLowerLevels, ...rwanPrimaryUpperLevels, ...rwanOLevels, ...rwanALevels, ...rwanUniversityLevels,
     ...burundiPrePrimaryLevels, ...burundiPrimaryLowerLevels, ...burundiPrimaryUpperLevels, ...burundiLowerSecondaryLevels, ...burundiUpperSecondaryLevels,
+    ...kenyaPrePrimaryLevels, ...kenyaPrimaryLevels, ...kenyaJuniorSecondaryLevels, ...kenyaSeniorSecondaryLevels,
 ];
 
 // Functions to add new items to the mock data
@@ -633,5 +733,7 @@ export function getQuiz(videoId: string): Quiz | undefined {
 export function getSummary(videoId: string) {
   return summaries[videoId as keyof typeof summaries];
 }
+
+    
 
     
