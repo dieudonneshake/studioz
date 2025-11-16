@@ -14,8 +14,15 @@ export let users: User[] = [
 ];
 
 export let curricula: Curriculum[] = [
-  { id: 'cur-1', name: 'International Baccalaureate (IB)', description: 'A globally recognized curriculum.' },
-  { id: 'cur-2', name: 'A-Levels', description: 'UK-based advanced level qualifications.' },
+    { id: 'cur-1', name: 'Rwanda National Curriculum', description: 'The official curriculum for schools in Rwanda.' },
+    { id: 'cur-2', name: 'Burundi National Curriculum', description: 'The official curriculum for schools in Burundi.' },
+    { id: 'cur-3', name: 'Kenya National Curriculum', description: 'The official curriculum for schools in Kenya.' },
+    { id: 'cur-4', name: 'Uganda National Curriculum', description: 'The official curriculum for schools in Uganda.' },
+    { id: 'cur-5', name: 'DRC National Curriculum', description: 'The official curriculum for schools in the Democratic Republic of Congo.' },
+    { id: 'cur-6', name: 'Tanzania National Curriculum', description: 'The official curriculum for schools in Tanzania.' },
+    { id: 'cur-7', name: 'South Sudan National Curriculum', description: 'The official curriculum for schools in South Sudan.' },
+    { id: 'cur-8', name: 'Nigeria National Curriculum', description: 'The official curriculum for schools in Nigeria.' },
+    { id: 'cur-9', name: 'Cambridge International Curriculum', description: 'Globally recognized curriculum from Cambridge Assessment International Education.' }
 ];
 
 export let levels: Level[] = [
