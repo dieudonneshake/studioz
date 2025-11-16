@@ -1,6 +1,7 @@
 
 
-import { User, Video, Curriculum, Level, Subject, Quiz, WatchHistory } from './types';
+
+import { User, Video, Curriculum, Level, Subject, Quiz, WatchHistory, Cycle } from './types';
 import { PlaceHolderImages } from './placeholder-images';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
@@ -25,9 +26,21 @@ export let curricula: Curriculum[] = [
     { id: 'cur-9', name: 'Cambridge International Curriculum', description: 'Globally recognized curriculum from Cambridge Assessment International Education.' }
 ];
 
+export let cycles: Cycle[] = [
+    { id: 'cycle-1', name: 'Nursery' },
+    { id: 'cycle-2', name: 'Primary' },
+    { id: 'cycle-3', name: 'Secondary' },
+    { id: 'cycle-4', name: 'College' },
+    { id: 'cycle-5', name: 'University' },
+    { id: 'cycle-6', name: 'A-Level' },
+    { id: 'cycle-7', name: 'IB Diploma' },
+];
+
 export let levels: Level[] = [
   { id: 'lvl-1', name: 'IB Diploma Year 1' },
   { id: 'lvl-2', name: 'A-Level Year 12' },
+  { id: 'lvl-3', name: 'Grade 10' },
+  { id: 'lvl-4', name: 'Grade 11' },
 ];
 
 export let subjects: Subject[] = [

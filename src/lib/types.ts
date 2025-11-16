@@ -1,6 +1,7 @@
 
 
 
+
 export type User = {
   id: string;
   name: string;
@@ -18,6 +19,11 @@ export type Curriculum = {
   id: string;
   name: string;
   description: string;
+};
+
+export type Cycle = {
+  id: string;
+  name: string;
 };
 
 export type Level = {
