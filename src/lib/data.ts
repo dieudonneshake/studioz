@@ -138,9 +138,9 @@ const rwanOLevels: Level[] = [
 const rwanALevelStreams: Stream[] = [
     {id: 'stream-gen-ed', name: 'General Education (Academic Pathway)', 
         subjects: [
-            {id: 'sub-stream-sci', name: 'Science Combinations', subjects: [{id: 'sub-combo-pcb', name: 'PCB – Physics, Chemistry, Biology'}, {id: 'sub-combo-pcm', name: 'PCM – Physics, Chemistry, Mathematics'}, {id: 'sub-combo-mcb', name: 'MCB – Mathematics, Chemistry, Biology'}, {id: 'sub-combo-mpc', name: 'MPC – Mathematics, Physics, Computer Science'}, {id: 'sub-combo-mpg', name: 'MPG – Mathematics, Physics, Geography'}, {id: 'sub-combo-bcm', name: 'BCM – Biology, Chemistry, Mathematics'}]},
-            {id: 'sub-stream-arts', name: 'Arts & Humanities Combinations', subjects: [{id: 'sub-combo-heg', name: 'HEG – History, Economics, Geography'}, {id: 'sub-combo-hel', name: 'HEL – History, Economics, Literature'}, {id: 'sub-combo-hgl', name: 'HGL – History, Geography, Literature'}, {id: 'sub-combo-heps', name: 'HEPS – History, Economics, Political Science'}, {id: 'sub-combo-hek', name: 'HEK – History, Economics, Kiswahili'}]},
-            {id: 'sub-stream-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-combo-klf', name: 'KLF – Kinyarwanda, Literature, French'}, {id: 'sub-combo-elf', name: 'ELF – English, Literature, French'}, {id: 'sub-combo-kle', name: 'KLE – Kinyarwanda, Literature, English'}, {id: 'sub-combo-gel', name: 'GEL – Geography, Economics, Literature'}]},
+            {id: 'sub-stream-sci', name: 'Science Combinations', subjects: [{id: 'sub-combo-pcb', name: 'PCB (Physics, Chemistry, Biology)'}, {id: 'sub-combo-pcm', name: 'PCM (Physics, Chemistry, Mathematics)'}, {id: 'sub-combo-mcb', name: 'MCB (Mathematics, Chemistry, Biology)'}, {id: 'sub-combo-mpc', name: 'MPC (Mathematics, Physics, Computer Science)'}, {id: 'sub-combo-mpg', name: 'MPG (Mathematics, Physics, Geography)'}, {id: 'sub-combo-bcm', name: 'BCM (Biology, Chemistry, Mathematics)'}]},
+            {id: 'sub-stream-arts', name: 'Arts & Humanities Combinations', subjects: [{id: 'sub-combo-heg', name: 'HEG (History, Economics, Geography)'}, {id: 'sub-combo-hel', name: 'HEL (History, Economics, Literature)'}, {id: 'sub-combo-hgl', name: 'HGL (History, Geography, Literature)'}, {id: 'sub-combo-heps', name: 'HEPS (History, Economics, Political Science)'}, {id: 'sub-combo-hek', name: 'HEK (History, Economics, Kiswahili)'}]},
+            {id: 'sub-stream-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-combo-klf', name: 'KLF (Kinyarwanda, Literature, French)'}, {id: 'sub-combo-elf', name: 'ELF (English, Literature, French)'}, {id: 'sub-combo-kle', name: 'KLE (Kinyarwanda, Literature, English)'}, {id: 'sub-combo-gel', name: 'GEL (Geography, Economics, Literature)'}]},
         ]
     },
     {id: 'stream-ttc', name: 'TTC (Teacher Training College)', subjects: [{id: 'sub-ttc-lang', name: 'Education in Languages'}, {id: 'sub-ttc-sci', name: 'Education in Mathematics & Science'}, {id: 'sub-ttc-social', name: 'Education in Social Studies'}, {id: 'sub-ttc-ecd', name: 'Early Childhood Development (ECD)'}, {id: 'sub-ttc-sne', name: 'Inclusive & Special Needs Education'}]},
@@ -166,6 +166,156 @@ const rwanALevels: Level[] = [
     { id: 'lvl-s6', name: 'S6', streams: rwanALevelStreams },
 ];
 
+const rwanUniversityLevels: Level[] = [
+    {
+        id: 'lvl-u-cert', name: 'Certificate Programs', subjects: [
+            { id: 'sub-u-cert-ict', name: 'Certificate in ICT' },
+            { id: 'sub-u-cert-biz', name: 'Certificate in Business Communication' },
+            { id: 'sub-u-cert-ent', name: 'Certificate in Entrepreneurship' },
+            { id: 'sub-u-cert-lang', name: 'Certificate in Languages' },
+            { id: 'sub-u-cert-comm', name: 'Certificate in Community Development' },
+        ]
+    },
+    {
+        id: 'lvl-u-dip', name: 'Diploma Programs', subjects: [
+            { id: 'sub-u-dip-edu', name: 'Diploma in Education' },
+            { id: 'sub-u-dip-nurse', name: 'Diploma in Nursing' },
+            { id: 'sub-u-dip-ict', name: 'Diploma in ICT' },
+            { id: 'sub-u-dip-acc', name: 'Diploma in Accounting' },
+            { id: 'sub-u-dip-civil', name: 'Diploma in Civil Engineering (A1)' },
+            { id: 'sub-u-dip-hosp', name: 'Diploma in Hospitality Management' },
+        ]
+    },
+    {
+        id: 'lvl-u-undergrad', name: 'Undergraduate Degrees (Bachelor’s)', subjects: [
+            {
+                id: 'sub-u-sbe', name: 'School of Business & Economics (SBE)', subjects: [
+                    { id: 'sub-u-bba-acc', name: 'BBA – Accounting' },
+                    { id: 'sub-u-bba-fin', name: 'BBA – Finance' },
+                    { id: 'sub-u-bba-mkt', name: 'BBA – Marketing' },
+                    { id: 'sub-u-bba-proc', name: 'BBA – Procurement & Logistics' },
+                    { id: 'sub-u-becon', name: 'Bachelor of Economics' },
+                    { id: 'sub-u-bpm', name: 'Bachelor of Project Management' },
+                ]
+            },
+            {
+                id: 'sub-u-sce', name: 'School of Computing & Engineering (SCE)', subjects: [
+                    { id: 'sub-u-bsc-cs', name: 'BSc Computer Science' },
+                    { id: 'sub-u-bsc-se', name: 'BSc Software Engineering' },
+                    { id: 'sub-u-bsc-it', name: 'BSc Information Technology' },
+                    { id: 'sub-u-bsc-ce', name: 'BSc Computer Engineering' },
+                    { id: 'sub-u-bsc-ds', name: 'BSc Data Science' },
+                    { id: 'sub-u-bsc-etc', name: 'BSc Electronics and Telecommunication Engineering' },
+                    { id: 'sub-u-bsc-civil', name: 'BSc Civil Engineering' },
+                    { id: 'sub-u-bsc-mech', name: 'BSc Mechanical Engineering' },
+                    { id: 'sub-u-bsc-elec', name: 'BSc Electrical Engineering' },
+                ]
+            },
+            {
+                id: 'sub-u-soe', name: 'School of Education (SoE)', subjects: [
+                    { id: 'sub-u-edu-mp', name: 'Mathematics – Physics' },
+                    { id: 'sub-u-edu-mcs', name: 'Mathematics – Computer Science' },
+                    { id: 'sub-u-edu-pc', name: 'Physics – Chemistry' },
+                    { id: 'sub-u-edu-cb', name: 'Chemistry – Biology' },
+                    { id: 'sub-u-edu-bg', name: 'Biology – Geography' },
+                    { id: 'sub-u-edu-el', name: 'English – Literature' },
+                    { id: 'sub-u-edu-ke', name: 'Kinyarwanda – English' },
+                    { id: 'sub-u-edu-he', name: 'History – Economics' },
+                    { id: 'sub-u-edu-ge', name: 'Geography – Economics' },
+                    { id: 'sub-u-edu-ee', name: 'Entrepreneurship – Economics' },
+                ]
+            },
+            {
+                id: 'sub-u-shs', name: 'School of Health Sciences (SHS)', subjects: [
+                    { id: 'sub-u-shs-nurse', name: 'Bachelor of Nursing' },
+                    { id: 'sub-u-shs-ph', name: 'Bachelor of Public Health' },
+                    { id: 'sub-u-shs-bls', name: 'Bachelor of Biomedical Laboratory Sciences' },
+                    { id: 'sub-u-shs-pharm', name: 'Bachelor of Pharmacy' },
+                    { id: 'sub-u-shs-mbbs', name: 'Bachelor of Medicine & Surgery (MBBS)' },
+                ]
+            },
+            {
+                id: 'sub-u-sass', name: 'School of Arts & Social Sciences (SASS)', subjects: [
+                    { id: 'sub-u-sass-journo', name: 'Bachelor of Journalism' },
+                    { id: 'sub-u-sass-mass', name: 'Bachelor of Mass Communication' },
+                    { id: 'sub-u-sass-ir', name: 'Bachelor of International Relations' },
+                    { id: 'sub-u-sass-ps', name: 'Bachelor of Political Science' },
+                    { id: 'sub-u-sass-sw', name: 'Bachelor of Social Work' },
+                    { id: 'sub-u-sass-psy', name: 'Bachelor of Psychology' },
+                ]
+            },
+            { id: 'sub-u-sol', name: 'School of Law (SoL)', subjects: [{ id: 'sub-u-sol-llb', name: 'Bachelor of Laws (LLB)' }] },
+            {
+                id: 'sub-u-saes', name: 'School of Agriculture & Environmental Studies (SAES)', subjects: [
+                    { id: 'sub-u-saes-agri', name: 'Bachelor of Agriculture' },
+                    { id: 'sub-u-saes-agbiz', name: 'Bachelor of Agribusiness' },
+                    { id: 'sub-u-saes-forest', name: 'Bachelor of Forestry' },
+                    { id: 'sub-u-saes-env', name: 'Bachelor of Environmental Science' },
+                ]
+            },
+        ]
+    },
+    {
+        id: 'lvl-u-pgd', name: 'Postgraduate Diploma (PGD)', subjects: [
+            { id: 'sub-u-pgd-edu', name: 'PGD in Education (PGDE)' },
+            { id: 'sub-u-pgd-pm', name: 'PGD in Project Management' },
+            { id: 'sub-u-pgd-me', name: 'PGD in Monitoring & Evaluation' },
+        ]
+    },
+    {
+        id: 'lvl-u-master', name: 'Master’s Degrees (MA / MSc / MBA)', subjects: [
+            {
+                id: 'sub-u-master-biz', name: 'Business & Management', subjects: [
+                    { id: 'sub-u-master-mba', name: 'MBA (General)' },
+                    { id: 'sub-u-master-msc-fin', name: 'MSc in Finance' },
+                    { id: 'sub-u-master-msc-acc', name: 'MSc in Accounting' },
+                    { id: 'sub-u-master-msc-econ', name: 'MSc in Economics' },
+                    { id: 'sub-u-master-proc', name: 'Master of Procurement & Logistics' },
+                ]
+            },
+            {
+                id: 'sub-u-master-tech', name: 'Technology & Engineering', subjects: [
+                    { id: 'sub-u-master-msc-cs', name: 'MSc in Computer Science' },
+                    { id: 'sub-u-master-msc-is', name: 'MSc in Information Systems' },
+                    { id: 'sub-u-master-msc-tele', name: 'MSc in Telecommunications Engineering' },
+                ]
+            },
+            {
+                id: 'sub-u-master-edu', name: 'Education', subjects: [
+                    { id: 'sub-u-master-med', name: 'Master of Education (MEd)' },
+                    { id: 'sub-u-master-med-ci', name: 'MEd in Curriculum & Instruction' },
+                    { id: 'sub-u-master-med-la', name: 'MEd in Leadership & Administration' },
+                ]
+            },
+            {
+                id: 'sub-u-master-health', name: 'Health Sciences', subjects: [
+                    { id: 'sub-u-master-mph', name: 'Master of Public Health (MPH)' },
+                    { id: 'sub-u-master-msc-nurse', name: 'MSc Nursing' },
+                    { id: 'sub-u-master-msc-bls', name: 'MSc Biomedical Laboratory Science' },
+                ]
+            },
+            {
+                id: 'sub-u-master-social', name: 'Social Sciences & Law', subjects: [
+                    { id: 'sub-u-master-ir', name: 'Master in International Relations' },
+                    { id: 'sub-u-master-ds', name: 'Master in Development Studies' },
+                    { id: 'sub-u-master-cj', name: 'Master in Criminal Justice' },
+                    { id: 'sub-u-master-llm', name: 'LLM (Master of Laws)' },
+                ]
+            },
+        ]
+    },
+    {
+        id: 'lvl-u-phd', name: 'Doctorate Programs (PhD)', subjects: [
+            { id: 'sub-u-phd-edu', name: 'PhD in Education' },
+            { id: 'sub-u-phd-cs', name: 'PhD in Computer Science' },
+            { id: 'sub-u-phd-ba', name: 'PhD in Business Administration' },
+            { id: 'sub-u-phd-ph', name: 'PhD in Public Health' },
+            { id: 'sub-u-phd-eng', name: 'PhD in Engineering' },
+            { id: 'sub-u-phd-ss', name: 'PhD in Social Sciences' },
+            { id: 'sub-u-phd-law', name: 'PhD in Law' },
+        ]
+    },
+];
 
 export let cycles: Cycle[] = [
     { id: 'cycle-rwa-1', name: 'Pre-Primary (Nursery)', curriculumId: 'cur-1', levels: rwanNurseryLevels },
@@ -173,14 +323,14 @@ export let cycles: Cycle[] = [
     { id: 'cycle-rwa-2-upper', name: 'Upper Primary (P4 - P6)', curriculumId: 'cur-1', levels: rwanPrimaryUpperLevels },
     { id: 'cycle-rwa-3', name: 'Ordinary Level (O-Level)', curriculumId: 'cur-1', levels: rwanOLevels },
     { id: 'cycle-rwa-4', name: 'Advanced Level (A-Level)', curriculumId: 'cur-1', levels: rwanALevels },
-    { id: 'cycle-rwa-5', name: 'University', curriculumId: 'cur-1', levels: [ {id: 'lvl-u1-rwa', name: 'Year 1', subjects: [{id:'sub-3', name: 'Mathematics'}] } ] },
+    { id: 'cycle-rwa-5', name: 'University', curriculumId: 'cur-1', levels: rwanUniversityLevels },
 
     // Placeholder for other curricula
     { id: 'cycle-generic-1', name: 'Secondary', curriculumId: 'cur-9', levels: [ {id: 'lvl-g1', name: 'Grade 10', subjects: [{id:'sub-1', name: 'Physics'}] }, {id: 'lvl-g2', name: 'Grade 11', subjects: [{id:'sub-2', name: 'History'}] } ] },
     { id: 'cycle-generic-2', name: 'University', curriculumId: 'cur-9', levels: [ {id: 'lvl-u1', name: 'Year 1', subjects: [{id:'sub-3', name: 'Mathematics'}] } ] }
 ];
 
-export let levels: Level[] = [...rwanNurseryLevels, ...rwanPrimaryLowerLevels, ...rwanPrimaryUpperLevels, ...rwanOLevels, ...rwanALevels];
+export let levels: Level[] = [...rwanNurseryLevels, ...rwanPrimaryLowerLevels, ...rwanPrimaryUpperLevels, ...rwanOLevels, ...rwanALevels, ...rwanUniversityLevels];
 
 // Functions to add new items to the mock data
 // In a real app, these would be API calls to your backend.
