@@ -10,6 +10,7 @@ import { drcCurriculum } from './curricula/drc';
 import { tanzaniaCurriculum } from './curricula/tanzania';
 import { southSudanCurriculum } from './curricula/south_sudan';
 import { nigeriaCurriculum } from './curricula/nigeria';
+import { watchHistory } from './curricula/history';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
 
@@ -260,10 +261,8 @@ export const summaries = {
   },
 };
 
-export const watchHistory: WatchHistory[] = [
-  { id: 'wh-1', student_id: 'user-3', video_id: 'vid-2', watched_at: '2024-05-20T10:00:00Z'},
-  { id: 'wh-2', student_id: 'user-3', video_id: 'vid-4', watched_at: '2024-05-19T15:30:00Z'},
-];
+export { watchHistory };
+
 
 // These functions just retrieve data for the simulation.
 // In a real app, they would be API calls.

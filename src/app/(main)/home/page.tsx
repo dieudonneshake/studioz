@@ -1,5 +1,6 @@
 import { HomeClientPage } from "@/components/home/home-client-page";
-import { homePageVideos, watchHistory, videos } from "@/lib/data";
+import { homePageVideos, videos } from "@/lib/data";
+import { watchHistory } from "@/lib/curricula/history";
 
 // This is now a Server Component
 export default async function HomePage() {
