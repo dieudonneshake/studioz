@@ -103,10 +103,10 @@ const rwanOLevels: Level[] = [
 ];
 
 const rwanALevelStreams: Stream[] = [
-    {id: 'stream-gen-sci', name: 'Sciences', subjects: [{id: 'sub-1', name: 'PCB'}, {id: 'sub-1', name: 'PCM'}, {id: 'sub-1', name: 'MCB'}, {id: 'sub-1', name: 'MPC'}, {id: 'sub-1', name: 'MPG'}, {id: 'sub-1', name: 'BCM'}]},
-    {id: 'stream-gen-arts', name: 'Arts & Humanities', subjects: [{id: 'sub-2', name: 'HEG'}, {id: 'sub-2', name: 'HEL'}, {id: 'sub-2', name: 'HGL'}, {id: 'sub-2', name: 'HEK'}, {id: 'sub-2', name: 'HEPS'}]},
-    {id: 'stream-gen-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-4', name: 'KLF'}, {id: 'sub-4', name: 'ELF'}, {id: 'sub-4', name: 'KLE'}, {id: 'sub-4', name: 'GEL'}]},
-    {id: 'stream-ttc', name: 'TTC (Teacher Training College)', subjects: [{id: 'sub-15', name: 'Education in Languages'}, {id: 'sub-3', name: 'Education in Mathematics & Science'}, {id: 'sub-21', name: 'Education in Social Studies'}, {id: 'sub-11', name: 'Early Childhood Development (ECD)'}, {id: 'sub-16', name: 'Inclusive & Special Needs Education'}]},
+    {id: 'stream-gen-sci', name: 'Sciences', subjects: [{id: 'sub-sci-1', name: 'PCB (Physics-Chemistry-Biology)'}, {id: 'sub-sci-2', name: 'PCM (Physics-Chemistry-Math)'}, {id: 'sub-sci-3', name: 'MCB (Math-Chemistry-Biology)'}, {id: 'sub-sci-4', name: 'MPC (Math-Physics-Computer)'}, {id: 'sub-sci-5', name: 'MPG (Math-Physics-Geography)'}, {id: 'sub-sci-6', name: 'BCM (Biology-Chemistry-Math)'}]},
+    {id: 'stream-gen-arts', name: 'Arts & Humanities', subjects: [{id: 'sub-art-1', name: 'HEG (History-Economics-Geography)'}, {id: 'sub-art-2', name: 'HEL (History-Economics-Literature)'}, {id: 'sub-art-3', name: 'HGL (History-Geography-Literature)'}, {id: 'sub-art-4', name: 'HEK (History-Economics-Kiswahili)'}, {id: 'sub-art-5', name: 'HEPS (History-Economics-Political Science)'}]},
+    {id: 'stream-gen-lang', name: 'Languages / Social Sciences', subjects: [{id: 'sub-lan-1', name: 'KLF (Kinyarwanda-Literature-French)'}, {id: 'sub-lan-2', name: 'ELF (English-Lit-French)'}, {id: 'sub-lan-3', name: 'KLE (Kinyarwanda-Lit-English)'}, {id: 'sub-lan-4', name: 'GEL (Geography-Economics-Literature)'}]},
+    {id: 'stream-ttc', name: 'TTC (Teacher Training College)', subjects: [{id: 'sub-ttc-1', name: 'Education in Languages'}, {id: 'sub-ttc-2', name: 'Education in Mathematics & Science'}, {id: 'sub-ttc-3', name: 'Education in Social Studies'}, {id: 'sub-ttc-4', name: 'Early Childhood Development (ECD)'}, {id: 'sub-ttc-5', name: 'Inclusive & Special Needs Education'}]},
     {id: 'stream-tvet', name: 'TVET (Technical & Vocational)', subjects: [{id: 'sub-33', name: 'Software Development'}, {id: 'sub-34', name: 'Networking'}, {id: 'sub-35', name: 'Masonry'}, {id: 'sub-36', name: 'Plumbing'}, {id: 'sub-37', name: 'Civil Engineering'}, {id: 'sub-38', name: 'Culinary Arts'}, {id: 'sub-39', name: 'Hotel Operations'}, {id: 'sub-40', name: 'Crop Production'}, {id: 'sub-41', name: 'Animal Husbandry'}, {id: 'sub-42', name: 'Electrical Installation'}, {id: 'sub-43', name: 'Electronics Maintenance'}, {id: 'sub-44', name: 'Tailoring'}, {id: 'sub-45', name: 'Garment Technology'}, {id: 'sub-46', name: 'Welding'}, {id: 'sub-47', name: 'Automobile Mechanics'}, {id: 'sub-48', name: 'Finance'}, {id: 'sub-49', name: 'Cooperative Management'}, {id: 'sub-50', name: 'Cosmetology'}, {id: 'sub-51', name: 'Photography'}, {id: 'sub-52', name: 'Video Production'}]},
 ];
 
@@ -122,6 +122,7 @@ export let cycles: Cycle[] = [
     { id: 'cycle-rwa-2', name: 'Primary Education (P1 - P6)', curriculumId: 'cur-1', levels: rwanPrimaryLevels },
     { id: 'cycle-rwa-3', name: 'Ordinary Level (O-Level)', curriculumId: 'cur-1', levels: rwanOLevels },
     { id: 'cycle-rwa-4', name: 'Advanced Level (A-Level)', curriculumId: 'cur-1', levels: rwanALevels },
+    { id: 'cycle-rwa-5', name: 'University', curriculumId: 'cur-1', levels: [ {id: 'lvl-u1-rwa', name: 'Year 1', subjects: [{id:'sub-3', name: 'Mathematics'}] } ] },
 
     // Placeholder for other curricula
     { id: 'cycle-generic-1', name: 'Secondary', curriculumId: 'cur-9', levels: [ {id: 'lvl-g1', name: 'Grade 10', subjects: [{id:'sub-1', name: 'Physics'}] }, {id: 'lvl-g2', name: 'Grade 11', subjects: [{id:'sub-2', name: 'History'}] } ] },
