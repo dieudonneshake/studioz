@@ -8,6 +8,7 @@ import { kenyaCurriculum } from './curricula/kenya';
 import { ugandaCurriculum } from './curricula/uganda';
 import { drcCurriculum } from './curricula/drc';
 import { tanzaniaCurriculum } from './curricula/tanzania';
+import { southSudanCurriculum } from './curricula/south_sudan';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
 
@@ -38,6 +39,7 @@ const allSubjects: Subject[] = [
   ...ugandaCurriculum.subjects,
   ...drcCurriculum.subjects,
   ...tanzaniaCurriculum.subjects,
+  ...southSudanCurriculum.subjects,
 ];
 
 // Remove duplicates
@@ -51,6 +53,7 @@ const allCycles: Cycle[] = [
     ...ugandaCurriculum.cycles,
     ...drcCurriculum.cycles,
     ...tanzaniaCurriculum.cycles,
+    ...southSudanCurriculum.cycles,
     // Placeholder for other curricula
     { id: 'cycle-generic-1', curriculumId: 'cur-9', name: 'Secondary', levels: [ {id: 'lvl-g1', name: 'Grade 10', subjects: [{id:'sub-1', name: 'Physics'}] }, {id: 'lvl-g2', name: 'Grade 11', subjects: [{id:'sub-2', name: 'History'}] } ] },
     { id: 'cycle-generic-2', curriculumId: 'cur-9', name: 'University', levels: [ {id: 'lvl-u1', name: 'Year 1', subjects: [{id:'sub-3', name: 'Mathematics'}] } ] }
@@ -65,6 +68,7 @@ const allLevels: Level[] = [
   ...ugandaCurriculum.levels,
   ...drcCurriculum.levels,
   ...tanzaniaCurriculum.levels,
+  ...southSudanCurriculum.levels,
 ];
 export const levels: Level[] = allLevels;
 
@@ -272,13 +276,3 @@ export function getQuiz(videoId: string): Quiz | undefined {
 export function getSummary(videoId: string) {
   return summaries[videoId as keyof typeof summaries];
 }
-
-    
-
-    
-
-
-
-    
-
-    
