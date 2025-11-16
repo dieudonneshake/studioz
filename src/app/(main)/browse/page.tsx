@@ -5,9 +5,6 @@ import { curricula, levels, subjects, cycles } from '@/lib/data';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-// A simple way to get a video for demonstration purposes
-const firstVideoId = 'vid-1';
-
 export default function BrowsePage() {
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
@@ -39,7 +36,7 @@ export default function BrowsePage() {
                                            <AccordionContent className="p-4 border-t">
                                              <div className="space-y-2">
                                                {subjects.map(subject => (
-                                                 <Link href={`/watch/${firstVideoId}`} key={subject.id} className="block">
+                                                 <Link href={`/browse/results`} key={subject.id} className="block">
                                                    <div className="flex items-center justify-between p-3 rounded-md bg-secondary hover:bg-secondary/80 transition-colors">
                                                      <span>{subject.name}</span>
                                                      <ChevronRight className="h-4 w-4" />
