@@ -1,5 +1,6 @@
 
-import { shorts, users } from "@/lib/shorts-data";
+import { shorts } from "@/lib/shorts-data";
+import { users } from "@/lib/data";
 import { ShortsCarousel } from "@/components/shorts/shorts-carousel";
 
 export default function ShortsPage() {
