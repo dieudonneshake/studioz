@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getVideo, getUploader, getQuiz, getSummary, users } from '@/lib/data';
+import { getVideo, getUploader, users } from '@/lib/data';
 import VideoDetails from '@/components/watch/video-details';
 import ContentTabs from '@/components/watch/content-tabs';
 import { VideoCard } from '@/components/video-card';
@@ -15,8 +15,6 @@ export default function WatchPage({ params }: { params: { id: string } }) {
   }
 
   const uploader = getUploader(video.uploaded_by, users);
-  const quiz = getQuiz(video.id);
-  const summary = getSummary(video.id);
 
   const relatedVideos = videos.filter(v => v.id !== video.id && v.subject === video.subject).slice(0, 4);
 
@@ -27,7 +25,7 @@ export default function WatchPage({ params }: { params: { id: string } }) {
           <CustomVideoPlayer video={video} />
           <VideoDetails video={video} uploader={uploader} />
            <div className="mt-8">
-            {summary && quiz && <ContentTabs summary={summary} quiz={quiz} />}
+            <ContentTabs video={video} />
           </div>
         </div>
         <div className="space-y-4">
