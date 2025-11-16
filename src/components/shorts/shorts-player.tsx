@@ -1,22 +1,36 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { type Short, type User } from '@/lib/types';
 import { Heart, MessageCircle, Send, MoreVertical, Play, Pause, Music, Volume2, VolumeX } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import Link from 'next/link';
 
 interface ShortsPlayerProps {
   short: Short;
   uploader: User;
+  isActive: boolean;
 }
 
-export function ShortsPlayer({ short, uploader }: ShortsPlayerProps) {
+export function ShortsPlayer({ short, uploader, isActive }: ShortsPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
+
+  useEffect(() => {
+    if (isActive) {
+      videoRef.current?.play().then(() => {
+        setIsPlaying(true);
+      }).catch(e => {
+        // Autoplay was prevented.
+        setIsPlaying(false);
+      });
+    } else {
+      videoRef.current?.pause();
+      setIsPlaying(false);
+    }
+  }, [isActive]);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -33,8 +47,9 @@ export function ShortsPlayer({ short, uploader }: ShortsPlayerProps) {
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
     if(videoRef.current){
-        videoRef.current.muted = !videoRef.current.muted;
-        setIsMuted(videoRef.current.muted);
+        const newMutedState = !videoRef.current.muted;
+        videoRef.current.muted = newMutedState;
+        setIsMuted(newMutedState);
     }
   };
 
@@ -43,8 +58,7 @@ export function ShortsPlayer({ short, uploader }: ShortsPlayerProps) {
       <video
         ref={videoRef}
         src={short.videoUrl}
-        className="h-full w-full object-cover rounded-xl"
-        autoPlay
+        className="h-full w-full object-contain"
         loop
         playsInline
         muted={isMuted}
@@ -57,7 +71,7 @@ export function ShortsPlayer({ short, uploader }: ShortsPlayerProps) {
       )}
 
       {/* Header for Mute Button */}
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 z-10">
         <Button variant="ghost" size="icon" onClick={toggleMute} className="text-white bg-black/30 hover:bg-black/50">
           {isMuted ? <VolumeX className="h-5 w-5"/> : <Volume2 className="h-5 w-5"/> }
         </Button>
