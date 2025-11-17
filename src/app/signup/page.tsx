@@ -11,6 +11,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/hooks/use-toast";
+import { curricula } from "@/lib/data";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Role = "student" | "teacher" | "admin";
 
@@ -18,7 +20,7 @@ export default function SignupPage() {
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<Role | null>(null);
   const router = useRouter();
-  const { login, users } = useAuthStore();
+  const { login } = useAuthStore();
   const { toast } = useToast();
 
   const handleRoleSelect = (selectedRole: Role) => {
@@ -39,7 +41,7 @@ export default function SignupPage() {
     
     if (role) {
       // Find a pre-existing user of the selected role to log in as.
-      const user = users.find(u => u.role === role && u.status !== 'pending');
+      const user = useAuthStore.getState().users.find(u => u.role === role && u.status !== 'pending');
       if (user) {
         login(user);
         if (role === 'student') {
@@ -130,6 +132,19 @@ export default function SignupPage() {
                 <div className="grid gap-2">
                     <Label htmlFor="grades">Grade Levels</Label>
                     <Input id="grades" placeholder="e.g., Grade 10, A-Level" required />
+                </div>
+                <div className="grid gap-4">
+                    <Label>Curricula</Label>
+                    <div className="space-y-2">
+                        {curricula.map((curriculum) => (
+                            <div key={curriculum.id} className="flex items-center space-x-2">
+                                <Checkbox id={`curriculum-${curriculum.id}`} />
+                                <Label htmlFor={`curriculum-${curriculum.id}`} className="font-normal">
+                                    {curriculum.name}
+                                </Label>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </>
           )}
