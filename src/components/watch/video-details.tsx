@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -22,6 +23,7 @@ export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
   const [likeState, setLikeState] = useState<'liked' | 'disliked' | null>(null);
   const [likeCount, setLikeCount] = useState(12000); // Initial like count
   const [isShareSheetOpen, setIsShareSheetOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleSubscribe = () => {
     setIsSubscribed(!isSubscribed);
@@ -37,7 +39,6 @@ export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
     } else {
       if (likeState === 'disliked') {
         // If it was disliked, we remove the dislike first, then add the like.
-        // For simplicity, we just switch. In a real app, you'd have dislike counts too.
       }
       setLikeState('liked');
       setLikeCount(likeCount + 1);
@@ -53,6 +54,13 @@ export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
       }
       setLikeState('disliked');
     }
+  };
+
+  const handleSave = () => {
+    setIsSaved(!isSaved);
+    toast({
+      title: !isSaved ? 'Saved to Watch Later' : 'Removed from Watch Later',
+    });
   };
 
   return (
@@ -76,26 +84,29 @@ export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
               <p className="font-semibold text-lg">{uploader?.name}</p>
               <p className="text-sm text-muted-foreground">1.2M Subscribers</p>
             </div>
-            <Button onClick={handleSubscribe} variant={isSubscribed ? 'secondary' : 'default'}>
+            <Button onClick={handleSubscribe} variant={isSubscribed ? 'secondary' : 'default'} size="sm">
                 {isSubscribed && <Check className="mr-2 h-4 w-4" />}
                 {isSubscribed ? 'Subscribed' : 'Subscribe'}
             </Button>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center rounded-full bg-secondary">
-                <Button variant="secondary" className="rounded-r-none" onClick={handleLike}>
-                    <ThumbsUp className={cn("mr-2 h-5 w-5", likeState === 'liked' && "fill-current")} />
+                <Button size="sm" variant="secondary" className="rounded-r-none" onClick={handleLike}>
+                    <ThumbsUp className={cn("mr-2 h-4 w-4", likeState === 'liked' && "fill-current")} />
                     {likeCount.toLocaleString()}
                 </Button>
                 <div className="h-6 w-px bg-border"></div>
-                <Button variant="secondary" className="rounded-l-none" onClick={handleDislike}>
-                    <ThumbsDown className={cn("h-5 w-5", likeState === 'disliked' && "fill-current")} />
+                <Button size="sm" variant="secondary" className="rounded-l-none" onClick={handleDislike}>
+                    <ThumbsDown className={cn("h-4 w-4", likeState === 'disliked' && "fill-current")} />
                 </Button>
             </div>
-            <Button variant="secondary" onClick={() => setIsShareSheetOpen(true)}>
-                <Share2 className="mr-2 h-5 w-5" /> Share
+            <Button size="sm" variant="secondary" onClick={() => setIsShareSheetOpen(true)}>
+                <Share2 className="mr-2 h-4 w-4" /> Share
             </Button>
-            <Button variant="secondary"><PlusSquare className="mr-2 h-5 w-5" /> Save</Button>
+            <Button size="sm" variant="secondary" onClick={handleSave}>
+                {isSaved ? <Check className="mr-2 h-4 w-4" /> : <PlusSquare className="mr-2 h-4 w-4" />}
+                {isSaved ? 'Saved' : 'Save'}
+            </Button>
           </div>
         </div>
         <div className="mt-4 bg-secondary rounded-lg p-4 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
