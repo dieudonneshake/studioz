@@ -7,6 +7,8 @@ import { SidebarTrigger } from './ui/sidebar';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
+import Image from 'next/image';
+
 
 export default function Header() {
   const { isAuthenticated } = useAuthStore();
@@ -16,7 +18,7 @@ export default function Header() {
       <div className='flex items-center gap-1 sm:gap-2'>
         <SidebarTrigger className="flex md:hidden" />
         <Link href="/" className="flex items-center gap-2">
-            <div className="h-7 w-7 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold">[L]</div>
+            <Image src="/logo.png" alt="Ederaxy Logo" width={28} height={28} className="h-7 w-7" />
             <span className="font-bold text-lg hidden sm:inline-block">Ederaxy</span>
         </Link>
       </div>

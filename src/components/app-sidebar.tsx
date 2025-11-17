@@ -30,6 +30,8 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
+import Image from 'next/image';
+
 
 const mainMenuItems = [
     { href: '/home', label: 'Home', icon: Home, roles: ['student', 'teacher', 'admin'] },
@@ -84,7 +86,7 @@ export default function AppSidebar() {
       <SidebarHeader className="p-4 justify-center items-center h-16 border-b hidden md:flex">
          <SidebarMenuButton icon={<div />} tooltip="Ederaxy" asChild>
             <Link href="/home" className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
-              <span className="font-bold text-primary-foreground text-lg">E</span>
+               <Image src="/logo.png" alt="Ederaxy Logo" width={32} height={32} className="h-8 w-8" />
             </Link>
          </SidebarMenuButton>
       </SidebarHeader>

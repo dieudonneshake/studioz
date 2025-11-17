@@ -13,6 +13,8 @@ import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/hooks/use-toast";
 import { curricula } from "@/lib/data";
 import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
+
 
 type Role = "student" | "teacher" | "admin";
 
@@ -57,7 +59,7 @@ export default function SignupPage() {
   const RoleSelection = () => (
     <Card className="mx-auto max-w-sm text-center">
       <CardHeader>
-        <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-2xl">[L]</div>
+        <Image src="/logo.png" alt="Ederaxy Logo" width={48} height={48} className="mx-auto h-12 w-12" />
         <CardTitle className="text-2xl font-headline mt-4">Join Ederaxy</CardTitle>
         <CardDescription>First, tell us who you are.</CardDescription>
       </CardHeader>
@@ -89,7 +91,7 @@ export default function SignupPage() {
   const SignupForm = () => (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="text-center">
-         <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-2xl">[L]</div>
+        <Image src="/logo.png" alt="Ederaxy Logo" width={48} height={48} className="mx-auto h-12 w-12" />
         <CardTitle className="text-2xl font-headline mt-4">Create your {role} account</CardTitle>
         <CardDescription>Enter your information to create an account</CardDescription>
       </CardHeader>
