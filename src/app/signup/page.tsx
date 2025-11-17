@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GraduationCap, User, Briefcase, Shield } from "lucide-react";
+import { User, Briefcase, Shield } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
@@ -57,7 +57,7 @@ export default function SignupPage() {
   const RoleSelection = () => (
     <Card className="mx-auto max-w-sm text-center">
       <CardHeader>
-        <GraduationCap className="mx-auto h-10 w-10 text-primary" />
+        <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-2xl">[L]</div>
         <CardTitle className="text-2xl font-headline mt-4">Join Ederaxy</CardTitle>
         <CardDescription>First, tell us who you are.</CardDescription>
       </CardHeader>
@@ -89,7 +89,7 @@ export default function SignupPage() {
   const SignupForm = () => (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="text-center">
-         <GraduationCap className="mx-auto h-10 w-10 text-primary" />
+         <div className="mx-auto h-12 w-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-2xl">[L]</div>
         <CardTitle className="text-2xl font-headline mt-4">Create your {role} account</CardTitle>
         <CardDescription>Enter your information to create an account</CardDescription>
       </CardHeader>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Bell, Mic, GraduationCap, Video } from 'lucide-react';
+import { Search, Bell, Mic, Video } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { SidebarTrigger } from './ui/sidebar';
@@ -16,7 +16,7 @@ export default function Header() {
       <div className='flex items-center gap-1 sm:gap-2'>
         <SidebarTrigger className="flex md:hidden" />
         <Link href="/" className="flex items-center gap-2">
-            <GraduationCap className="h-7 w-7 text-primary" />
+            <div className="h-7 w-7 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold">[L]</div>
             <span className="font-bold text-lg hidden sm:inline-block">Ederaxy</span>
         </Link>
       </div>
