@@ -36,7 +36,7 @@ export default function LoginPage() {
       <Card className="mx-auto max-w-sm">
         <CardHeader className="text-center">
             <GraduationCap className="mx-auto h-10 w-10 text-primary" />
-          <CardTitle className="text-2xl font-headline mt-4">Login to EduVerse</CardTitle>
+          <CardTitle className="text-2xl font-headline mt-4">Login to Ederaxy</CardTitle>
           <CardDescription>
             Enter your email below to login to your account.
             <br />

@@ -58,7 +58,7 @@ export default function SignupPage() {
     <Card className="mx-auto max-w-sm text-center">
       <CardHeader>
         <GraduationCap className="mx-auto h-10 w-10 text-primary" />
-        <CardTitle className="text-2xl font-headline mt-4">Join EduVerse</CardTitle>
+        <CardTitle className="text-2xl font-headline mt-4">Join Ederaxy</CardTitle>
         <CardDescription>First, tell us who you are.</CardDescription>
       </CardHeader>
       <CardContent>

@@ -5,7 +5,7 @@ export function YouTubeLogo({ className }: { className?: string }) {
       viewBox="0 0 90 20"
       className={className}
       preserveAspectRatio="xMidYMid meet"
-      aria-label="EduVerse Home"
+      aria-label="Ederaxy Home"
     >
       <g>
         <text
@@ -16,7 +16,7 @@ export function YouTubeLogo({ className }: { className?: string }) {
           fontWeight="bold"
           fill="currentColor"
         >
-          EduVerse
+          Ederaxy
         </text>
       </g>
     </svg>

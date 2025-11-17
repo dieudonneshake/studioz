@@ -17,7 +17,7 @@ export default function Header() {
         <SidebarTrigger className="flex md:hidden" />
         <Link href="/" className="flex items-center gap-2">
             <GraduationCap className="h-7 w-7 text-primary" />
-            <span className="font-bold text-lg hidden sm:inline-block">EduVerse</span>
+            <span className="font-bold text-lg hidden sm:inline-block">Ederaxy</span>
         </Link>
       </div>
       

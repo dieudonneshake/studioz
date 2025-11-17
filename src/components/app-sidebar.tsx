@@ -82,7 +82,7 @@ export default function AppSidebar() {
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarHeader className="p-4 justify-center items-center h-16 border-b hidden md:flex">
-         <SidebarMenuButton icon={<div />} tooltip="EduVerse" asChild>
+         <SidebarMenuButton icon={<div />} tooltip="Ederaxy" asChild>
             <Link href="/home" className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
               <span className="font-bold text-primary-foreground text-lg">E</span>
             </Link>

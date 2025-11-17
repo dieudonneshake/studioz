@@ -11,7 +11,7 @@ import { BottomNav } from '@/components/bottom-nav';
 
 
 export const metadata: Metadata = {
-  title: 'EduVerse',
+  title: 'Ederaxy',
   description: 'A YouTube-like Global Educational Video Platform',
 };
 
