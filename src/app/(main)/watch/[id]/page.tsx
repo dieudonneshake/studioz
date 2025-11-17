@@ -5,7 +5,7 @@ import VideoDetails from '@/components/watch/video-details';
 import ContentTabs from '@/components/watch/content-tabs';
 import { VideoCard } from '@/components/video-card';
 import { videos } from '@/lib/data';
-import CustomVideoPlayer from '@/components/watch/custom-video-player';
+import CustomVideoPlayer from '@/components/watch/video-player';
 
 export default function WatchPage({ params }: { params: { id: string } }) {
   const video = getVideo(params.id);
