@@ -11,7 +11,7 @@ import { useAuthStore } from "@/store/auth";
 import { useToast } from "@/hooks/use-toast";
 
 export default function SettingsPage() {
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const { toast } = useToast();
 
   const handleUpdateProfile = () => {
@@ -26,23 +26,25 @@ export default function SettingsPage() {
       <h1 className="text-3xl font-bold tracking-tight mb-8 font-headline">Settings</h1>
       
       <div className="space-y-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Account</CardTitle>
-            <CardDescription>Manage your account settings.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" defaultValue={user?.name} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" defaultValue={user?.email} />
-            </div>
-            <Button onClick={handleUpdateProfile}>Update Profile</Button>
-          </CardContent>
-        </Card>
+        {isAuthenticated && user && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Account</CardTitle>
+              <CardDescription>Manage your account settings.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" defaultValue={user.name} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" defaultValue={user.email} />
+              </div>
+              <Button onClick={handleUpdateProfile}>Update Profile</Button>
+            </CardContent>
+          </Card>
+        )}
 
         <Card>
           <CardHeader>
@@ -60,28 +62,30 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-         <Card>
-          <CardHeader>
-            <CardTitle>Notifications</CardTitle>
-            <CardDescription>Manage your notification preferences.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             <div className="flex items-center justify-between rounded-lg border p-4">
-              <div>
-                <Label htmlFor="new-video-notifications">New Videos</Label>
-                <p className="text-sm text-muted-foreground">Notify me when a subscribed channel uploads a new video.</p>
+        {isAuthenticated && (
+           <Card>
+            <CardHeader>
+              <CardTitle>Notifications</CardTitle>
+              <CardDescription>Manage your notification preferences.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+               <div className="flex items-center justify-between rounded-lg border p-4">
+                <div>
+                  <Label htmlFor="new-video-notifications">New Videos</Label>
+                  <p className="text-sm text-muted-foreground">Notify me when a subscribed channel uploads a new video.</p>
+                </div>
+                <Switch id="new-video-notifications" defaultChecked />
               </div>
-              <Switch id="new-video-notifications" defaultChecked />
-            </div>
-             <div className="flex items-center justify-between rounded-lg border p-4">
-              <div>
-                <Label htmlFor="recommendation-notifications">Recommendations</Label>
-                <p className="text-sm text-muted-foreground">Notify me about recommended videos and content.</p>
+               <div className="flex items-center justify-between rounded-lg border p-4">
+                <div>
+                  <Label htmlFor="recommendation-notifications">Recommendations</Label>
+                  <p className="text-sm text-muted-foreground">Notify me about recommended videos and content.</p>
+                </div>
+                <Switch id="recommendation-notifications" />
               </div>
-              <Switch id="recommendation-notifications" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
