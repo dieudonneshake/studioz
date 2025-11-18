@@ -21,7 +21,7 @@ export default function Header() {
             <Menu />
         </SidebarTrigger>
         <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Ederaxy Logo" width={28} height={28} className="h-7 w-7" />
+            <Image src="/logo.png" alt="Ederaxy Logo" width={32} height={32} className="h-8 w-8" />
             <span className="font-bold text-lg hidden sm:inline-block">Ederaxy</span>
         </Link>
       </div>
