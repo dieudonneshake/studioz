@@ -1,7 +1,8 @@
 
-"use client";
+'use client';
 
-import { Search, Bell, Mic, Video, Menu } from 'lucide-react';
+import { useState, useEffect, FormEvent } from 'react';
+import { Search, Bell, Video, Menu } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { SidebarTrigger } from './ui/sidebar';
@@ -9,13 +10,24 @@ import { UserNav } from './user-nav';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 import Image from 'next/image';
-
+import { useSearchStore } from '@/store/search';
 
 export default function Header() {
   const { isAuthenticated } = useAuthStore();
+  const { searchQuery, setSearchQuery } = useSearchStore();
+
+  // Handle form submission if needed, e.g., for accessibility or mobile keyboards.
+  // For live filtering, this doesn't need to do much.
+  const handleSearchSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    // The filtering is already live, but you could add logic here
+    // e.g., to dismiss a mobile keyboard.
+    (document.activeElement as HTMLElement)?.blur();
+  };
+
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 w-full shrink-0 items-center justify-between gap-2 border-b bg-background px-2 sm:px-4">
+    <header className="sticky top-0 z-30 flex h-16 w-full shrink-0 items-center justify-between gap-2 border-b bg-background px-2 sm:px-4">
       <div className='flex items-center gap-1 sm:gap-2'>
         <SidebarTrigger>
             <Menu />
@@ -26,17 +38,21 @@ export default function Header() {
         </Link>
       </div>
       
-      <div className="flex flex-1 items-center justify-center gap-2 px-2">
-        <div className="relative w-full max-w-xl flex items-center">
-          <Input
-            type="search"
-            placeholder="Search"
-            className="w-full rounded-full border-border bg-secondary h-10 pl-10 pr-4 sm:pl-12"
-          />
-           <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2">
-            <Search className="h-5 w-5 text-muted-foreground" />
-           </div>
-        </div>
+       <div className="flex flex-1 items-center justify-center gap-2 px-2">
+         <form onSubmit={handleSearchSubmit} className="relative w-full max-w-xl">
+             <div className="relative flex items-center">
+              <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <Search className="h-5 w-5 text-muted-foreground" />
+              </div>
+               <Input
+                type="search"
+                placeholder="Search"
+                className="w-full rounded-full border-border bg-secondary h-10 pl-10 pr-4 sm:pl-12"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </form>
       </div>
 
       <div className="flex items-center gap-2">

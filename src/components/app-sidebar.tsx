@@ -25,7 +25,7 @@ import {
   Users,
   ThumbsUp,
   Clock,
-  Youtube,
+  Search,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -35,6 +35,7 @@ import Image from 'next/image';
 
 const mainMenuItems = [
     { href: '/home', label: 'Home', icon: Home, roles: ['student', 'teacher', 'admin'] },
+    { href: '/search', label: 'Search', icon: Search, roles: ['student', 'teacher', 'admin'] },
     { href: '/browse', label: 'Browse', icon: Compass, roles: ['student', 'teacher', 'admin'] },
     { href: '/shorts', label: 'Shorts', icon: Clapperboard, roles: ['student'] },
     { href: '/subscriptions', label: 'Subscriptions', icon: Video, roles: ['student'] },
@@ -43,7 +44,7 @@ const mainMenuItems = [
 const libraryMenuItems = [
     { href: '/library', label: 'Library', icon: Library, roles: ['student'] },
     { href: '/history', label: 'History', icon: History, roles: ['student'] },
-    { href: '/my-videos', label: 'Your Videos', icon: Youtube, roles: ['teacher'] },
+    { href: '/my-videos', label: 'Your Videos', icon: Video, roles: ['teacher'] },
     { href: '/watch-later', label: 'Watch Later', icon: Clock, roles: ['student'] },
     { href: '/liked-videos', label: 'Liked Videos', icon: ThumbsUp, roles: ['student'] },
 ];
@@ -85,8 +86,8 @@ export default function AppSidebar() {
     <Sidebar collapsible="offcanvas">
       <SidebarHeader className="p-4 justify-center items-center h-16 border-b hidden md:flex">
          <SidebarMenuButton icon={<div />} tooltip="Ederaxy" asChild>
-            <Link href="/home" className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
-               <Image src="/logo.png" alt="Ederaxy Logo" width={32} height={32} className="h-8 w-8" />
+            <Link href="/home" className="h-9 w-9 bg-primary rounded-full flex items-center justify-center">
+               <Image src="/logo.png" alt="Ederaxy Logo" width={36} height={36} className="h-9 w-9" />
             </Link>
          </SidebarMenuButton>
       </SidebarHeader>
