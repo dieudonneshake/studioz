@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Search, Bell, Mic, Video } from 'lucide-react';
@@ -16,7 +17,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-30 flex h-14 w-full shrink-0 items-center justify-between gap-2 border-b bg-background px-2 sm:px-4">
       <div className='flex items-center gap-1 sm:gap-2'>
-        <SidebarTrigger className="flex md:hidden" />
+        <SidebarTrigger />
         <Link href="/" className="flex items-center gap-2">
             <Image src="/logo.png" alt="Ederaxy Logo" width={28} height={28} className="h-7 w-7" />
             <span className="font-bold text-lg hidden sm:inline-block">Ederaxy</span>
