@@ -8,12 +8,13 @@ import { Button } from '@/components/ui/button';
 import { VideoCard } from '@/components/video-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Clapperboard, Video, Check } from 'lucide-react';
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function ProfilePage({ params }: { params: { id: string } }) {
   const { toast } = useToast();
-  const uploader = getUploader(params.id, users);
+  const id = use(Promise.resolve(params.id));
+  const uploader = getUploader(id, users);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   if (!uploader) {
