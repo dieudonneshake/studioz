@@ -105,7 +105,7 @@ export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
             </Button>
             <Button size="sm" variant="secondary" onClick={handleSave}>
                 {isSaved ? <Check className="mr-2 h-4 w-4" /> : <PlusSquare className="mr-2 h-4 w-4" />}
-                {isSaved ? 'Saved' : 'Save'}
+                <span className="hidden sm:inline">{isSaved ? 'Saved' : 'Save'}</span>
             </Button>
           </div>
         </div>

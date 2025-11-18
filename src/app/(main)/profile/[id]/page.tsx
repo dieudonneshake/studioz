@@ -1,22 +1,33 @@
 
+"use client";
+
 import { notFound } from 'next/navigation';
 import { getUploader, users, videos } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { VideoCard } from '@/components/video-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Clapperboard, Video } from 'lucide-react';
+import { Clapperboard, Video, Check } from 'lucide-react';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function ProfilePage({ params }: { params: { id: string } }) {
+  const { toast } = useToast();
   const uploader = getUploader(params.id, users);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   if (!uploader) {
     notFound();
   }
 
+  const handleSubscribe = () => {
+    setIsSubscribed(!isSubscribed);
+    toast({
+      title: isSubscribed ? `Unsubscribed from ${uploader?.name}` : `Subscribed to ${uploader?.name}`,
+    });
+  };
+
   const uploaderVideos = videos.filter(v => v.uploaded_by === uploader.id);
-  // Assuming shorts data is accessible or can be filtered similarly
-  // const uploaderShorts = shorts.filter(s => s.uploaderId === uploader.id);
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
@@ -30,7 +41,10 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
           <p className="text-muted-foreground mt-1">@{uploader.name.split(' ').join('').toLowerCase()}</p>
           <p className="mt-2 text-sm text-muted-foreground">1.2M Subscribers &middot; {uploaderVideos.length} videos</p>
           <p className="mt-4 max-w-lg text-sm">{uploader.bio}</p>
-          <Button className="mt-4">Subscribe</Button>
+          <Button className="mt-4" onClick={handleSubscribe} variant={isSubscribed ? 'secondary' : 'default'}>
+            {isSubscribed && <Check className="mr-2 h-4 w-4" />}
+            {isSubscribed ? 'Subscribed' : 'Subscribe'}
+          </Button>
         </div>
       </div>
 

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,22 +12,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useAuthStore } from '@/store/auth';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export function UserNav() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
-  
-  const userImage = PlaceHolderImages.find(img => img.id === 'user-avatar-3');
 
   const handleLogout = () => {
     logout();
-    router.push('/');
+    router.push('/login');
   };
 
-  if (!user || !userImage) {
+  if (!user) {
     return null;
   }
   
@@ -35,7 +34,7 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={user.profile_photo} alt={user.name} data-ai-hint={userImage.imageHint}/>
+            <AvatarImage src={user.profile_photo} alt={user.name} />
             <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
           </Avatar>
         </Button>
@@ -49,9 +48,16 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+           <Link href={`/profile/${user.id}`}>
+            <DropdownMenuItem>
+              Profile
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/settings">
+            <DropdownMenuItem>
+              Settings
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>

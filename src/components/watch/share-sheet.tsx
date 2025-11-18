@@ -23,7 +23,6 @@ const shareOptions = [
     { name: 'WhatsApp', icon: MessageCircle, color: '#25D366' },
     { name: 'Facebook', icon: Facebook, color: '#1877F2' },
     { name: 'Twitter', icon: Twitter, color: '#1DA1F2' },
-    { name: 'Copy Link', icon: LinkIcon, color: '#6b7280' },
 ];
 
 export function ShareSheet({ open, onOpenChange, videoId }: ShareSheetProps) {
@@ -52,7 +51,7 @@ export function ShareSheet({ open, onOpenChange, videoId }: ShareSheetProps) {
         <SheetHeader className="text-center mb-6">
           <SheetTitle>Share this Video</SheetTitle>
         </SheetHeader>
-        <div className="grid grid-cols-4 gap-4 text-center">
+        <div className="flex justify-center gap-4 text-center">
             {shareOptions.map(option => (
                 <div key={option.name} className="flex flex-col items-center gap-2">
                     <Button 
@@ -60,7 +59,7 @@ export function ShareSheet({ open, onOpenChange, videoId }: ShareSheetProps) {
                         variant="outline" 
                         className="h-14 w-14 rounded-full"
                         style={{'--color': option.color} as React.CSSProperties}
-                        onClick={() => option.name === 'Copy Link' ? handleCopy() : toast({title: `Sharing to ${option.name} is not implemented.`})}
+                        onClick={() => toast({title: `Sharing to ${option.name} is not implemented.`})}
                     >
                         <option.icon className="h-6 w-6" style={{color: option.color}}/>
                     </Button>

@@ -10,7 +10,7 @@ import { drcCurriculum } from './curricula/drc';
 import { tanzaniaCurriculum } from './curricula/tanzania';
 import { southSudanCurriculum } from './curricula/south_sudan';
 import { nigeriaCurriculum } from './curricula/nigeria';
-import { watchHistory } from './curricula/history';
+import { watchHistory as importedWatchHistory } from './curricula/history';
 
 const getImage = (id: string) => PlaceHolderImages.find(img => img.id === id)?.imageUrl ?? '';
 
@@ -255,13 +255,11 @@ export const quizzes: Quiz[] = [
 
 export const summaries = {
   'vid-1': {
-    en: 'This lesson introduces the foundational principles of quantum mechanics. It covers the concept of wave-particle duality, explaining how particles like electrons can behave as both particles and waves. The video also delves into the Heisenberg Uncertainty Principle, which posits a fundamental limit to the precision with which certain pairs of physical properties of a particle, such as position and momentum, can be known. Finally, it touches upon the idea of superposition, where a particle can exist in multiple states at once until measured.',
-    fr: 'Cette leçon présente les principes fondamentaux de la mécanique quantique. Elle aborde le concept de dualité onde-particule, expliquant comment des particules comme les électrons peuvent se comporter à la fois comme des particules et des ondes. La vidéo explore également le principe d\'incertitude de Heisenberg, qui postule une limite fondamentale à la précision avec laquelle certaines paires de propriétés physiques d\'une particule, telles que la position et la quantité de mouvement, peuvent être connues. Enfin, elle aborde l\'idée de superposition, où une particule peut exister dans plusieurs états à la fois jusqu\'à ce qu\'elle soit mesurée.',
     notes: 'Lesson Notes: Introduction to Quantum Mechanics\n\n1.  Wave-Particle Duality\n    -   Light can act as a wave (diffraction, interference) and a particle (photoelectric effect).\n    -   De Broglie proposed that all matter has wave-like properties.\n    -   Electrons show wave properties in experiments like the double-slit experiment.\n\n2.  Heisenberg\'s Uncertainty Principle\n    -   It is impossible to simultaneously know the exact position and exact momentum (mass x velocity) of a particle.\n    -   The more accurately you know one, the less accurately you know the other.\n    -   Δx * Δp ≥ h/4π\n\n3.  Superposition\n    -   A quantum system can be in multiple states at the same time.\n    -   The act of measurement "collapses" the superposition into a single, definite state.\n    -   Schrödinger\'s cat is a famous thought experiment illustrating this concept.'
   },
 };
 
-export { watchHistory };
+export const watchHistory: WatchHistory[] = importedWatchHistory;
 
 
 // These functions just retrieve data for the simulation.

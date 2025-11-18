@@ -1,12 +1,26 @@
 
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuthStore } from "@/store/auth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SettingsPage() {
+  const { user } = useAuthStore();
+  const { toast } = useToast();
+
+  const handleUpdateProfile = () => {
+    toast({
+      title: "Profile Updated",
+      description: "Your account details have been saved.",
+    });
+  };
+
   return (
     <div className="container mx-auto max-w-3xl p-4 md:p-6 lg:p-8">
       <h1 className="text-3xl font-bold tracking-tight mb-8 font-headline">Settings</h1>
@@ -20,13 +34,13 @@ export default function SettingsPage() {
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" defaultValue="Alex Johnson" />
+              <Input id="name" defaultValue={user?.name} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" defaultValue="a.johnson@example.com" />
+              <Input id="email" type="email" defaultValue={user?.email} />
             </div>
-            <Button>Update Profile</Button>
+            <Button onClick={handleUpdateProfile}>Update Profile</Button>
           </CardContent>
         </Card>
 

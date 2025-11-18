@@ -30,12 +30,18 @@ export function ShortsPlayer({ short, uploader, isActive }: ShortsPlayerProps) {
 
   useEffect(() => {
     if (isActive) {
-      videoRef.current?.play().then(() => {
-        setIsPlaying(true);
-      }).catch(e => {
-        setIsPlaying(false);
-      });
+      // Autoplay when the short becomes active
+      const playPromise = videoRef.current?.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          setIsPlaying(true);
+        }).catch(e => {
+          // Autoplay was prevented. User might need to interact first.
+          setIsPlaying(false);
+        });
+      }
     } else {
+      // Pause and reset when the short is no longer active
       videoRef.current?.pause();
       if (videoRef.current) {
         videoRef.current.currentTime = 0;
@@ -94,7 +100,7 @@ export function ShortsPlayer({ short, uploader, isActive }: ShortsPlayerProps) {
         poster={short.thumbnail_path} 
       />
 
-      {!isPlaying && (
+      {!isPlaying && isActive && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="bg-black/50 p-4 rounded-full">
             <Play className="h-16 w-16 text-white/90 fill-white/90" />
