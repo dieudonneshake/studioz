@@ -10,18 +10,19 @@ import { UserNav } from './user-nav';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useSearchStore } from '@/store/search';
 
 export default function Header() {
   const { isAuthenticated } = useAuthStore();
-  const [searchQuery, setSearchQuery] = useState('');
-  const router = useRouter();
+  const { searchQuery, setSearchQuery } = useSearchStore();
 
-  const handleSearch = (e: FormEvent) => {
+  // Handle form submission if needed, e.g., for accessibility or mobile keyboards.
+  // For live filtering, this doesn't need to do much.
+  const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-    }
+    // The filtering is already live, but you could add logic here
+    // e.g., to dismiss a mobile keyboard.
+    (document.activeElement as HTMLElement)?.blur();
   };
 
 
@@ -38,7 +39,7 @@ export default function Header() {
       </div>
       
        <div className="flex flex-1 items-center justify-center gap-2 px-2">
-         <form onSubmit={handleSearch} className="relative w-full max-w-xl">
+         <form onSubmit={handleSearchSubmit} className="relative w-full max-w-xl">
              <div className="relative flex items-center">
               <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 pointer-events-none">
                 <Search className="h-5 w-5 text-muted-foreground" />
