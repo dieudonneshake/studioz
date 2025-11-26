@@ -8,7 +8,7 @@ import { Video } from "@/lib/types";
 
 // This is now a Server Component
 export default async function HomePage() {
-  const { firestore } = initializeFirebase();
+  const { firestore } = await initializeFirebase();
 
   // Data fetching and preparation happens on the server.
   const videosCollection = collection(firestore, 'videos');
