@@ -55,12 +55,22 @@ export type Video = {
   video_url: string;
   duration_seconds: number;
   views_count: number;
-  created_at: string;
+  created_at: string; // Should be ISO string
   curriculum: string;
   level: string;
   subject: string;
   unit?: string;
 };
+
+export type Note = {
+    id: string;
+    videoId: string;
+    uploadedBy: string;
+    filePath: string;
+    fileType: string;
+    textExtracted: string;
+    createdAt: string;
+}
 
 export type Short = {
     id: string;
@@ -100,9 +110,5 @@ export type QuizResult = {
 
 export type WatchHistory = {
   id: string;
-  student_id: string;
-  video_id: string;
-  watched_at: string;
+  videoId: string;
 };
-
-    
