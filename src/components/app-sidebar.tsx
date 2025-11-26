@@ -29,8 +29,10 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuthStore } from '@/store/auth';
+import { useUser, useFirestore } from '@/firebase';
 import Image from 'next/image';
+import { doc, getDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 
 
 const mainMenuItems = [
@@ -72,8 +74,24 @@ const filterMenuByRole = (menu: any[], role: string | undefined) => {
 
 export default function AppSidebar() {
   const pathname = usePathname();
-  const { user, isAuthenticated } = useAuthStore();
-  const role = user?.role;
+  const { user } = useUser();
+  const firestore = useFirestore();
+  const [role, setRole] = useState<string | undefined>('student');
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+        if(user) {
+            const userDocRef = doc(firestore, 'users', user.uid);
+            const userDoc = await getDoc(userDocRef);
+            if(userDoc.exists()) {
+                setRole(userDoc.data().role);
+            }
+        } else {
+            setRole('student'); // Default for guest
+        }
+    };
+    fetchUserRole();
+  }, [user, firestore]);
 
   const visibleMainMenuItems = filterMenuByRole(mainMenuItems, role);
   const visibleLibraryMenuItems = filterMenuByRole(libraryMenuItems, role);
@@ -87,7 +105,7 @@ export default function AppSidebar() {
       <SidebarHeader className="p-4 justify-center items-center h-16 border-b hidden md:flex">
          <SidebarMenuButton icon={<div />} tooltip="Ederaxy" asChild>
             <Link href="/home" className="h-10 w-10 bg-primary rounded-full flex items-center justify-center">
-               <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={40} height={40} className="h-10 w-10" />
+               <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={48} height={48} className="h-12 w-12" />
             </Link>
          </SidebarMenuButton>
       </SidebarHeader>

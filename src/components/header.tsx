@@ -8,13 +8,13 @@ import { Input } from './ui/input';
 import { SidebarTrigger } from './ui/sidebar';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
-import { useAuthStore } from '@/store/auth';
+import { useUser } from '@/firebase';
 import Image from 'next/image';
 import { useSearchStore } from '@/store/search';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
-  const { isAuthenticated } = useAuthStore();
+  const { user } = useUser();
   const { searchQuery, setSearchQuery } = useSearchStore();
   const router = useRouter();
 
@@ -32,7 +32,7 @@ export default function Header() {
             <Menu />
         </SidebarTrigger>
         <Link href="/" className="flex items-center gap-2">
-            <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={40} height={40} className="h-10 w-10" />
+            <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={48} height={48} className="h-12 w-12" />
             <span className="font-bold text-lg hidden sm:inline-block">Ederaxy</span>
         </Link>
       </div>
@@ -55,7 +55,7 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-2">
-        {isAuthenticated ? (
+        {user ? (
           <>
             <Button variant="ghost" size="icon" className="hidden md:flex">
               <Video className="h-5 w-5" />
