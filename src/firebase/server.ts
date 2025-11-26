@@ -15,14 +15,19 @@ export async function initializeFirebase() {
 
   if (!apps.length) {
     const serviceAccountStr = process.env.FIREBASE_SERVICE_ACCOUNT;
-    const serviceAccount: ServiceAccount | undefined = serviceAccountStr
-      ? JSON.parse(serviceAccountStr)
-      : undefined;
-
-    firebaseApp = initializeApp({
-      credential: serviceAccount ? cert(serviceAccount) : undefined,
-      databaseURL: `https://${firebaseConfig.projectId}.firebaseio.com`,
-    });
+    
+    if (serviceAccountStr) {
+        const serviceAccount: ServiceAccount = JSON.parse(serviceAccountStr);
+        firebaseApp = initializeApp({
+            credential: cert(serviceAccount),
+            databaseURL: `https://${firebaseConfig.projectId}.firebaseio.com`,
+        });
+    } else {
+        // In a managed environment like App Hosting, the SDK will discover credentials automatically.
+        firebaseApp = initializeApp({
+            databaseURL: `https://${firebaseConfig.projectId}.firebaseio.com`,
+        });
+    }
   } else {
     firebaseApp = getApp();
   }
