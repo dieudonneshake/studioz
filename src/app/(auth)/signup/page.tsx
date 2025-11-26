@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { User, Briefcase, Shield, Check, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { useAuth, useFirestore, useMemoFirebase } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
@@ -20,6 +20,17 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
 type Role = "student" | "teacher" | "admin";
+
+const allCurricula: Curriculum[] = [
+    { id: "cur-1", name: "Rwanda National Curriculum (CBC)", description: "The official curriculum for Rwanda." },
+    { id: "cur-2", name: "Burundi National Curriculum", description: "The official curriculum for Burundi." },
+    { id: "cur-3", name: "Kenya National Curriculum (CBC)", description: "The official curriculum for Kenya." },
+    { id: "cur-4", name: "Uganda National Curriculum", description: "The official curriculum for Uganda." },
+    { id: "cur-5", name: "DRC National Curriculum", description: "The official curriculum for the Democratic Republic of Congo." },
+    { id: "cur-6", name: "Tanzania National Curriculum", description: "The official curriculum for Tanzania." },
+    { id: "cur-7", name: "South Sudan National Curriculum", description: "The official curriculum for South Sudan." },
+    { id: "cur-8", name: "Nigeria National Curriculum", description: "The official curriculum for Nigeria." },
+];
 
 const PasswordStrengthIndicator = ({ strength, criteria }: { strength: number, criteria: any }) => {
     return (
@@ -166,10 +177,6 @@ export default function SignupPage() {
         specialChar: false,
         match: false
     });
-    
-    const firestore = useFirestore();
-    const curriculaQuery = useMemoFirebase(() => collection(firestore, 'curricula'), [firestore]);
-    const { data: curricula } = useCollection<Curriculum>(curriculaQuery);
 
     useEffect(() => {
         const hasLength = password.length >= 8;
@@ -271,7 +278,7 @@ export default function SignupPage() {
                     <div className="grid gap-4">
                         <Label>Curricula</Label>
                         <div className="space-y-2 max-h-32 overflow-y-auto border p-2 rounded-md">
-                            {curricula?.map((curriculum) => (
+                            {allCurricula?.map((curriculum) => (
                                 <div key={curriculum.id} className="flex items-center space-x-2">
                                     <Checkbox 
                                         id={`curriculum-${curriculum.id}`} 
@@ -309,5 +316,3 @@ export default function SignupPage() {
       <>{step === 1 ? <RoleSelection /> : <SignupForm role={role!} onSignup={handleSignup} onBack={() => setStep(1)} />}</>
   );
 }
-
-    
