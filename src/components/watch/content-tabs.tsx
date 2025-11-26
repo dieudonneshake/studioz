@@ -22,9 +22,9 @@ export default function ContentTabs({ video }: ContentTabsProps) {
   const firestore = useFirestore();
 
   const notesQuery = useMemoFirebase(() => {
-    if (!video.id) return null;
+    if (!video?.id) return null;
     return query(collection(firestore, `videos/${video.id}/notes`), limit(1));
-  }, [firestore, video.id]);
+  }, [firestore, video?.id]);
 
   const { data: notes, isLoading: isLoadingNotes } = useCollection<Note>(notesQuery);
 
@@ -78,7 +78,10 @@ export default function ContentTabs({ video }: ContentTabsProps) {
               <p className="text-sm text-muted-foreground">{summary.fr}</p>
             </>
           )}
-          {!summary && !isLoading && (
+          {!summary && !isLoading && !noteText && (
+             <p className="text-muted-foreground">No notes were uploaded for this video, so an AI summary cannot be generated.</p>
+          )}
+           {!summary && !isLoading && noteText && (
             <p className="text-muted-foreground">Click the tab again to generate the summary.</p>
           )}
         </ScrollArea>
