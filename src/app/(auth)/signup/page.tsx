@@ -201,8 +201,6 @@ export default function SignupPage() {
   );
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      {step === 1 ? <RoleSelection /> : <SignupForm />}
-    </div>
+      <>{step === 1 ? <RoleSelection /> : <SignupForm />}</>
   );
 }

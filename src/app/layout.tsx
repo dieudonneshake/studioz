@@ -2,12 +2,6 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 import { cn } from '@/lib/utils';
-import AppSidebar from '@/components/app-sidebar';
-import Header from '@/components/header';
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
-import { GlobalLoader } from '@/components/global-loader';
-import { Suspense } from 'react';
-import { BottomNav } from '@/components/bottom-nav';
 import { FirebaseClientProvider } from '@/firebase';
 
 
@@ -30,22 +24,8 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased", "min-h-screen bg-background font-sans")}>
         <FirebaseClientProvider>
-          <SidebarProvider>
-            <div className="flex h-screen w-full">
-              <AppSidebar />
-              <SidebarInset className="overflow-x-hidden">
-                <Header />
-                <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
-                  {children}
-                </main>
-              </SidebarInset>
-            </div>
-          </SidebarProvider>
-          <BottomNav />
+          {children}
           <Toaster />
-          <Suspense>
-            <GlobalLoader />
-          </Suspense>
         </FirebaseClientProvider>
       </body>
     </html>

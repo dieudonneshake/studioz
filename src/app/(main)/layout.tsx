@@ -1,8 +1,13 @@
 "use client";
 import { useUser } from "@/firebase";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import AppSidebar from '@/components/app-sidebar';
+import Header from '@/components/header';
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
+import { GlobalLoader } from '@/components/global-loader';
+import { BottomNav } from '@/components/bottom-nav';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const { user, isUserLoading } = useUser();
@@ -12,7 +17,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     if (isUserLoading) return; // Wait until user status is resolved
 
-    const guestAllowedPaths = ['/home', '/browse', '/watch', '/profile', '/search', '/shorts'];
+    const guestAllowedPaths = ['/home', '/browse', '/watch', '/profile', '/search', '/shorts', '/signup', '/login'];
     const isGuestPath = guestAllowedPaths.some(p => pathname.startsWith(p));
     
     if (!user && !isGuestPath) {
@@ -38,5 +43,21 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       )
   }
 
-  return <>{children}</>;
+  return (
+    <SidebarProvider>
+      <div className="flex h-screen w-full">
+        <AppSidebar />
+        <SidebarInset className="overflow-x-hidden">
+          <Header />
+          <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
+            {children}
+          </main>
+        </SidebarInset>
+      </div>
+      <BottomNav />
+      <Suspense>
+        <GlobalLoader />
+      </Suspense>
+    </SidebarProvider>
+  )
 }

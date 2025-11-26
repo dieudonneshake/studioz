@@ -63,7 +63,6 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
       <Card className="mx-auto max-w-sm">
         <CardHeader className="text-center">
             <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={80} height={80} className="mx-auto h-20 w-20" />
@@ -114,6 +113,5 @@ export default function LoginPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
   );
 }
