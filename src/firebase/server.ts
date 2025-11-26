@@ -16,7 +16,7 @@ const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
   : undefined;
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
-export function initializeFirebase() {
+export async function initializeFirebase() {
   const apps = getApps();
   let firebaseApp: App;
 
