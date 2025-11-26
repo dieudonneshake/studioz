@@ -1,0 +1,903 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the EduVerse platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's full name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "role": {
+          "type": "string",
+          "description": "The user's role (student, teacher, or admin)."
+        },
+        "profilePhoto": {
+          "type": "string",
+          "description": "URL or path to the user's profile photo."
+        },
+        "bio": {
+          "type": "string",
+          "description": "A short biography of the user."
+        },
+        "preferences": {
+          "type": "string",
+          "description": "User-specific preferences stored as a JSON string."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "role",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Curriculum": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Curriculum",
+      "type": "object",
+      "description": "Represents a curriculum within the EduVerse platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Curriculum entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the curriculum."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the curriculum."
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Reference to User (teacher/admin) who created the curriculum. (Relationship: User 1:N Curriculum)"
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "Indicates whether the curriculum is publicly accessible."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the curriculum was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the curriculum was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "createdBy",
+        "isPublic",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Level": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Level",
+      "type": "object",
+      "description": "Represents an educational level within a curriculum (e.g., Grade 1, Year 10).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Level entity."
+        },
+        "curriculumId": {
+          "type": "string",
+          "description": "Reference to Curriculum. (Relationship: Curriculum 1:N Level)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the level (e.g., Grade 1, Year 10)."
+        },
+        "metadata": {
+          "type": "string",
+          "description": "Additional metadata for the level stored as a JSON string."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the level was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the level was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "curriculumId",
+        "name",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Subject": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Subject",
+      "type": "object",
+      "description": "Represents a subject within a curriculum.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Subject entity."
+        },
+        "curriculumId": {
+          "type": "string",
+          "description": "Reference to Curriculum. (Relationship: Curriculum 1:N Subject)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the subject."
+        },
+        "code": {
+          "type": "string",
+          "description": "A code representing the subject."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the subject was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the subject was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "curriculumId",
+        "name",
+        "code",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Unit": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Unit",
+      "type": "object",
+      "description": "Represents a unit (topic) within a subject.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Unit entity."
+        },
+        "subjectId": {
+          "type": "string",
+          "description": "Reference to Subject. (Relationship: Subject 1:N Unit)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the unit."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the unit."
+        },
+        "order": {
+          "type": "number",
+          "description": "The order of the unit within the subject."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the unit was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the unit was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "subjectId",
+        "title",
+        "order",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Video": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Video",
+      "type": "object",
+      "description": "Represents a video on the EduVerse platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Video entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the video."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the video."
+        },
+        "uploadedBy": {
+          "type": "string",
+          "description": "Reference to User (teacher) who uploaded the video. (Relationship: User 1:N Video)"
+        },
+        "s3Key": {
+          "type": "string",
+          "description": "The key of the video file in the S3 bucket."
+        },
+        "storageUrl": {
+          "type": "string",
+          "description": "URL for accessing the video file."
+        },
+        "encodings": {
+          "type": "string",
+          "description": "JSON string containing information about different video encodings (HLS, MP4)."
+        },
+        "thumbnailPath": {
+          "type": "string",
+          "description": "Path to the video thumbnail image."
+        },
+        "curriculumId": {
+          "type": "string",
+          "description": "Reference to Curriculum. (Relationship: Curriculum 1:N Video)"
+        },
+        "levelId": {
+          "type": "string",
+          "description": "Reference to Level. (Relationship: Level 1:N Video)"
+        },
+        "subjectId": {
+          "type": "string",
+          "description": "Reference to Subject. (Relationship: Subject 1:N Video)"
+        },
+        "unitId": {
+          "type": "string",
+          "description": "Reference to Unit. (Relationship: Unit 1:N Video)"
+        },
+        "durationSeconds": {
+          "type": "number",
+          "description": "The duration of the video in seconds."
+        },
+        "language": {
+          "type": "string",
+          "description": "The language of the video."
+        },
+        "viewsCount": {
+          "type": "number",
+          "description": "The number of views the video has received."
+        },
+        "likesCount": {
+          "type": "number",
+          "description": "The number of likes the video has received."
+        },
+        "privacy": {
+          "type": "string",
+          "description": "The privacy setting of the video (public or private)."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the video was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the video was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "uploadedBy",
+        "s3Key",
+        "curriculumId",
+        "levelId",
+        "subjectId",
+        "unitId",
+        "durationSeconds",
+        "language",
+        "viewsCount",
+        "likesCount",
+        "privacy",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Note": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Note",
+      "type": "object",
+      "description": "Represents notes associated with a video.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Note entity."
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to Video. (Relationship: Video 1:N Note)"
+        },
+        "uploadedBy": {
+          "type": "string",
+          "description": "Reference to User (teacher) who uploaded the notes. (Relationship: User 1:N Note)"
+        },
+        "filePath": {
+          "type": "string",
+          "description": "The path to the notes file."
+        },
+        "fileType": {
+          "type": "string",
+          "description": "The type of the notes file (pdf/docx)."
+        },
+        "textExtracted": {
+          "type": "string",
+          "description": "The extracted text from the notes file."
+        },
+        "aiSummaryEn": {
+          "type": "string",
+          "description": "The AI-generated summary of the notes in English."
+        },
+        "aiSummaryFr": {
+          "type": "string",
+          "description": "The AI-generated summary of the notes in French."
+        },
+        "aiSummaryMeta": {
+          "type": "string",
+          "description": "JSON string containing metadata about the AI summary."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the notes were uploaded.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the notes were last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "videoId",
+        "uploadedBy",
+        "filePath",
+        "fileType",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Quiz": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Quiz",
+      "type": "object",
+      "description": "Represents a quiz associated with a video.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Quiz entity."
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to Video. (Relationship: Video 1:N Quiz)"
+        },
+        "generatedBy": {
+          "type": "string",
+          "description": "Indicates whether the quiz was generated by AI or a teacher."
+        },
+        "questions": {
+          "type": "string",
+          "description": "JSON array containing the quiz questions."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the quiz was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "videoId",
+        "generatedBy",
+        "questions",
+        "createdAt"
+      ]
+    },
+    "QuizResult": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "QuizResult",
+      "type": "object",
+      "description": "Represents the results of a quiz taken by a student.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the QuizResult entity."
+        },
+        "quizId": {
+          "type": "string",
+          "description": "Reference to Quiz. (Relationship: Quiz 1:N QuizResult)"
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Reference to User (student) who took the quiz. (Relationship: User 1:N QuizResult)"
+        },
+        "answers": {
+          "type": "string",
+          "description": "JSON string containing the student's answers to the quiz questions."
+        },
+        "score": {
+          "type": "number",
+          "description": "The student's score on the quiz (0-100)."
+        },
+        "gradedBy": {
+          "type": "string",
+          "description": "Indicates whether the quiz was graded by AI or manually."
+        },
+        "feedback": {
+          "type": "string",
+          "description": "JSON string containing feedback on the student's answers."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the quiz was submitted.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "quizId",
+        "studentId",
+        "answers",
+        "score",
+        "gradedBy",
+        "createdAt"
+      ]
+    },
+    "WatchHistory": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WatchHistory",
+      "type": "object",
+      "description": "Represents a student's watch history for a video.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the WatchHistory entity."
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Reference to User (student). (Relationship: User 1:N WatchHistory)"
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to Video. (Relationship: Video 1:N WatchHistory)"
+        },
+        "progressSeconds": {
+          "type": "number",
+          "description": "The student's progress in the video in seconds."
+        },
+        "lastWatchedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the video was last watched.",
+          "format": "date-time"
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Indicates whether the student has completed watching the video."
+        }
+      },
+      "required": [
+        "id",
+        "studentId",
+        "videoId",
+        "progressSeconds",
+        "lastWatchedAt",
+        "completed"
+      ]
+    },
+    "Playlist": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Playlist",
+      "type": "object",
+      "description": "Represents a user's playlist of videos.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Playlist entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Playlist)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the playlist."
+        },
+        "videoIds": {
+          "type": "array",
+          "description": "References to Videos in the playlist. (Relationship: Playlist N:N Video)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the playlist was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the playlist was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "name",
+        "videoIds",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Bookmark": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Bookmark",
+      "type": "object",
+      "description": "Represents a user's bookmark for a video.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Bookmark entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Bookmark)"
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to Video. (Relationship: Video 1:N Bookmark)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the bookmark was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the bookmark was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "videoId",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Like": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Like",
+      "type": "object",
+      "description": "Represents a user's like for a video.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Like entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Like)"
+        },
+        "videoId": {
+          "type": "string",
+          "description": "Reference to Video. (Relationship: Video 1:N Like)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the like was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "videoId",
+        "createdAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile information. Accessible only by the user themselves or admins.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/curricula/{curriculumId}",
+        "definition": {
+          "entityName": "Curriculum",
+          "schema": {
+            "$ref": "#/backend/entities/Curriculum"
+          },
+          "description": "Stores curriculum information. Includes denormalized 'createdBy' field for authorization independence.",
+          "params": [
+            {
+              "name": "curriculumId",
+              "description": "The unique identifier of the curriculum."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/curricula/{curriculumId}/levels/{levelId}",
+        "definition": {
+          "entityName": "Level",
+          "schema": {
+            "$ref": "#/backend/entities/Level"
+          },
+          "description": "Stores level information within a curriculum. Includes denormalized 'createdBy' (from Curriculum) for authorization independence.",
+          "params": [
+            {
+              "name": "curriculumId",
+              "description": "The unique identifier of the curriculum."
+            },
+            {
+              "name": "levelId",
+              "description": "The unique identifier of the level."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/curricula/{curriculumId}/subjects/{subjectId}",
+        "definition": {
+          "entityName": "Subject",
+          "schema": {
+            "$ref": "#/backend/entities/Subject"
+          },
+          "description": "Stores subject information within a curriculum. Includes denormalized 'createdBy' (from Curriculum) for authorization independence.",
+          "params": [
+            {
+              "name": "curriculumId",
+              "description": "The unique identifier of the curriculum."
+            },
+            {
+              "name": "subjectId",
+              "description": "The unique identifier of the subject."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/curricula/{curriculumId}/subjects/{subjectId}/units/{unitId}",
+        "definition": {
+          "entityName": "Unit",
+          "schema": {
+            "$ref": "#/backend/entities/Unit"
+          },
+          "description": "Stores unit information within a subject. Includes denormalized 'createdBy' (from Curriculum) for authorization independence.",
+          "params": [
+            {
+              "name": "curriculumId",
+              "description": "The unique identifier of the curriculum."
+            },
+            {
+              "name": "subjectId",
+              "description": "The unique identifier of the subject."
+            },
+            {
+              "name": "unitId",
+              "description": "The unique identifier of the unit."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/videos/{videoId}",
+        "definition": {
+          "entityName": "Video",
+          "schema": {
+            "$ref": "#/backend/entities/Video"
+          },
+          "description": "Stores video information. Includes denormalized 'curriculumId', 'levelId', 'subjectId', 'unitId', and 'uploadedBy' for efficient querying and rule creation.",
+          "params": [
+            {
+              "name": "videoId",
+              "description": "The unique identifier of the video."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/videos/{videoId}/notes/{noteId}",
+        "definition": {
+          "entityName": "Note",
+          "schema": {
+            "$ref": "#/backend/entities/Note"
+          },
+          "description": "Stores notes associated with a video. Includes denormalized 'uploadedBy' (teacher ID) and 'videoId' for query and rule creation.",
+          "params": [
+            {
+              "name": "videoId",
+              "description": "The unique identifier of the video."
+            },
+            {
+              "name": "noteId",
+              "description": "The unique identifier of the note."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/videos/{videoId}/quizzes/{quizId}",
+        "definition": {
+          "entityName": "Quiz",
+          "schema": {
+            "$ref": "#/backend/entities/Quiz"
+          },
+          "description": "Stores quizzes associated with a video. Includes denormalized 'videoId' for easier access.",
+          "params": [
+            {
+              "name": "videoId",
+              "description": "The unique identifier of the video."
+            },
+            {
+              "name": "quizId",
+              "description": "The unique identifier of the quiz."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/quizResults/{quizResultId}",
+        "definition": {
+          "entityName": "QuizResult",
+          "schema": {
+            "$ref": "#/backend/entities/QuizResult"
+          },
+          "description": "Stores quiz results for a user. Path-based ownership ensures only the user or admin can access the results.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "quizResultId",
+              "description": "The unique identifier of the quiz result."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/watchHistory/{watchHistoryId}",
+        "definition": {
+          "entityName": "WatchHistory",
+          "schema": {
+            "$ref": "#/backend/entities/WatchHistory"
+          },
+          "description": "Stores watch history for a user. Path-based ownership ensures only the user or admin can access the history.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "watchHistoryId",
+              "description": "The unique identifier of the watch history entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/playlists/{playlistId}",
+        "definition": {
+          "entityName": "Playlist",
+          "schema": {
+            "$ref": "#/backend/entities/Playlist"
+          },
+          "description": "Stores playlists created by a user. Path-based ownership.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "playlistId",
+              "description": "The unique identifier of the playlist."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/bookmarks/{bookmarkId}",
+        "definition": {
+          "entityName": "Bookmark",
+          "schema": {
+            "$ref": "#/backend/entities/Bookmark"
+          },
+          "description": "Stores bookmarks created by a user. Path-based ownership.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "bookmarkId",
+              "description": "The unique identifier of the bookmark."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/likes/{likeId}",
+        "definition": {
+          "entityName": "Like",
+          "schema": {
+            "$ref": "#/backend/entities/Like"
+          },
+          "description": "Stores likes created by a user. Path-based ownership.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "likeId",
+              "description": "The unique identifier of the like."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to ensure Authorization Independence, Clarity of Intent, and support secure list operations (QAPs). Authorization Independence is achieved through denormalization. For example, curriculum ownership ('createdBy') is copied into subcollections like 'levels', 'subjects', and 'videos' when appropriate to avoid costly and insecure `get()` calls in security rules.\n\nStructural Segregation is employed to maintain a Homogeneous Security Posture.  Private user data resides under `/users/{userId}`, while public or shared data is stored in root-level collections. This segregation simplifies security rules and ensures that each collection has a clear, consistent security posture.  Curricula, Levels, Subjects, Units, Videos, Notes, and Quizzes are top-level collections.  Relationships between these collections are managed via document references, but authorization information (e.g., the curriculum creator) is denormalized into the related entities to ensure atomic operations and avoid `get()` calls.\n\nQAPs are supported through structural segregation and explicit access modeling. Public curricula and videos can be listed securely. Private user data like WatchHistory, Playlists, Bookmarks, and Likes are stored under `/users/{userId}`, allowing secure listing based on the `request.auth.uid`. The Membership Map pattern is not heavily used, as path-based ownership is preferred for user-owned data. For collaborative scenarios (which are not explicitly described in the prompt) a `members` map could be added to relevant documents and denormalized to child collections, if needed."
+  }
+}

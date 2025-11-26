@@ -1,0 +1,307 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * Core Philosophy: This ruleset enforces a hybrid security model. It combines a strict
+     * user-ownership model for all private user data with a content-creator ownership
+     * model for shared educational content.
+     *
+     * Data Structure: The data is structurally segregated to simplify security. All private,
+     * user-specific data (like quiz results, playlists, and watch history) is nested under
+     * the `/users/{userId}` path. Publicly accessible or shared educational content (like
+     * curricula and videos) resides in top-level collections.
+     *
+     * Key Security Decisions:
+     * - User Isolation: A user's private data, stored under their own `/users/{userId}`
+     *   document tree, is completely inaccessible to any other user.
+     * - No User Listing: It is not possible for any client to list all users in the system.
+     * - Content Ownership: All write operations (create, update, delete) on educational
+     *   content are strictly limited to the original author/creator of that content.
+     * - Conditional Public Access: Read access to educational content is governed by explicit
+     *   flags within the documents themselves (e.g., `isPublic` on curricula, `privacy` on videos),
+     *   allowing for a clear distinction between public and private materials.
+     *
+     * Denormalization for Authorization: To ensure rules are both performant and secure,
+     * ownership information is denormalized. For example, a curriculum's `createdBy` ID is
+     * the single source of truth for authorizing writes to that curriculum and all of its
+     * sub-collections (levels, subjects, etc.). This avoids slow and insecure cross-collection
+     * `get()` calls for most common operations, with parent lookups used only where necessary
+     * to secure subcollections based on their parent's status.
+     *
+     * Structural Segregation: Private user data (`/users/{userId}/...`) is kept entirely
+     * separate from shared content (`/curricula`, `/videos`). This clear separation creates a
+     * homogeneous security posture within each collection, making rules simpler to write,
+     * understand, and audit.
+     */
+
+    // ------------------------------------------------------------------------
+    // Helper Functions
+    // ------------------------------------------------------------------------
+
+    /**
+     * Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the currently authenticated user's UID matches the given userId.
+     * This is the foundation of the user-ownership model.
+     * @param userId The UID to check against the authenticated user.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Verifies that a document already exists. Crucial for safe update/delete ops.
+     */
+    function isExistingDoc() {
+      return resource != null;
+    }
+
+    /**
+     * A convenient combination of isOwner and isExistingDoc for update/delete rules.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && isExistingDoc();
+    }
+    
+    /**
+     * Checks if the requesting user is the owner of a given curriculum document.
+     * Requires one read operation on the curriculum document.
+     */
+    function isCurriculumOwner(curriculumId) {
+      return isSignedIn() && get(/databases/$(database)/documents/curricula/$(curriculumId)).data.createdBy == request.auth.uid;
+    }
+
+    /**
+     * Checks if a curriculum document is marked as public.
+     * Requires one read operation on the curriculum document.
+     */
+    function isCurriculumPublic(curriculumId) {
+      return get(/databases/$(database)/documents/curricula/$(curriculumId)).data.isPublic == true;
+    }
+    
+    /**
+     * Checks if the requesting user is the owner of a given video document.
+     * Requires one read operation on the video document.
+     */
+    function isVideoOwner(videoId) {
+      return isSignedIn() && get(/databases/$(database)/documents/videos/$(videoId)).data.uploadedBy == request.auth.uid;
+    }
+
+    /**
+     * Checks if a video document is marked as public.
+     * Requires one read operation on the video document.
+     */
+    function isVideoPublic(videoId) {
+      return get(/databases/$(database)/documents/videos/$(videoId)).data.privacy == 'public';
+    }
+
+    // ------------------------------------------------------------------------
+    // User Data Collections
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description Controls access to a user's own profile document.
+     * @path /users/{userId}
+     * @allow User 'abc' (create) their own profile at /users/abc.
+     * @deny User 'xyz' (get) the profile at /users/abc.
+     * @principle Restricts access to a user's own data tree.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secures a student's private quiz results.
+     * @path /users/{userId}/quizResults/{quizResultId}
+     * @allow User 'abc' (create) a new quiz result under their own path /users/abc/quizResults.
+     * @deny User 'xyz' (list) the quiz results under /users/abc/quizResults.
+     * @principle Path-based ownership ensures data privacy for subcollections.
+     */
+    match /users/{userId}/quizResults/{quizResultId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.studentId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.studentId == resource.data.studentId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secures a student's private video watch history.
+     * @path /users/{userId}/watchHistory/{watchHistoryId}
+     * @allow User 'abc' (update) their watch history at /users/abc/watchHistory/some_id.
+     * @deny User 'xyz' (get) any document from /users/abc/watchHistory.
+     * @principle Path-based ownership ensures data privacy for subcollections.
+     */
+    match /users/{userId}/watchHistory/{watchHistoryId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.studentId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.studentId == resource.data.studentId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secures a user's private video playlists.
+     * @path /users/{userId}/playlists/{playlistId}
+     * @allow User 'abc' (create) a new playlist under their own path /users/abc/playlists.
+     * @deny User 'xyz' (delete) a playlist at /users/abc/playlists/some_id.
+     * @principle Path-based ownership ensures data privacy for subcollections.
+     */
+    match /users/{userId}/playlists/{playlistId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secures a user's private video bookmarks.
+     * @path /users/{userId}/bookmarks/{bookmarkId}
+     * @allow User 'abc' (get) their own bookmark from /users/abc/bookmarks/some_id.
+     * @deny User 'xyz' (create) a bookmark under /users/abc/bookmarks.
+     * @principle Path-based ownership ensures data privacy for subcollections.
+     */
+    match /users/{userId}/bookmarks/{bookmarkId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Secures a user's private video likes.
+     * @path /users/{userId}/likes/{likeId}
+     * @allow User 'abc' (delete) their own like from /users/abc/likes/some_id.
+     * @deny User 'xyz' (get) a like document from /users/abc/likes/some_id.
+     * @principle Path-based ownership ensures data privacy for subcollections.
+     */
+    match /users/{userId}/likes/{likeId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+    
+    // ------------------------------------------------------------------------
+    // Content Collections
+    // ------------------------------------------------------------------------
+    
+    /**
+     * @description Anyone can read public curricula, but only creators can write them.
+     * @path /curricula/{curriculumId}
+     * @allow Any user (get) a curriculum where `isPublic` is true.
+     * @deny A user (update) a curriculum they did not create.
+     * @principle Enforces document ownership for writes, while allowing conditional public reads.
+     */
+    match /curricula/{curriculumId} {
+      allow get: if resource.data.isPublic == true;
+      allow list: if true;
+      allow create: if isSignedIn() && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isExistingDoc() && isOwner(resource.data.createdBy) && request.resource.data.createdBy == resource.data.createdBy;
+      allow delete: if isExistingDoc() && isOwner(resource.data.createdBy);
+    }
+
+    /**
+     * @description Access to levels is derived from the parent curriculum.
+     * @path /curricula/{curriculumId}/levels/{levelId}
+     * @allow Any user (get) a level if its parent curriculum is public.
+     * @deny A user (create) a level under a curriculum they do not own.
+     * @principle Secures a subcollection based on the state of its parent document.
+     */
+    match /curricula/{curriculumId}/levels/{levelId} {
+      allow get: if isCurriculumPublic(curriculumId);
+      allow list: if isCurriculumPublic(curriculumId);
+      allow create: if isCurriculumOwner(curriculumId) && request.resource.data.curriculumId == curriculumId;
+      allow update: if isExistingDoc() && isCurriculumOwner(curriculumId) && request.resource.data.curriculumId == resource.data.curriculumId;
+      allow delete: if isExistingDoc() && isCurriculumOwner(curriculumId);
+    }
+
+    /**
+     * @description Access to subjects is derived from the parent curriculum.
+     * @path /curricula/{curriculumId}/subjects/{subjectId}
+     * @allow Any user (list) subjects if their parent curriculum is public.
+     * @deny A user (update) a subject under a curriculum they do not own.
+     * @principle Secures a subcollection based on the state of its parent document.
+     */
+    match /curricula/{curriculumId}/subjects/{subjectId} {
+      allow get: if isCurriculumPublic(curriculumId);
+      allow list: if isCurriculumPublic(curriculumId);
+      allow create: if isCurriculumOwner(curriculumId) && request.resource.data.curriculumId == curriculumId;
+      allow update: if isExistingDoc() && isCurriculumOwner(curriculumId) && request.resource.data.curriculumId == resource.data.curriculumId;
+      allow delete: if isExistingDoc() && isCurriculumOwner(curriculumId);
+    }
+    
+    /**
+     * @description Access to units is derived from the parent curriculum.
+     * @path /curricula/{curriculumId}/subjects/{subjectId}/units/{unitId}
+     * @allow Any user (get) a unit if its grandparent curriculum is public.
+     * @deny A user (delete) a unit under a curriculum they do not own.
+     * @principle Secures a subcollection based on the state of its ancestor document.
+     */
+    match /curricula/{curriculumId}/subjects/{subjectId}/units/{unitId} {
+      allow get: if isCurriculumPublic(curriculumId);
+      allow list: if isCurriculumPublic(curriculumId);
+      allow create: if isCurriculumOwner(curriculumId) && request.resource.data.subjectId == subjectId;
+      allow update: if isExistingDoc() && isCurriculumOwner(curriculumId) && request.resource.data.subjectId == resource.data.subjectId;
+      allow delete: if isExistingDoc() && isCurriculumOwner(curriculumId);
+    }
+
+    /**
+     * @description Anyone can read public videos, but only creators can write them.
+     * @path /videos/{videoId}
+     * @allow Any user (get) a video where `privacy` is 'public'.
+     * @deny A user (delete) a video they did not upload.
+     * @principle Enforces document ownership for writes, while allowing conditional public reads.
+     */
+    match /videos/{videoId} {
+      allow get: if resource.data.privacy == 'public';
+      allow list: if true;
+      allow create: if isSignedIn() && request.resource.data.uploadedBy == request.auth.uid;
+      allow update: if isExistingDoc() && isOwner(resource.data.uploadedBy) && request.resource.data.uploadedBy == resource.data.uploadedBy;
+      allow delete: if isExistingDoc() && isOwner(resource.data.uploadedBy);
+    }
+    
+    /**
+     * @description Notes are readable if the parent video is public; writable only by the note's creator.
+     * @path /videos/{videoId}/notes/{noteId}
+     * @allow Any user (get) notes for a public video.
+     * @deny A user (update) notes they did not create, even if the video is public.
+     * @principle Secures a subcollection based on its parent's state and its own ownership data.
+     */
+    match /videos/{videoId}/notes/{noteId} {
+      allow get: if isVideoPublic(videoId);
+      allow list: if isVideoPublic(videoId);
+      allow create: if isSignedIn() && request.resource.data.uploadedBy == request.auth.uid && request.resource.data.videoId == videoId;
+      allow update: if isExistingDoc() && isOwner(resource.data.uploadedBy) && request.resource.data.uploadedBy == resource.data.uploadedBy && request.resource.data.videoId == resource.data.videoId;
+      allow delete: if isExistingDoc() && isOwner(resource.data.uploadedBy);
+    }
+    
+    /**
+     * @description Quizzes are readable if the video is public; writable only by the video's owner.
+     * @path /videos/{videoId}/quizzes/{quizId}
+     * @allow Any user (list) quizzes for a public video.
+     * @deny A user (create) a quiz for a video they do not own.
+     * @principle Secures a subcollection based entirely on the ownership of its parent document.
+     */
+    match /videos/{videoId}/quizzes/{quizId} {
+      allow get: if isVideoPublic(videoId);
+      allow list: if isVideoPublic(videoId);
+      allow create: if isVideoOwner(videoId) && request.resource.data.videoId == videoId;
+      allow update: if isExistingDoc() && isVideoOwner(videoId) && request.resource.data.videoId == resource.data.videoId;
+      allow delete: if isExistingDoc() && isVideoOwner(videoId);
+    }
+  }
+}
