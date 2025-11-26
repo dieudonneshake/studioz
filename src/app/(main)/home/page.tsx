@@ -2,7 +2,7 @@
 'use server';
 
 import { HomeClientPage } from "@/components/home/home-client-page";
-import { getDocs, collection, limit, query } from "firebase-admin/firestore";
+import { getDocs } from "firebase-admin/firestore";
 import { initializeFirebase } from "@/firebase/server";
 import { Video } from "@/lib/types";
 
@@ -11,11 +11,11 @@ export default async function HomePage() {
   const { firestore } = await initializeFirebase();
 
   // Data fetching and preparation happens on the server.
-  const videosCollection = collection(firestore, 'videos');
+  const videosCollection = firestore.collection('videos');
   
-  const allVideosQuery = query(videosCollection);
-  const recommendedQuery = query(videosCollection, limit(8));
-  const recentQuery = query(videosCollection, limit(8)); // Example, adjust as needed
+  const allVideosQuery = videosCollection;
+  const recommendedQuery = videosCollection.limit(8);
+  const recentQuery = videosCollection.limit(8); // Example, adjust as needed
 
   const [allVideosSnap, recommendedSnap, recentSnap] = await Promise.all([
     getDocs(allVideosQuery),
