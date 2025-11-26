@@ -6,7 +6,6 @@
 import { initializeApp, getApps, getApp, App, cert, ServiceAccount } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
-import { firebaseConfig } from './config';
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
 export async function initializeFirebase() {
@@ -16,21 +15,19 @@ export async function initializeFirebase() {
   if (!apps.length) {
     const serviceAccountStr = process.env.FIREBASE_SERVICE_ACCOUNT;
     
-    if (!serviceAccountStr) {
-      // In a managed environment, the SDK might discover credentials automatically.
-      // However, for local dev and explicit setup, we depend on the service account.
-      // If it's missing, we fall back to a configuration without credentials,
-      // which is suitable for environments like App Hosting where credentials are implicit.
-      firebaseApp = initializeApp({
-          databaseURL: `https://${firebaseConfig.projectId}.firebaseio.com`,
-      });
-    } else {
+    if (serviceAccountStr) {
       const serviceAccount: ServiceAccount = JSON.parse(serviceAccountStr);
       firebaseApp = initializeApp({
           credential: cert(serviceAccount),
-          databaseURL: `https://${firebaseConfig.projectId}.firebaseio.com`,
       });
+    } else {
+      // In a managed environment (like App Hosting), the SDK can discover credentials automatically.
+      // For local development, FIREBASE_SERVICE_ACCOUNT must be set.
+      console.log("No FIREBASE_SERVICE_ACCOUNT found, attempting to initialize with default credentials.");
+      initializeApp();
     }
+    firebaseApp = getApp();
+
   } else {
     firebaseApp = getApp();
   }
