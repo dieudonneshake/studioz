@@ -3,8 +3,8 @@
 
 import { firebaseConfig } from '@/firebase/config';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore'
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
 export function initializeFirebase() {
@@ -17,19 +17,6 @@ export function initializeFirebase() {
 
   const auth = getAuth(firebaseApp);
   const firestore = getFirestore(firebaseApp);
-
-  // In a development environment, connect to the emulators
-  if (process.env.NODE_ENV === 'development') {
-    // Check if not already connected to avoid re-connecting on hot reloads
-    // @ts-ignore - _isInitialized is a private property but useful here
-    if (!auth.emulatorConfig) {
-        connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-    }
-    // @ts-ignore
-    if (!firestore._settings.host) {
-       connectFirestoreEmulator(firestore, '127.0.0.1', 8080);
-    }
-  }
 
   return {
     firebaseApp,
