@@ -207,12 +207,29 @@ service cloud.firestore {
      * @principle Enforces document ownership for writes, while allowing conditional public reads.
      */
     match /curricula/{curriculumId} {
-      allow get: if resource.data.isPublic == true;
-      allow list: if true;
+      allow get: if resource.data.isPublic == true || isSignedIn();
+      allow list: if isSignedIn();
       allow create: if isSignedIn() && request.resource.data.createdBy == request.auth.uid;
       allow update: if isExistingDoc() && isOwner(resource.data.createdBy) && request.resource.data.createdBy == resource.data.createdBy;
       allow delete: if isExistingDoc() && isOwner(resource.data.createdBy);
     }
+    
+    match /cycles/{cycleId} {
+      allow get, list: if isSignedIn();
+    }
+
+    match /levels/{levelId} {
+        allow get, list: if isSignedIn();
+        allow create: if isSignedIn();
+        allow update, delete: if false; // Or more specific ownership rules
+    }
+
+    match /subjects/{subjectId} {
+        allow get, list: if isSignedIn();
+        allow create: if isSignedIn();
+        allow update, delete: if false; // Or more specific ownership rules
+    }
+
 
     /**
      * @description Access to levels is derived from the parent curriculum.
@@ -267,11 +284,11 @@ service cloud.firestore {
      * @principle Enforces document ownership for writes, while allowing conditional public reads.
      */
     match /videos/{videoId} {
-      allow get: if resource.data.privacy == 'public';
+      allow get: if resource.data.privacy == 'public' || isSignedIn();
       allow list: if true;
-      allow create: if isSignedIn() && request.resource.data.uploadedBy == request.auth.uid;
-      allow update: if isExistingDoc() && isOwner(resource.data.uploadedBy) && request.resource.data.uploadedBy == resource.data.uploadedBy;
-      allow delete: if isExistingDoc() && isOwner(resource.data.uploadedBy);
+      allow create: if isSignedIn() && request.resource.data.uploaded_by == request.auth.uid;
+      allow update: if isExistingDoc() && isOwner(resource.data.uploaded_by) && request.resource.data.uploaded_by == resource.data.uploaded_by;
+      allow delete: if isExistingDoc() && isOwner(resource.data.uploaded_by);
     }
     
     /**
@@ -282,8 +299,8 @@ service cloud.firestore {
      * @principle Secures a subcollection based on its parent's state and its own ownership data.
      */
     match /videos/{videoId}/notes/{noteId} {
-      allow get: if isVideoPublic(videoId);
-      allow list: if isVideoPublic(videoId);
+      allow get: if isVideoPublic(videoId) || isSignedIn();
+      allow list: if isVideoPublic(videoId) || isSignedIn();
       allow create: if isSignedIn() && request.resource.data.uploadedBy == request.auth.uid && request.resource.data.videoId == videoId;
       allow update: if isExistingDoc() && isOwner(resource.data.uploadedBy) && request.resource.data.uploadedBy == resource.data.uploadedBy && request.resource.data.videoId == resource.data.videoId;
       allow delete: if isExistingDoc() && isOwner(resource.data.uploadedBy);
@@ -297,11 +314,13 @@ service cloud.firestore {
      * @principle Secures a subcollection based entirely on the ownership of its parent document.
      */
     match /videos/{videoId}/quizzes/{quizId} {
-      allow get: if isVideoPublic(videoId);
-      allow list: if isVideoPublic(videoId);
-      allow create: if isVideoOwner(videoId) && request.resource.data.videoId == videoId;
+      allow get: if isVideoPublic(videoId) || isSignedIn();
+      allow list: if isVideoPublic(videoId) || isSignedIn();
+      allow create: if (isVideoOwner(videoId) && request.resource.data.videoId == videoId) || isSignedIn();
       allow update: if isExistingDoc() && isVideoOwner(videoId) && request.resource.data.videoId == resource.data.videoId;
       allow delete: if isExistingDoc() && isVideoOwner(videoId);
     }
   }
 }
+
+    

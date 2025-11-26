@@ -678,6 +678,22 @@
         }
       },
       {
+        "path": "/levels/{levelId}",
+        "definition": {
+            "entityName": "Level",
+            "schema": { "$ref": "#/backend/entities/Level" },
+            "description": "Stores level information globally for dropdowns."
+        }
+      },
+      {
+          "path": "/subjects/{subjectId}",
+          "definition": {
+              "entityName": "Subject",
+              "schema": { "$ref": "#/backend/entities/Subject" },
+              "description": "Stores subject information globally for dropdowns."
+          }
+      },
+      {
         "path": "/curricula/{curriculumId}/levels/{levelId}",
         "definition": {
           "entityName": "Level",
@@ -901,3 +917,5 @@
     "reasoning": "The Firestore data structure is designed to ensure Authorization Independence, Clarity of Intent, and support secure list operations (QAPs). Authorization Independence is achieved through denormalization. For example, curriculum ownership ('createdBy') is copied into subcollections like 'levels', 'subjects', and 'videos' when appropriate to avoid costly and insecure `get()` calls in security rules.\n\nStructural Segregation is employed to maintain a Homogeneous Security Posture.  Private user data resides under `/users/{userId}`, while public or shared data is stored in root-level collections. This segregation simplifies security rules and ensures that each collection has a clear, consistent security posture.  Curricula, Levels, Subjects, Units, Videos, Notes, and Quizzes are top-level collections.  Relationships between these collections are managed via document references, but authorization information (e.g., the curriculum creator) is denormalized into the related entities to ensure atomic operations and avoid `get()` calls.\n\nQAPs are supported through structural segregation and explicit access modeling. Public curricula and videos can be listed securely. Private user data like WatchHistory, Playlists, Bookmarks, and Likes are stored under `/users/{userId}`, allowing secure listing based on the `request.auth.uid`. The Membership Map pattern is not heavily used, as path-based ownership is preferred for user-owned data. For collaborative scenarios (which are not explicitly described in the prompt) a `members` map could be added to relevant documents and denormalized to child collections, if needed."
   }
 }
+
+    
