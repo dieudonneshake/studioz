@@ -1,25 +1,40 @@
 
-import { HomeClientPage } from "@/components/home/home-client-page";
-import { videos } from "@/lib/data";
-import { watchHistory } from "@/lib/curricula/history";
+'use server';
 
+import { HomeClientPage } from "@/components/home/home-client-page";
+import { getDocs, collection, limit, query } from "firebase/firestore";
+import { initializeFirebase } from "@/firebase/server";
+import { Video } from "@/lib/types";
 
 // This is now a Server Component
 export default async function HomePage() {
+  const { firestore } = initializeFirebase();
+
   // Data fetching and preparation happens on the server.
-  const recommendedVideos = videos.slice(0, 8);
-  const recentVideos = videos.slice(8, 16);
-  const newForYouVideos = videos.filter(v => v.level === 'Diploma Year 1').slice(0,4);
+  const videosCollection = collection(firestore, 'videos');
   
-  // Correctly look up recently watched videos from the complete video list.
-  const recentlyWatchedVideoIds = watchHistory.map(wh => wh.video_id);
-  const recentlyWatchedVideos = videos.filter(v => recentlyWatchedVideoIds.includes(v.id));
+  const allVideosQuery = query(videosCollection);
+  const recommendedQuery = query(videosCollection, limit(8));
+  const recentQuery = query(videosCollection, limit(8)); // Example, adjust as needed
+
+  const [allVideosSnap, recommendedSnap, recentSnap] = await Promise.all([
+    getDocs(allVideosQuery),
+    getDocs(recommendedQuery),
+    getDocs(recentQuery)
+  ]);
+  
+  const allVideos = allVideosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Video[];
+  const recommendedVideos = recommendedSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Video[];
+  const recentVideos = recentSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Video[];
+  
+  // These are just placeholders for now. Real recommendations and watch history would be user-specific.
+  const newForYouVideos = allVideos.filter(v => v.level === 'Diploma Year 1').slice(0,4);
+  const recentlyWatchedVideos = allVideos.slice(3, 7);
 
   // We pass only the necessary, pre-filtered data down to the client component.
-  // We also pass the full video list for client-side filtering.
   return (
     <HomeClientPage
-      allVideos={videos}
+      allVideos={allVideos}
       recommendedVideos={recommendedVideos}
       recentVideos={recentVideos}
       newForYouVideos={newForYouVideos}

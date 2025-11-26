@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { useAuthStore } from "@/store/auth";
+import { useUser, useAuth } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,18 +23,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { updateProfile } from "firebase/auth";
 
 export default function SettingsPage() {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user } = useUser();
+  const auth = useAuth();
   const { toast } = useToast();
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
-  const handleUpdateProfile = () => {
-    toast({
-      title: "Profile Updated",
-      description: "Your account details have been saved.",
-    });
-  };
   
   const handleSaveChanges = (section: string) => {
     toast({
@@ -42,6 +36,17 @@ export default function SettingsPage() {
       description: `Your ${section} settings have been updated.`,
     });
   };
+  
+  const handleDeleteAccount = async () => {
+    if (!user) return;
+    try {
+        await user.delete();
+        toast({variant: "destructive", title: "Account Deleted", description: "Your account has been permanently deleted."})
+    } catch (error) {
+        console.error("Error deleting account:", error);
+        toast({variant: "destructive", title: "Error", description: "Could not delete account. You may need to log in again."})
+    }
+  }
 
   return (
     <div className="container mx-auto max-w-4xl p-4 md:p-6 lg:p-8">
@@ -49,7 +54,7 @@ export default function SettingsPage() {
       
       <div className="space-y-12">
         
-        {isAuthenticated && user && (
+        {user && (
           <Card>
             <CardHeader>
               <CardTitle>Profile</CardTitle>
@@ -58,15 +63,15 @@ export default function SettingsPage() {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" defaultValue={user.name} />
+                <Input id="name" defaultValue={user.displayName ?? ""} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
-                <Input id="username" defaultValue={`@${user.name.split(' ').join('').toLowerCase()}`} />
+                <Input id="username" defaultValue={`@${user.displayName?.split(' ').join('').toLowerCase() ?? user.email?.split('@')[0]}`} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="bio">Bio</Label>
-                <Textarea id="bio" placeholder="Tell us a little about yourself" defaultValue={user.bio} />
+                <Textarea id="bio" placeholder="Tell us a little about yourself" defaultValue={""} />
               </div>
               <Button onClick={() => handleSaveChanges('Profile')}>Save Changes</Button>
             </CardContent>
@@ -89,7 +94,7 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        {isAuthenticated && (
+        {user && (
            <>
             <Card>
                 <CardHeader>
@@ -173,7 +178,7 @@ export default function SettingsPage() {
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" defaultValue={user.email} readOnly />
+                    <Input id="email" type="email" defaultValue={user.email ?? ''} readOnly />
                   </div>
                   <div>
                     <Button variant="outline">Change Password</Button>
@@ -194,7 +199,7 @@ export default function SettingsPage() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => toast({variant: "destructive", title: "Account Deletion Requested"})}>
+                        <AlertDialogAction onClick={handleDeleteAccount}>
                           Delete Account
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -209,5 +214,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-
-    

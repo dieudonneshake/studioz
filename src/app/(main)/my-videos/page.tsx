@@ -2,14 +2,23 @@
 "use client";
 
 import { VideoCard } from "@/components/video-card";
-import { videos } from "@/lib/data";
-import { useAuthStore } from "@/store/auth";
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { collection, query, where } from "firebase/firestore";
+import { Video } from "@/lib/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MyVideosPage() {
-    const { user } = useAuthStore();
-    const myVideos = videos.filter(v => v.uploaded_by === user?.id);
+    const { user } = useUser();
+    const firestore = useFirestore();
+
+    const myVideosQuery = useMemoFirebase(() => {
+        if (!user) return null;
+        return query(collection(firestore, 'videos'), where('uploaded_by', '==', user.uid));
+    }, [firestore, user]);
+
+    const { data: myVideos, isLoading } = useCollection<Video>(myVideosQuery);
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
@@ -19,7 +28,17 @@ export default function MyVideosPage() {
                 <Link href="/upload">Upload New Video</Link>
             </Button>
         </div>
-      {myVideos.length > 0 ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="space-y-2">
+              <Skeleton className="h-40 w-full" />
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+          ))}
+        </div>
+      ) : myVideos && myVideos.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {myVideos.map(video => (
                 <VideoCard key={video.id} video={video} />

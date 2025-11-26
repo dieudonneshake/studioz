@@ -1,9 +1,9 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { VideoCard } from "@/components/video-card";
-import { useAuthStore } from "@/store/auth";
+import { useUser } from "@/firebase";
 import { Video } from "@/lib/types";
 import { useSearchStore } from '@/store/search';
 import { SearchX } from 'lucide-react';
@@ -24,14 +24,14 @@ export function HomeClientPage({
   newForYouVideos,
   recentlyWatchedVideos,
 }: HomeClientPageProps) {
-  const { isAuthenticated, user } = useAuthStore();
+  const { user, isUserLoading } = useUser();
   const { searchQuery, setSearchQuery } = useSearchStore();
   const pathname = usePathname();
 
   // Clear search query when navigating away from the home page
   useEffect(() => {
     return () => {
-      if (pathname !== '/home') {
+      if (pathname !== '/home' && pathname !== '/search') {
         setSearchQuery('');
       }
     };
@@ -72,13 +72,13 @@ export function HomeClientPage({
   }
 
   // If the user is not authenticated, show generic recommendations.
-  if (!isAuthenticated) {
+  if (isUserLoading || !user) {
      return (
         <div className="flex h-full flex-col">
           <main className="flex-1 p-4 md:p-6 lg:p-8">
             <div className="mt-6">
               <h2 className="text-2xl font-bold tracking-tight font-headline">Recommended Videos</h2>
-              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {recommendedVideos.map(video => (
                   <VideoCard key={video.id} video={video} />
                 ))}
@@ -87,7 +87,7 @@ export function HomeClientPage({
 
             <div className="mt-8">
               <h2 className="text-2xl font-bold tracking-tight font-headline">Recently Uploaded</h2>
-              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {recentVideos.map(video => (
                   <VideoCard key={video.id} video={video} />
                 ))}
@@ -105,8 +105,8 @@ export function HomeClientPage({
         {recentlyWatchedVideos.length > 0 && (
             <div className="mt-6">
             <h2 className="text-2xl font-bold tracking-tight font-headline">Recently Watched</h2>
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {recentlyWatchedVideos.slice(0, 4).map(video => (
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {recentlyWatchedVideos.slice(0, 5).map(video => (
                   <VideoCard key={video.id} video={video} />
                 ))}
             </div>
@@ -114,8 +114,8 @@ export function HomeClientPage({
         )}
 
         <div className="mt-8">
-          <h2 className="text-2xl font-bold tracking-tight font-headline">New for You - IB Diploma Year 1</h2>
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <h2 className="text-2xl font-bold tracking-tight font-headline">New for You</h2>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {newForYouVideos.map(video => (
               <VideoCard key={video.id} video={video} />
             ))}

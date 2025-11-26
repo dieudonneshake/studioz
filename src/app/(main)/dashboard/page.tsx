@@ -1,22 +1,50 @@
 
 "use client";
 
-import { useAuthStore } from "@/store/auth";
+import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { videos } from "@/lib/data";
-import { Eye, Film, Star, Users, TrendingUp, HelpCircle, Bell } from "lucide-react";
+import { Eye, Film, HelpCircle, TrendingUp, Bell } from "lucide-react";
 import { RecentActivities } from "@/components/dashboard/recent-activities";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProgressChart } from "@/components/dashboard/progress-chart";
+import { collection, query, where } from "firebase/firestore";
+import { Video } from "@/lib/types";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
-  const { user } = useAuthStore();
-  const teacherVideos = videos.filter(v => v.uploaded_by === user?.id);
+  const { user } = useUser();
+  const firestore = useFirestore();
 
-  const userName = user ? user.name.split(' ')[0] : 'Teacher';
+  const teacherVideosQuery = useMemoFirebase(() => {
+    if (!user) return null;
+    return query(collection(firestore, 'videos'), where('uploaded_by', '==', user.uid));
+  }, [firestore, user]);
+
+  const { data: teacherVideos, isLoading } = useCollection<Video>(teacherVideosQuery);
+
+  const userName = user ? user.displayName?.split(' ')[0] : 'Teacher';
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+        <div className="flex items-center justify-between space-y-2">
+          <Skeleton className="h-9 w-1/4" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28" />)}
+        </div>
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+          <Skeleton className="col-span-1 lg:col-span-4 h-96" />
+          <Skeleton className="col-span-1 lg:col-span-3 h-96" />
+        </div>
+        <Skeleton className="h-96 w-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -39,7 +67,7 @@ export default function DashboardPage() {
             <Film className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{teacherVideos.length}</div>
+            <div className="text-2xl font-bold">{teacherVideos?.length ?? 0}</div>
             <p className="text-xs text-muted-foreground">
               +2 this month
             </p>
@@ -50,7 +78,7 @@ export default function DashboardPage() {
             <CardTitle className="text-sm font-medium">
               Total Students Reached
             </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+1,250</div>
@@ -65,7 +93,7 @@ export default function DashboardPage() {
             <HelpCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{teacherVideos.length}</div>
+            <div className="text-2xl font-bold">{teacherVideos?.length ?? 0}</div>
             <p className="text-xs text-muted-foreground">
              Matching your video count
             </p>
@@ -100,7 +128,7 @@ export default function DashboardPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {teacherVideos.slice(0,5).map(video => (
+                    {teacherVideos?.slice(0,5).map(video => (
                         <TableRow key={video.id}>
                             <TableCell>
                                 <Link href={`/watch/${video.id}`} className="font-medium hover:underline line-clamp-2">{video.title}</Link>

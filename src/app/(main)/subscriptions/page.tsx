@@ -3,44 +3,76 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { users } from "@/lib/data";
 import Link from "next/link";
 import { ChevronRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type User } from "@/lib/types";
-
-
-const initialSubscribedTeachers = users.filter(u => u.role === 'teacher').slice(0, 2);
+import { useUser, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { collection, doc, deleteDoc, writeBatch } from "firebase/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SubscriptionsPage() {
     const { toast } = useToast();
-    const [subscribedTeachers, setSubscribedTeachers] = useState(initialSubscribedTeachers);
+    const { user } = useUser();
+    const firestore = useFirestore();
+
+    const subscriptionsQuery = useMemoFirebase(() => {
+        if (!user) return null;
+        return collection(firestore, `users/${user.uid}/subscriptions`);
+    }, [user, firestore]);
+    const { data: subscriptions, isLoading: isLoadingSubscriptions } = useCollection<{teacherId: string}>(subscriptionsQuery);
+    
+    const usersQuery = useMemoFirebase(() => collection(firestore, 'users'), [firestore]);
+    const { data: allUsers, isLoading: isLoadingUsers } = useCollection<User>(usersQuery);
+
+    const [subscribedTeachers, setSubscribedTeachers] = useState<User[]>([]);
     const [teacherToUnsubscribe, setTeacherToUnsubscribe] = useState<User | null>(null);
 
-    const handleUnsubscribe = () => {
-        if (!teacherToUnsubscribe) return;
+    useEffect(() => {
+        if (subscriptions && allUsers) {
+            const teacherIds = subscriptions.map(sub => sub.teacherId);
+            setSubscribedTeachers(allUsers.filter(u => teacherIds.includes(u.id)));
+        }
+    }, [subscriptions, allUsers]);
+
+    const handleUnsubscribe = async () => {
+        if (!teacherToUnsubscribe || !user || !subscriptions) return;
         
-        setSubscribedTeachers(currentTeachers => 
-            currentTeachers.filter(t => t.id !== teacherToUnsubscribe.id)
-        );
+        const subscriptionDoc = subscriptions.find(s => s.teacherId === teacherToUnsubscribe.id);
+        if (!subscriptionDoc) return;
+        
+        const docRef = doc(firestore, `users/${user.uid}/subscriptions`, subscriptionDoc.id);
 
-        toast({
-            title: "Unsubscribed",
-            description: `You have unsubscribed from ${teacherToUnsubscribe.name}.`,
-        });
-
-        setTeacherToUnsubscribe(null); // Close dialog
+        try {
+            await deleteDoc(docRef);
+            toast({
+                title: "Unsubscribed",
+                description: `You have unsubscribed from ${teacherToUnsubscribe.name}.`,
+            });
+            setTeacherToUnsubscribe(null); // Close dialog
+        } catch(e) {
+             toast({
+                variant: "destructive",
+                title: "Error",
+                description: `Could not unsubscribe. Please try again.`,
+            });
+        }
     };
 
+    const isLoading = isLoadingSubscriptions || isLoadingUsers;
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
       <h1 className="text-3xl font-bold tracking-tight mb-6 font-headline">Subscriptions</h1>
       
-        {subscribedTeachers.length > 0 ? (
+        {isLoading ? (
+            <div className="space-y-4">
+                {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-24 w-full" />)}
+            </div>
+        ) : subscribedTeachers.length > 0 ? (
             <Card>
                 <CardContent className="p-0">
                     <div className="space-y-0">

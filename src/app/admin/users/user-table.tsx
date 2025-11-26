@@ -6,9 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { type User } from "@/lib/types";
 import { UserActionsMenu } from "./user-actions";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface UserTableProps {
     users: User[];
+    isLoading: boolean;
 }
 
 const statusVariant: Record<string, "default" | "secondary" | "destructive"> = {
@@ -17,8 +19,16 @@ const statusVariant: Record<string, "default" | "secondary" | "destructive"> = {
     rejected: "destructive",
 };
 
+export function UserTable({ users, isLoading }: UserTableProps) {
 
-export function UserTable({ users }: UserTableProps) {
+    if (isLoading) {
+        return (
+            <div className="space-y-2">
+                {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-16 w-full" />)}
+            </div>
+        )
+    }
+
     return (
         <Table>
             <TableHeader>
@@ -39,7 +49,7 @@ export function UserTable({ users }: UserTableProps) {
                         <div className="flex items-center gap-3">
                             <Avatar className="h-9 w-9">
                                 <AvatarImage src={user.profile_photo} alt="Avatar" />
-                                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                                <AvatarFallback>{user.name?.charAt(0) ?? 'U'}</AvatarFallback>
                             </Avatar>
                             <div className="grid gap-0.5">
                                 <div className="font-medium">{user.name}</div>

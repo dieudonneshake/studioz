@@ -1,13 +1,13 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { videos, quizzes, users } from "@/lib/data";
-import { useAuthStore } from "@/store/auth";
+import { useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { collection, query, where, doc, updateDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -20,20 +20,37 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { type User } from "@/lib/types";
+import { type User, type Video, type Quiz } from "@/lib/types";
 
 export default function AdminDashboardPage() {
-  const { updateUserStatus } = useAuthStore();
+  const firestore = useFirestore();
   const { toast } = useToast();
   const [selectedTeacher, setSelectedTeacher] = useState<User | null>(null);
 
-  const totalStudents = users.filter(u => u.role === 'student').length;
-  const totalTeachers = users.filter(u => u.role === 'teacher' && u.status === 'approved').length;
-  const pendingTeachers = users.filter(u => u.role === 'teacher' && u.status === 'pending');
+  const usersQuery = useMemoFirebase(() => collection(firestore, 'users'), [firestore]);
+  const videosQuery = useMemoFirebase(() => collection(firestore, 'videos'), [firestore]);
+  const quizzesQuery = useMemoFirebase(() => collection(firestore, 'quizzes'), [firestore]);
+
+  const { data: allUsers } = useCollection<User>(usersQuery);
+  const { data: allVideos } = useCollection<Video>(videosQuery);
+  const { data: allQuizzes } = useCollection<Quiz>(quizzesQuery);
+
+  const [totalStudents, setTotalStudents] = useState(0);
+  const [totalTeachers, setTotalTeachers] = useState(0);
+  const [pendingTeachers, setPendingTeachers] = useState<User[]>([]);
+
+  useEffect(() => {
+    if (allUsers) {
+      setTotalStudents(allUsers.filter(u => u.role === 'student').length);
+      setTotalTeachers(allUsers.filter(u => u.role === 'teacher' && u.status === 'approved').length);
+      setPendingTeachers(allUsers.filter(u => u.role === 'teacher' && u.status === 'pending'));
+    }
+  }, [allUsers]);
   
-  const handleApproveTeacher = () => {
+  const handleApproveTeacher = async () => {
     if (selectedTeacher) {
-      updateUserStatus(selectedTeacher.id, 'approved');
+      const teacherDocRef = doc(firestore, 'users', selectedTeacher.id);
+      await updateDoc(teacherDocRef, { status: 'approved' });
       toast({
         title: "Teacher Approved",
         description: `${selectedTeacher.name}'s account has been activated.`,
@@ -73,7 +90,7 @@ export default function AdminDashboardPage() {
                 <Card>
                     <CardHeader className="pb-2">
                         <CardDescription>Total Videos</CardDescription>
-                        <CardTitle className="text-4xl">{videos.length}</CardTitle>
+                        <CardTitle className="text-4xl">{allVideos?.length ?? 0}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-xs text-muted-foreground">
@@ -84,7 +101,7 @@ export default function AdminDashboardPage() {
                 <Card>
                     <CardHeader className="pb-2">
                         <CardDescription>Total Quizzes</CardDescription>
-                        <CardTitle className="text-4xl">{quizzes.length}</CardTitle>
+                        <CardTitle className="text-4xl">{allQuizzes?.length ?? 0}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="text-xs text-muted-foreground">

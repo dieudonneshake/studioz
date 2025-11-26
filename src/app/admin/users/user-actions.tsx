@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { type User } from "@/lib/types";
-import { useAuthStore } from "@/store/auth";
+import { useFirestore } from "@/firebase";
 import { MoreHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 
 interface UserActionsMenuProps {
   user: User;
@@ -33,11 +33,39 @@ interface UserActionsMenuProps {
 
 export function UserActionsMenu({ user }: UserActionsMenuProps) {
   const { toast } = useToast();
-  const router = useRouter();
-  const { updateUserStatus, removeUser } = useAuthStore();
+  const firestore = useFirestore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogAction, setDialogAction] = useState<"delete" | "approve" | "reject" | null>(null);
 
+  const handleAction = async () => {
+    if (!dialogAction) return;
+
+    const userDocRef = doc(firestore, "users", user.id);
+
+    try {
+      switch (dialogAction) {
+        case "delete":
+          await deleteDoc(userDocRef);
+          toast({ title: "User Removed", description: `${user.name} has been deleted.` });
+          break;
+        case "approve":
+          await updateDoc(userDocRef, { status: "approved" });
+          toast({ title: "Teacher Approved", description: `${user.name} has been approved.` });
+          break;
+        case "reject":
+          await updateDoc(userDocRef, { status: "rejected" });
+          toast({ title: "Teacher Rejected", description: `${user.name} has been rejected.` });
+          break;
+      }
+    } catch (error) {
+      console.error(`Error performing action: ${dialogAction}`, error);
+      toast({ variant: "destructive", title: "Error", description: "An error occurred. Please try again." });
+    } finally {
+        setIsDialogOpen(false);
+        setDialogAction(null);
+    }
+  };
+  
   const getDialogContent = () => {
     switch (dialogAction) {
       case "delete":
@@ -45,33 +73,18 @@ export function UserActionsMenu({ user }: UserActionsMenuProps) {
           title: "Are you sure?",
           description: `This will permanently delete the user "${user.name}" and all their associated data. This action cannot be undone.`,
           actionText: "Delete",
-          onAction: () => {
-            removeUser(user.id);
-            toast({ title: "User Removed", description: `${user.name} has been deleted.` });
-            router.refresh();
-          },
         };
       case "approve":
         return {
           title: "Approve Teacher?",
           description: `This will approve ${user.name} and allow them to start creating content.`,
           actionText: "Approve",
-          onAction: () => {
-            updateUserStatus(user.id, "approved");
-            toast({ title: "Teacher Approved", description: `${user.name} has been approved.` });
-            router.refresh();
-          },
         };
       case "reject":
         return {
           title: "Reject Teacher?",
           description: `This will reject the application for ${user.name}.`,
           actionText: "Reject",
-          onAction: () => {
-            updateUserStatus(user.id, "rejected");
-            toast({ title: "Teacher Rejected", description: `${user.name} has been rejected.` });
-            router.refresh();
-          },
         };
       default:
         return null;
@@ -116,7 +129,7 @@ export function UserActionsMenu({ user }: UserActionsMenuProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={currentDialog.onAction}>{currentDialog.actionText}</AlertDialogAction>
+            <AlertDialogAction onClick={handleAction}>{currentDialog.actionText}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       )}

@@ -1,17 +1,34 @@
 
-import { users } from "@/lib/data";
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserTable } from "./user-table";
+import { useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { collection } from "firebase/firestore";
+import { User } from "@/lib/types";
+import { useMemo } from "react";
 
 export default function AdminUserManagementPage() {
-  const allUsers = users;
-  const teachers = allUsers.filter(u => u.role === 'teacher');
-  const students = allUsers.filter(u => u.role === 'student');
+  const firestore = useFirestore();
+  const usersQuery = useMemoFirebase(() => collection(firestore, 'users'), [firestore]);
+  const { data: allUsers, isLoading } = useCollection<User>(usersQuery);
 
-  const totalUsers = allUsers.length;
-  const verifiedTeachers = teachers.filter(t => t.status === 'approved').length;
-  const activeStudents = students.length; // Assuming all students are active
+  const { teachers, students, totalUsers, verifiedTeachers, activeStudents } = useMemo(() => {
+    if (!allUsers) {
+      return { teachers: [], students: [], totalUsers: 0, verifiedTeachers: 0, activeStudents: 0 };
+    }
+    const teachers = allUsers.filter(u => u.role === 'teacher');
+    const students = allUsers.filter(u => u.role === 'student');
+    return {
+      teachers,
+      students,
+      totalUsers: allUsers.length,
+      verifiedTeachers: teachers.filter(t => t.status === 'approved').length,
+      activeStudents: students.length,
+    };
+  }, [allUsers]);
+
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -63,7 +80,7 @@ export default function AdminUserManagementPage() {
                 <CardDescription>A list of all users on the platform.</CardDescription>
               </CardHeader>
               <CardContent>
-                <UserTable users={allUsers} />
+                <UserTable users={allUsers ?? []} isLoading={isLoading} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -74,7 +91,7 @@ export default function AdminUserManagementPage() {
                 <CardDescription>A list of all teacher accounts.</CardDescription>
               </CardHeader>
               <CardContent>
-                <UserTable users={teachers} />
+                <UserTable users={teachers} isLoading={isLoading} />
               </CardContent>
             </Card>
           </TabsContent>
@@ -85,7 +102,7 @@ export default function AdminUserManagementPage() {
                 <CardDescription>A list of all student accounts.</CardDescription>
               </CardHeader>
               <CardContent>
-                <UserTable users={students} />
+                <UserTable users={students} isLoading={isLoading} />
               </CardContent>
             </Card>
           </TabsContent>

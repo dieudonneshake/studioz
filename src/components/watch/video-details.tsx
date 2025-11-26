@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { type Video, type User } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
@@ -10,6 +10,8 @@ import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { ShareSheet } from './share-sheet';
+import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { doc, collection, setDoc, deleteDoc, writeBatch } from 'firebase/firestore';
 
 interface VideoDetailsProps {
   video: Video;
@@ -18,49 +20,85 @@ interface VideoDetailsProps {
 
 export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
   const { toast } = useToast();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [likeState, setLikeState] = useState<'liked' | 'disliked' | null>(null);
-  const [likeCount, setLikeCount] = useState(12000); // Initial like count
-  const [isShareSheetOpen, setIsShareSheetOpen] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const { user } = useUser();
+  const firestore = useFirestore();
 
-  const handleSubscribe = () => {
-    setIsSubscribed(!isSubscribed);
-    toast({
-      title: isSubscribed ? `Unsubscribed from ${uploader?.name}` : `Subscribed to ${uploader?.name}`,
-    });
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [likeState, setLikeState] = useState<'liked' | 'disliked' | null>(null);
+  const [isShareSheetOpen, setIsShareSheetOpen] = useState(false);
+  
+  // Subscription state
+  const subscriptionsQuery = useMemoFirebase(() => {
+    if (!user || !uploader) return null;
+    return collection(firestore, `users/${user.uid}/subscriptions`);
+  }, [user, uploader, firestore]);
+  const { data: subscriptions } = useCollection<{teacherId: string}>(subscriptionsQuery);
+  const isSubscribed = useMemo(() => subscriptions?.some(s => s.teacherId === uploader?.id), [subscriptions, uploader]);
+
+  // Like state
+  const likesCollectionRef = useMemoFirebase(() => user ? collection(firestore, `users/${user.uid}/likes`) : null, [user, firestore]);
+  const { data: userLikes } = useCollection<{videoId: string}>(likesCollectionRef);
+
+  useEffect(() => {
+      if (userLikes?.some(l => l.videoId === video.id)) {
+          setLikeState('liked');
+      } else {
+          setLikeState(null);
+      }
+  }, [userLikes, video.id]);
+
+  // Save (Watch Later) state
+  const watchLaterQuery = useMemoFirebase(() => {
+      if (!user) return null;
+      return collection(firestore, `users/${user.uid}/playlists`);
+  }, [user, firestore]);
+  const { data: playlists } = useCollection<any>(watchLaterQuery);
+  const watchLaterPlaylist = useMemo(() => playlists?.find(p => p.name === "Watch Later"), [playlists]);
+  const isSaved = useMemo(() => watchLaterPlaylist?.videoIds?.includes(video.id), [watchLaterPlaylist, video.id]);
+
+
+  const handleSubscribe = async () => {
+    if (!user || !uploader) {
+      toast({ variant: "destructive", title: "You must be logged in to subscribe."});
+      return;
+    }
+    const subscriptionRef = doc(firestore, `users/${user.uid}/subscriptions`, uploader.id);
+    if (isSubscribed) {
+      await deleteDoc(subscriptionRef);
+      toast({ title: `Unsubscribed from ${uploader.name}` });
+    } else {
+      await setDoc(subscriptionRef, { teacherId: uploader.id });
+      toast({ title: `Subscribed to ${uploader.name}` });
+    }
   };
   
-  const handleLike = () => {
+  const handleLike = async () => {
+    if (!user) return;
+    const likeRef = doc(firestore, `users/${user.uid}/likes`, video.id);
     if (likeState === 'liked') {
-      setLikeState(null);
-      setLikeCount(likeCount - 1);
+        await deleteDoc(likeRef);
+        setLikeState(null);
     } else {
-      if (likeState === 'disliked') {
-        // If it was disliked, we remove the dislike first, then add the like.
-      }
-      setLikeState('liked');
-      setLikeCount(likeCount + 1);
+        await setDoc(likeRef, { videoId: video.id });
+        setLikeState('liked');
     }
   };
 
-  const handleDislike = () => {
-    if (likeState === 'disliked') {
-      setLikeState(null);
-    } else {
-      if (likeState === 'liked') {
-        setLikeCount(likeCount - 1);
-      }
-      setLikeState('disliked');
-    }
-  };
+  const handleSave = async () => {
+      if (!user) return;
+      
+      const playlistRef = doc(firestore, `users/${user.uid}/playlists`, 'watch-later');
+      const currentVideoIds = watchLaterPlaylist?.videoIds || [];
 
-  const handleSave = () => {
-    setIsSaved(!isSaved);
-    toast({
-      title: !isSaved ? 'Saved to Watch Later' : 'Removed from Watch Later',
-    });
+      if (isSaved) {
+          const newVideoIds = currentVideoIds.filter((id: string) => id !== video.id);
+          await setDoc(playlistRef, { name: "Watch Later", videoIds: newVideoIds }, { merge: true });
+          toast({ title: 'Removed from Watch Later' });
+      } else {
+          const newVideoIds = [...currentVideoIds, video.id];
+          await setDoc(playlistRef, { name: "Watch Later", videoIds: newVideoIds }, { merge: true });
+          toast({ title: 'Saved to Watch Later' });
+      }
   };
 
   return (
@@ -93,10 +131,10 @@ export default function VideoDetails({ video, uploader }: VideoDetailsProps) {
             <div className="flex items-center rounded-full bg-secondary">
                 <Button size="sm" variant="secondary" className="rounded-r-none" onClick={handleLike}>
                     <ThumbsUp className={cn("mr-2 h-4 w-4", likeState === 'liked' && "fill-current")} />
-                    {likeCount.toLocaleString()}
+                    {video.views_count.toLocaleString()}
                 </Button>
-                <div className="h-6 w-px bg-border"></div>
-                <Button size="sm" variant="secondary" className="rounded-l-none" onClick={handleDislike}>
+                 <div className="h-6 w-px bg-border"></div>
+                <Button size="sm" variant="secondary" className="rounded-l-none" onClick={() => toast({title: "Dislike functionality coming soon!"})}>
                     <ThumbsDown className={cn("h-4 w-4", likeState === 'disliked' && "fill-current")} />
                 </Button>
             </div>

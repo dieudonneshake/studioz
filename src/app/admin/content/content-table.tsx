@@ -4,17 +4,33 @@
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { type Video, type User } from "@/lib/types";
-import { users } from "@/lib/data";
 import { ContentActionsMenu } from "./content-actions";
 import Link from "next/link";
+import { useCollection, useMemoFirebase } from "@/firebase";
+import { collection } from "firebase/firestore";
+import { useFirestore } from "@/firebase";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ContentTableProps {
     videos: Video[];
+    isLoading: boolean;
 }
 
-export function ContentTable({ videos }: ContentTableProps) {
+export function ContentTable({ videos, isLoading }: ContentTableProps) {
+    const firestore = useFirestore();
+    const usersQuery = useMemoFirebase(() => collection(firestore, 'users'), [firestore]);
+    const { data: allUsers } = useCollection<User>(usersQuery);
+
     const getUploaderName = (userId: string) => {
-        return users.find(u => u.id === userId)?.name || 'Unknown User';
+        return allUsers?.find(u => u.id === userId)?.name || 'Unknown User';
+    }
+
+    if (isLoading) {
+        return (
+            <div className="space-y-2">
+                {[...Array(10)].map((_, i) => <Skeleton key={i} className="h-14 w-full" />)}
+            </div>
+        )
     }
 
     return (

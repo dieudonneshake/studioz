@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Compass, Clapperboard, Video, Library } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useAuthStore } from '@/store/auth';
+import { useUser, useFirestore } from '@/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 
 const navItems = [
   { href: '/home', label: 'Home', icon: Home, roles: ['student', 'teacher', 'admin'] },
@@ -22,8 +24,24 @@ const filterMenuByRole = (menu: any[], role: string | undefined) => {
 
 export function BottomNav() {
   const pathname = usePathname();
-  const { user } = useAuthStore();
-  const role = user?.role;
+  const { user } = useUser();
+  const firestore = useFirestore();
+  const [role, setRole] = useState<string | undefined>('student');
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+        if(user) {
+            const userDocRef = doc(firestore, 'users', user.uid);
+            const userDoc = await getDoc(userDocRef);
+            if(userDoc.exists()) {
+                setRole(userDoc.data().role);
+            }
+        } else {
+            setRole('student'); // Default for guest
+        }
+    };
+    fetchUserRole();
+  }, [user, firestore]);
 
   const visibleNavItems = filterMenuByRole(navItems, role);
 
@@ -32,7 +50,7 @@ export function BottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 p-4">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 p-4 md:hidden">
        <div className="mx-auto max-w-sm grid h-16 grid-cols-5 items-center justify-around rounded-full border bg-background/80 px-2 backdrop-blur-md shadow-lg">
         {visibleNavItems.map((item) => {
           const isActive = pathname === item.href;

@@ -5,43 +5,47 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/firebase";
-import { users } from "@/lib/data";
+import { useAuth, useFirestore } from "@/firebase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState }from "react";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { doc, getDoc } from "firebase/firestore";
 
 
 export default function LoginPage() {
   const router = useRouter();
   const auth = useAuth();
+  const firestore = useFirestore();
   const { toast } = useToast();
-  const [email, setEmail] = useState("alex.johnson@example.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
 
-  const handleLogin = async (role: 'student' | 'teacher' | 'admin') => {
-    // In a real app, you'd use different emails for different roles.
-    // Here we simulate it for demonstration.
-    const userAccount = users.find(u => u.role === role && u.status !== 'pending');
-    
-    if (!userAccount) {
-        toast({ variant: "destructive", title: "Login Failed", description: "No user found for this role." });
-        return;
-    }
-
+  const handleLogin = async () => {
+    setIsLoading(true);
     try {
-        await signInWithEmailAndPassword(auth, userAccount.email, "password"); // Assuming password is 'password' for all mock users
-        
-        if (role === 'student') {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userDocRef = doc(firestore, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.role === 'admin') {
+                router.push('/admin/dashboard');
+            } else if (userData.role === 'teacher') {
+                router.push('/dashboard');
+            } else {
+                router.push('/home');
+            }
+        } else {
+            // Default redirect if no role found
             router.push('/home');
-        } else if (role === 'teacher') {
-            router.push('/dashboard');
-        } else if (role === 'admin') {
-            router.push('/admin/dashboard');
         }
 
     } catch (error: any) {
@@ -49,8 +53,12 @@ export default function LoginPage() {
         toast({
             variant: "destructive",
             title: "Login Failed",
-            description: error.message || "An unexpected error occurred.",
+            description: error.code === 'auth/invalid-credential' 
+                ? "Invalid email or password."
+                : error.message || "An unexpected error occurred.",
         });
+    } finally {
+        setIsLoading(false);
     }
   };
 
@@ -61,7 +69,7 @@ export default function LoginPage() {
             <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={80} height={80} className="mx-auto h-20 w-20" />
             <CardTitle className="text-2xl font-headline mt-4">Login to Ederaxy</CardTitle>
             <CardDescription>
-            Select a role to sign in.
+            Enter your credentials to sign in.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -75,6 +83,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </div>
             <div className="grid gap-2">
@@ -90,18 +99,11 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required 
+                disabled={isLoading}
                />
             </div>
-            <div className="grid grid-cols-2 gap-2">
-                <Button onClick={() => handleLogin('student')} className="w-full">
-                Login as Student
-                </Button>
-                <Button onClick={() => handleLogin('teacher')} variant="secondary" className="w-full">
-                Login as Teacher
-                </Button>
-            </div>
-             <Button onClick={() => handleLogin('admin')} variant="outline" className="w-full">
-              Login as Admin
+            <Button onClick={handleLogin} className="w-full" disabled={isLoading}>
+                {isLoading ? "Logging in..." : "Login"}
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">

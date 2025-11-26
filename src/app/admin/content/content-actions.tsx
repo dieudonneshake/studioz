@@ -24,6 +24,8 @@ import { useToast } from "@/hooks/use-toast";
 import { type Video } from "@/lib/types";
 import { MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useFirestore, deleteDocumentNonBlocking } from "@/firebase";
+import { doc } from "firebase/firestore";
 
 interface ContentActionsProps {
   video: Video;
@@ -32,15 +34,16 @@ interface ContentActionsProps {
 export function ContentActionsMenu({ video }: ContentActionsProps) {
   const { toast } = useToast();
   const router = useRouter();
+  const firestore = useFirestore();
 
   const handleRemoveContent = () => {
-    // In a real app, this would be an API call to delete the video.
-    // For now, we just show a toast and refresh.
+    const videoDocRef = doc(firestore, 'videos', video.id);
+    deleteDocumentNonBlocking(videoDocRef);
     toast({
       title: "Content Removed",
       description: `"${video.title}" has been removed from the platform.`,
     });
-    router.refresh();
+    // The real-time listener in the parent component will handle the UI update.
   };
 
   return (
