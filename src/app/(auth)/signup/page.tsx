@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User, Briefcase, Shield } from "lucide-react";
+import { User, Briefcase, Shield, Check, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
@@ -16,16 +16,53 @@ import Image from "next/image";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, collection } from "firebase/firestore";
 import { type Curriculum } from "@/lib/types";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 type Role = "student" | "teacher" | "admin";
+
+const PasswordStrengthIndicator = ({ strength, criteria }: { strength: number, criteria: any }) => {
+    return (
+        <div className="space-y-2">
+            <Progress value={strength} className="h-2" />
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                <div className={cn("flex items-center gap-2", criteria.length ? 'text-green-600' : 'text-muted-foreground')}>
+                    {criteria.length ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                    <span>At least 8 characters</span>
+                </div>
+                <div className={cn("flex items-center gap-2", criteria.number ? 'text-green-600' : 'text-muted-foreground')}>
+                    {criteria.number ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                    <span>At least one number</span>
+                </div>
+                <div className={cn("flex items-center gap-2", criteria.specialChar ? 'text-green-600' : 'text-muted-foreground')}>
+                    {criteria.specialChar ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                    <span>At least one special character</span>
+                </div>
+                 <div className={cn("flex items-center gap-2", criteria.match ? 'text-green-600' : 'text-muted-foreground')}>
+                    {criteria.match ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                    <span>Passwords match</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 export default function SignupPage() {
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<Role | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    number: false,
+    specialChar: false,
+    match: false
+  });
 
   const router = useRouter();
   const auth = useAuth();
@@ -34,6 +71,28 @@ export default function SignupPage() {
 
   const curriculaQuery = useMemoFirebase(() => collection(firestore, 'curricula'), [firestore]);
   const { data: curricula } = useCollection<Curriculum>(curriculaQuery);
+  
+  useEffect(() => {
+    const hasLength = password.length >= 8;
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const doPasswordsMatch = password !== "" && password === confirmPassword;
+
+    let strength = 0;
+    if (hasLength) strength += 25;
+    if (hasNumber) strength += 25;
+    if (hasSpecialChar) strength += 25;
+    if (doPasswordsMatch) strength += 25;
+    
+    setPasswordStrength(strength);
+    setPasswordCriteria({
+      length: hasLength,
+      number: hasNumber,
+      specialChar: hasSpecialChar,
+      match: doPasswordsMatch
+    });
+
+  }, [password, confirmPassword]);
 
   const handleRoleSelect = (selectedRole: Role) => {
     setRole(selectedRole);
@@ -42,6 +101,24 @@ export default function SignupPage() {
 
   const handleSignup = async () => {
     if (!role) return;
+
+    if (password !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Signup Failed",
+        description: "Passwords do not match.",
+      });
+      return;
+    }
+    
+    if (passwordStrength < 100) {
+       toast({
+        variant: "destructive",
+        title: "Signup Failed",
+        description: "Please ensure your password meets all the requirements.",
+      });
+      return;
+    }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -153,6 +230,13 @@ export default function SignupPage() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
+           <div className="grid gap-2">
+            <Label htmlFor="confirm-password">Confirm Password</Label>
+            <Input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          </div>
+
+          <PasswordStrengthIndicator strength={passwordStrength} criteria={passwordCriteria} />
+
 
           {role === 'teacher' && (
             <>
@@ -184,7 +268,7 @@ export default function SignupPage() {
             </>
           )}
 
-          <Button onClick={handleSignup} type="submit" className="w-full">
+          <Button onClick={handleSignup} type="submit" className="w-full" disabled={passwordStrength < 100}>
             Create an account
           </Button>
           <Button variant="outline" className="w-full" onClick={() => toast({ title: "Coming soon!"})}>
@@ -204,3 +288,5 @@ export default function SignupPage() {
       <>{step === 1 ? <RoleSelection /> : <SignupForm />}</>
   );
 }
+
+    
