@@ -9,13 +9,13 @@ import { Label } from "@/components/ui/label";
 import { User, Briefcase, Shield } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth, useFirestore } from "@/firebase";
+import { useAuth, useFirestore, useCollection, useMemoFirebase } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { curricula } from "@/lib/data";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection } from "firebase/firestore";
+import { type Curriculum } from "@/lib/types";
 
 type Role = "student" | "teacher" | "admin";
 
@@ -31,6 +31,9 @@ export default function SignupPage() {
   const auth = useAuth();
   const firestore = useFirestore();
   const { toast } = useToast();
+
+  const curriculaQuery = useMemoFirebase(() => collection(firestore, 'curricula'), [firestore]);
+  const { data: curricula } = useCollection<Curriculum>(curriculaQuery);
 
   const handleRoleSelect = (selectedRole: Role) => {
     setRole(selectedRole);
@@ -168,7 +171,7 @@ export default function SignupPage() {
                 <div className="grid gap-4">
                     <Label>Curricula</Label>
                     <div className="space-y-2">
-                        {curricula.map((curriculum) => (
+                        {curricula?.map((curriculum) => (
                             <div key={curriculum.id} className="flex items-center space-x-2">
                                 <Checkbox id={`curriculum-${curriculum.id}`} />
                                 <Label htmlFor={`curriculum-${curriculum.id}`} className="font-normal">
