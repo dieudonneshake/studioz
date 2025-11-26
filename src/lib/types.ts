@@ -1,4 +1,5 @@
 
+
 export type User = {
   id: string;
   name: string;
@@ -10,6 +11,7 @@ export type User = {
   phone?: string;
   subjects?: string[];
   gradeLevels?: string[];
+  curricula?: string[];
 };
 
 export type Curriculum = {
