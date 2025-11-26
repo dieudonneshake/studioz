@@ -2,33 +2,67 @@
 "use client";
 
 import { notFound } from 'next/navigation';
-import { getUploader, users, videos } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { VideoCard } from '@/components/video-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Clapperboard, Video, Check } from 'lucide-react';
-import { useState, use } from 'react';
+import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useFirestore, useDoc, useCollection, useMemoFirebase, useUser } from '@/firebase';
+import { collection, doc, query, where } from 'firebase/firestore';
+import { type User, type Video as VideoType } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProfilePage({ params }: { params: { id: string } }) {
   const { toast } = useToast();
-  const id = use(Promise.resolve(params.id));
-  const uploader = getUploader(id, users);
+  const { user } = useUser();
+  const firestore = useFirestore();
   const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const uploaderQuery = useMemoFirebase(() => doc(firestore, 'users', params.id), [firestore, params.id]);
+  const { data: uploader, isLoading: isLoadingUploader } = useDoc<User>(uploaderQuery);
+
+  const uploaderVideosQuery = useMemoFirebase(() => query(collection(firestore, 'videos'), where('uploaded_by', '==', params.id)), [firestore, params.id]);
+  const { data: uploaderVideos, isLoading: isLoadingVideos } = useCollection<VideoType>(uploaderVideosQuery);
+  
+  const isLoading = isLoadingUploader || isLoadingVideos;
+
+  if (isLoading) {
+    return (
+        <div className="container mx-auto p-4 md:p-6 lg:p-8">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                <Skeleton className="h-32 w-32 rounded-full" />
+                <div className="space-y-2 text-center md:text-left">
+                    <Skeleton className="h-10 w-64" />
+                    <Skeleton className="h-5 w-32" />
+                    <Skeleton className="h-4 w-48" />
+                    <Skeleton className="h-16 w-full max-w-lg" />
+                    <Skeleton className="h-10 w-32 mt-4" />
+                </div>
+            </div>
+             <Skeleton className="mt-12 h-10 w-96" />
+             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {[...Array(4)].map((_,i) => <Skeleton key={i} className="h-56" />)}
+             </div>
+        </div>
+    )
+  }
 
   if (!uploader) {
     notFound();
   }
 
   const handleSubscribe = () => {
+    if (!user) {
+        toast({variant: 'destructive', title: 'Please log in to subscribe'});
+        return;
+    }
     setIsSubscribed(!isSubscribed);
     toast({
       title: isSubscribed ? `Unsubscribed from ${uploader?.name}` : `Subscribed to ${uploader?.name}`,
     });
   };
-
-  const uploaderVideos = videos.filter(v => v.uploaded_by === uploader.id);
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8">
@@ -40,7 +74,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
         <div className="text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-bold font-headline">{uploader.name}</h1>
           <p className="text-muted-foreground mt-1">@{uploader.name.split(' ').join('').toLowerCase()}</p>
-          <p className="mt-2 text-sm text-muted-foreground">1.2M Subscribers &middot; {uploaderVideos.length} videos</p>
+          <p className="mt-2 text-sm text-muted-foreground">1.2M Subscribers &middot; {uploaderVideos?.length ?? 0} videos</p>
           <p className="mt-4 max-w-lg text-sm">{uploader.bio}</p>
           <Button className="mt-4" onClick={handleSubscribe} variant={isSubscribed ? 'secondary' : 'default'}>
             {isSubscribed && <Check className="mr-2 h-4 w-4" />}
@@ -61,7 +95,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="videos" className="mt-6">
-          {uploaderVideos.length > 0 ? (
+          {uploaderVideos && uploaderVideos.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {uploaderVideos.map(video => (
                 <VideoCard key={video.id} video={video} />

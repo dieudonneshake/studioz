@@ -14,7 +14,7 @@ export default async function HomePage() {
   
   const allVideosQuery = videosCollection;
   const recommendedQuery = videosCollection.limit(8);
-  const recentQuery = videosCollection.limit(8); // Example, adjust as needed
+  const recentQuery = videosCollection.limit(8);
 
   const [allVideosSnap, recommendedSnap, recentSnap] = await Promise.all([
     allVideosQuery.get(),

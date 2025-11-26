@@ -4,7 +4,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import useEmblaCarousel, { EmblaCarouselType } from 'embla-carousel-react';
 import { ShortsPlayer } from './shorts-player';
-import { getUploader } from '@/lib/shorts-data';
 import { type Short, type User } from '@/lib/types';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -13,6 +12,11 @@ interface ShortsCarouselProps {
   shorts: Short[];
   users: User[];
 }
+
+function getUploader(userId: string, allUsers: User[]): User | undefined {
+  return allUsers.find(u => u.id === userId);
+}
+
 
 export function ShortsCarousel({ shorts, users }: ShortsCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ axis: 'y', loop: false });

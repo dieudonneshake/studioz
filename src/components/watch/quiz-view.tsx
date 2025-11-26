@@ -15,9 +15,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { CheckCircle2, XCircle, Loader2, RefreshCw, BrainCircuit } from 'lucide-react';
 import { automaticallyGradeQuizzes } from '@/ai/flows/automatically-grade-quizzes';
 import { generateQuizzesFromNotes, GenerateQuizzesFromNotesOutput } from '@/ai/flows/generate-quizzes-from-notes';
-import { getSummary, levels } from '@/lib/data';
-import { useAuthStore } from '@/store/auth';
-import { Skeleton } from '../ui/skeleton';
+import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+
 
 interface QuizViewProps {
   video: Video;
@@ -38,9 +38,27 @@ export default function QuizView({ video }: QuizViewProps) {
   const [quizState, setQuizState] = useState<'idle' | 'generating' | 'taking' | 'grading' | 'results'>('idle');
   const [quiz, setQuiz] = useState<GenerateQuizzesFromNotesOutput | null>(null);
   const [results, setResults] = useState<{ score: number, feedback: Record<string, string>, userAnswers: Record<string,string> } | null>(null);
-  const { user } = useAuthStore();
-  const notes = useMemo(() => getSummary(video.id)?.notes, [video.id]);
-  const levelName = useMemo(() => levels.find(l => l.name === video.level)?.name || 'High School', [video.level]);
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const [notes, setNotes] = useState<string | null>(null);
+  const [levelName, setLevelName] = useState<string>('High School');
+
+   useMemo(async () => {
+    if (!firestore || !video.id) return;
+    const notesQuery = query(collection(firestore, `videos/${video.id}/notes`));
+    const notesSnapshot = await getDocs(notesQuery);
+    if (!notesSnapshot.empty) {
+      const noteDoc = notesSnapshot.docs[0];
+      setNotes(noteDoc.data().textExtracted as string);
+    }
+
+    const levelQuery = query(collection(firestore, 'levels'), where('name', '==', video.level));
+    const levelSnapshot = await getDocs(levelQuery);
+    if(!levelSnapshot.empty) {
+        setLevelName(levelSnapshot.docs[0].data().name);
+    }
+  }, [firestore, video.id, video.level]);
   
   const formSchema = useMemo(() => createSchema(quiz?.questions || []), [quiz]);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,7 +89,7 @@ export default function QuizView({ video }: QuizViewProps) {
     try {
         const gradingResult = await automaticallyGradeQuizzes({
             quizId: video.id, // Using video id as a proxy for quiz id
-            studentId: user.id,
+            studentId: user.uid,
             answers: values,
             questions: quiz.questions,
             notesText: notes,

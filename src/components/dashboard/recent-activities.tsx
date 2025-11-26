@@ -2,31 +2,29 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { videos, users } from '@/lib/data';
 
 export function RecentActivities() {
+    // This is now mock data. In a real application, this would be fetched from Firestore.
     const recentActivities = [
-        { studentId: 'user-3', videoId: 'vid-1', score: 95 },
-        { studentId: 'user-3', videoId: 'vid-3', score: 88 },
-        { studentId: 'user-3', videoId: 'vid-5', score: 92 },
-        { studentId: 'user-3', videoId: 'vid-6', score: 76 },
+        { studentName: 'Alex Johnson', studentAvatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', videoTitle: "Introduction to Quantum Mechanics", score: 95 },
+        { studentName: 'Alex Johnson', studentAvatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', videoTitle: "The Battle of Hastings", score: 88 },
+        { studentName: 'Alex Johnson', studentAvatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', videoTitle: "Algebra Basics: Solving for X", score: 92 },
+        { studentName: 'Alex Johnson', studentAvatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', videoTitle: "The Renaissance Painters", score: 76 },
     ];
 
 
   return (
     <div className="space-y-6">
       {recentActivities.map((activity, i) => {
-        const student = users.find(u => u.id === activity.studentId);
-        const video = videos.find(v => v.id === activity.videoId);
         return (
             <div className="flex items-start gap-4" key={i}>
                 <Avatar className="h-9 w-9 flex-shrink-0 border">
-                  <AvatarImage src={student?.profile_photo} alt="Avatar" />
-                  <AvatarFallback>{student?.name.charAt(0)}</AvatarFallback>
+                  <AvatarImage src={activity.studentAvatar} alt="Avatar" />
+                  <AvatarFallback>{activity.studentName.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 grid gap-1">
                   <p className="text-sm font-medium leading-none line-clamp-2">
-                      <span className="font-bold">{student?.name}</span> completed the quiz for "{video?.title}"
+                      <span className="font-bold">{activity.studentName}</span> completed the quiz for "{activity.videoTitle}"
                   </p>
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-muted-foreground">2 hours ago</p>

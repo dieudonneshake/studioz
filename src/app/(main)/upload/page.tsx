@@ -18,12 +18,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { curricula, levels, subjects, addCurriculum, addLevel, addSubject } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Loader2, UploadCloud } from "lucide-react";
 import { generateQuizzesFromNotes } from "@/ai/flows/generate-quizzes-from-notes";
 import { CreatableSelect } from "@/components/creatable-select";
+import { useFirestore, useCollection, useMemoFirebase, useUser } from "@/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { type Curriculum, type Level, type Subject } from "@/lib/types";
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "Title must be at least 5 characters." }),
@@ -51,8 +53,17 @@ const readFileAsText = (file: File): Promise<string> => {
 export default function UploadPage() {
   const { toast } = useToast();
   const router = useRouter();
+  const firestore = useFirestore();
+  const { user } = useUser();
+
+  const curriculaQuery = useMemoFirebase(() => collection(firestore, 'curricula'), [firestore]);
+  const levelsQuery = useMemoFirebase(() => collection(firestore, 'levels'), [firestore]);
+  const subjectsQuery = useMemoFirebase(() => collection(firestore, 'subjects'), [firestore]);
   
-  // Force re-render when data changes
+  const { data: curricula, isLoading: isLoadingCurricula } = useCollection<Curriculum>(curriculaQuery);
+  const { data: levels, isLoading: isLoadingLevels } = useCollection<Level>(levelsQuery);
+  const { data: subjects, isLoading: isLoadingSubjects } = useCollection<Subject>(subjectsQuery);
+
   const [dataVersion, setDataVersion] = useState(0);
   const forceRerender = () => setDataVersion(v => v + 1);
 
@@ -67,6 +78,11 @@ export default function UploadPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!user) {
+        toast({ variant: "destructive", title: "Not Authenticated", description: "You must be logged in to upload content." });
+        return;
+    }
+    
     toast({
       title: "Processing Upload...",
       description: "Your content is being uploaded and the AI quiz is being generated. This may take a moment.",
@@ -76,22 +92,53 @@ export default function UploadPage() {
 
     try {
         const notesFile = values.notesFile[0];
+        let quizData = null;
+        let notesText = '';
+
         if (notesFile) {
-            // In a real app, you'd parse PDF/DOCX on the server.
-            // For simulation, we'll read it as text.
-            const notesText = await readFileAsText(notesFile);
-            const level = levels.find(l => l.id === values.grade)?.name || 'default level';
+            notesText = await readFileAsText(notesFile);
+            const levelName = levels?.find(l => l.id === values.grade)?.name || 'default level';
 
-            // Call the Genkit flow
-            const quizData = await generateQuizzesFromNotes({
+            quizData = await generateQuizzesFromNotes({
                 notesText,
-                level,
+                level: levelName,
             });
-
-            console.log("Generated Quiz:", quizData);
-            
-            // Here you would save the new video, notes, and quiz data to your database.
         }
+        
+        // In a real app, you'd upload files to Firebase Storage and get URLs.
+        // For now, we'll use placeholder URLs.
+        const newVideoRef = await addDoc(collection(firestore, 'videos'), {
+            title: values.title,
+            description: values.description,
+            shortSummary: values.shortSummary,
+            uploaded_by: user.uid,
+            thumbnail_path: '/placeholder.png', // Placeholder
+            video_url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', // Placeholder
+            duration_seconds: Math.floor(Math.random() * 600) + 60,
+            views_count: 0,
+            created_at: serverTimestamp(),
+            curriculum: curricula?.find(c => c.id === values.curriculum)?.name,
+            level: levels?.find(l => l.id === values.grade)?.name,
+            subject: subjects?.find(s => s.id === values.subject)?.name,
+            unit: values.unit || '',
+        });
+
+        if (notesText) {
+             await addDoc(collection(firestore, `videos/${newVideoRef.id}/notes`), {
+                textExtracted: notesText,
+                uploadedBy: user.uid,
+                createdAt: serverTimestamp(),
+                // other fields...
+             });
+        }
+        if (quizData) {
+             await addDoc(collection(firestore, `videos/${newVideoRef.id}/quizzes`), {
+                questions: quizData.questions,
+                generatedBy: 'ai',
+                createdAt: serverTimestamp(),
+             });
+        }
+
 
         toast({
             title: "Upload Successful!",
@@ -100,11 +147,11 @@ export default function UploadPage() {
         router.push("/dashboard");
 
     } catch(error) {
-        console.error("Error generating quiz:", error);
+        console.error("Error during upload:", error);
         toast({
             variant: "destructive",
-            title: "AI Error",
-            description: "There was a problem generating the quiz from your notes.",
+            title: "Upload Error",
+            description: "There was a problem uploading your content or generating the quiz.",
         });
     } finally {
         form.formState.isSubmitting = false;
@@ -171,12 +218,12 @@ export default function UploadPage() {
                                     <FormLabel>Curriculum</FormLabel>
                                     <CreatableSelect
                                         field={field}
-                                        options={curricula}
+                                        options={curricula ?? []}
                                         placeholder="Select curriculum"
                                         createLabel="Create new curriculum"
                                         onCreate={async (name) => {
-                                            const newCurriculum = await addCurriculum({ name, description: `User-created curriculum: ${name}` });
-                                            field.onChange(newCurriculum.id);
+                                            const newCurriculumRef = await addDoc(collection(firestore, 'curricula'), { name, description: `User-created curriculum: ${name}` });
+                                            field.onChange(newCurriculumRef.id);
                                             forceRerender();
                                         }}
                                     />
@@ -192,12 +239,12 @@ export default function UploadPage() {
                                     <FormLabel>Grade Level</FormLabel>
                                      <CreatableSelect
                                         field={field}
-                                        options={levels}
+                                        options={levels ?? []}
                                         placeholder="Select grade"
                                         createLabel="Create new grade level"
                                         onCreate={async (name) => {
-                                            const newLevel = await addLevel({ name });
-                                            field.onChange(newLevel.id);
+                                            const newLevelRef = await addDoc(collection(firestore, 'levels'), { name });
+                                            field.onChange(newLevelRef.id);
                                             forceRerender();
                                         }}
                                     />
@@ -213,12 +260,12 @@ export default function UploadPage() {
                                 <FormLabel>Subject</FormLabel>
                                  <CreatableSelect
                                     field={field}
-                                    options={subjects}
+                                    options={subjects ?? []}
                                     placeholder="Select subject"
                                     createLabel="Create new subject"
                                     onCreate={async (name) => {
-                                        const newSubject = await addSubject({ name });
-                                        field.onChange(newSubject.id);
+                                        const newSubjectRef = await addDoc(collection(firestore, 'subjects'), { name });
+                                        field.onChange(newSubjectRef.id);
                                         forceRerender();
                                     }}
                                 />

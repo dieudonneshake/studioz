@@ -5,10 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { type Video } from '@/lib/types';
 import QuizView from './quiz-view';
 import { ScrollArea } from '../ui/scroll-area';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { generateVideoSummary } from '@/ai/flows/generate-video-summary';
-import { getSummary } from '@/lib/data';
 import { Skeleton } from '../ui/skeleton';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, limit } from 'firebase/firestore';
+import { type Note } from '@/lib/types';
 
 interface ContentTabsProps {
   video: Video;
@@ -17,13 +19,22 @@ interface ContentTabsProps {
 export default function ContentTabs({ video }: ContentTabsProps) {
   const [summary, setSummary] = useState<{ en: string; fr: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const notes = getSummary(video.id)?.notes;
+  const firestore = useFirestore();
+
+  const notesQuery = useMemoFirebase(() => {
+    if (!video.id) return null;
+    return query(collection(firestore, `videos/${video.id}/notes`), limit(1));
+  }, [firestore, video.id]);
+
+  const { data: notes, isLoading: isLoadingNotes } = useCollection<Note>(notesQuery);
+
+  const noteText = useMemo(() => notes?.[0]?.textExtracted, [notes]);
 
   const handleTabChange = async (value: string) => {
-    if (value === 'summary' && !summary && notes) {
+    if (value === 'summary' && !summary && noteText) {
       setIsLoading(true);
       try {
-        const result = await generateVideoSummary({ notesText: notes });
+        const result = await generateVideoSummary({ notesText: noteText });
         setSummary({ en: result.summary_en, fr: result.summary_fr });
       } catch (error) {
         console.error("Failed to generate summary:", error);
@@ -75,8 +86,14 @@ export default function ContentTabs({ video }: ContentTabsProps) {
       <TabsContent value="notes">
       <ScrollArea className="h-[500px] rounded-md border p-4">
             <h3 className="font-bold text-lg font-headline mb-2">Lesson Notes (Downloadable)</h3>
-            {notes ? (
-                 <p className="text-sm text-muted-foreground whitespace-pre-wrap">{notes}</p>
+            {isLoadingNotes ? (
+                <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
+                </div>
+            ) : noteText ? (
+                 <p className="text-sm text-muted-foreground whitespace-pre-wrap">{noteText}</p>
             ) : (
                 <p className="text-muted-foreground">No notes available for this lesson.</p>
             )}
