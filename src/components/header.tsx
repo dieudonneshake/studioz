@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, FormEvent } from 'react';
+import { FormEvent } from 'react';
 import { Search, Bell, Video, Menu } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -11,18 +11,17 @@ import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 import Image from 'next/image';
 import { useSearchStore } from '@/store/search';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const { isAuthenticated } = useAuthStore();
   const { searchQuery, setSearchQuery } = useSearchStore();
+  const router = useRouter();
 
-  // Handle form submission if needed, e.g., for accessibility or mobile keyboards.
-  // For live filtering, this doesn't need to do much.
+
   const handleSearchSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // The filtering is already live, but you could add logic here
-    // e.g., to dismiss a mobile keyboard.
-    (document.activeElement as HTMLElement)?.blur();
+    router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
   };
 
 
@@ -33,7 +32,7 @@ export default function Header() {
             <Menu />
         </SidebarTrigger>
         <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Ederaxy Logo" width={36} height={36} className="h-9 w-9" />
+            <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={40} height={40} className="h-10 w-10" />
             <span className="font-bold text-lg hidden sm:inline-block">Ederaxy</span>
         </Link>
       </div>

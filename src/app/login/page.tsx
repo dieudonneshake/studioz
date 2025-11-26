@@ -36,7 +36,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-background">
       <Card className="mx-auto max-w-sm">
         <CardHeader className="text-center">
-            <Image src="/logo.png" alt="Ederaxy Logo" width={48} height={48} className="mx-auto h-12 w-12" />
+            <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={64} height={64} className="mx-auto h-16 w-16" />
             <CardTitle className="text-2xl font-headline mt-4">Login to Ederaxy</CardTitle>
             <CardDescription>
             Enter your email below to login to your account.

@@ -86,8 +86,8 @@ export default function AppSidebar() {
     <Sidebar collapsible="offcanvas">
       <SidebarHeader className="p-4 justify-center items-center h-16 border-b hidden md:flex">
          <SidebarMenuButton icon={<div />} tooltip="Ederaxy" asChild>
-            <Link href="/home" className="h-9 w-9 bg-primary rounded-full flex items-center justify-center">
-               <Image src="/logo.png" alt="Ederaxy Logo" width={36} height={36} className="h-9 w-9" />
+            <Link href="/home" className="h-10 w-10 bg-primary rounded-full flex items-center justify-center">
+               <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={40} height={40} className="h-10 w-10" />
             </Link>
          </SidebarMenuButton>
       </SidebarHeader>

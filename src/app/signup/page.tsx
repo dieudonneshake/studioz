@@ -59,7 +59,7 @@ export default function SignupPage() {
   const RoleSelection = () => (
     <Card className="mx-auto max-w-sm text-center">
       <CardHeader>
-        <Image src="/logo.png" alt="Ederaxy Logo" width={48} height={48} className="mx-auto h-12 w-12" />
+        <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={64} height={64} className="mx-auto h-16 w-16" />
         <CardTitle className="text-2xl font-headline mt-4">Join Ederaxy</CardTitle>
         <CardDescription>First, tell us who you are.</CardDescription>
       </CardHeader>
@@ -91,7 +91,7 @@ export default function SignupPage() {
   const SignupForm = () => (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="text-center">
-        <Image src="/logo.png" alt="Ederaxy Logo" width={48} height={48} className="mx-auto h-12 w-12" />
+        <Image src="/Ederaxy1.png" alt="Ederaxy Logo" width={64} height={64} className="mx-auto h-16 w-16" />
         <CardTitle className="text-2xl font-headline mt-4">Create your {role} account</CardTitle>
         <CardDescription>Enter your information to create an account</CardDescription>
       </CardHeader>
