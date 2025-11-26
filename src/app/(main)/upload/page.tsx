@@ -64,9 +64,6 @@ export default function UploadPage() {
   const { data: levels, isLoading: isLoadingLevels } = useCollection<Level>(levelsQuery);
   const { data: subjects, isLoading: isLoadingSubjects } = useCollection<Subject>(subjectsQuery);
 
-  const [dataVersion, setDataVersion] = useState(0);
-  const forceRerender = () => setDataVersion(v => v + 1);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -224,7 +221,6 @@ export default function UploadPage() {
                                         onCreate={async (name) => {
                                             const newCurriculumRef = await addDoc(collection(firestore, 'curricula'), { name, description: `User-created curriculum: ${name}` });
                                             field.onChange(newCurriculumRef.id);
-                                            forceRerender();
                                         }}
                                     />
                                     <FormMessage />
@@ -245,7 +241,6 @@ export default function UploadPage() {
                                         onCreate={async (name) => {
                                             const newLevelRef = await addDoc(collection(firestore, 'levels'), { name });
                                             field.onChange(newLevelRef.id);
-                                            forceRerender();
                                         }}
                                     />
                                     <FormMessage />
@@ -266,7 +261,6 @@ export default function UploadPage() {
                                     onCreate={async (name) => {
                                         const newSubjectRef = await addDoc(collection(firestore, 'subjects'), { name });
                                         field.onChange(newSubjectRef.id);
-                                        forceRerender();
                                     }}
                                 />
                                 <FormMessage />
