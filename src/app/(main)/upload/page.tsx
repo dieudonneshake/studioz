@@ -84,8 +84,6 @@ export default function UploadPage() {
       title: "Processing Upload...",
       description: "Your content is being uploaded and the AI quiz is being generated. This may take a moment.",
     });
-    
-    form.formState.isSubmitting = true;
 
     try {
         const notesFile = values.notesFile[0];
@@ -150,8 +148,6 @@ export default function UploadPage() {
             title: "Upload Error",
             description: "There was a problem uploading your content or generating the quiz.",
         });
-    } finally {
-        form.formState.isSubmitting = false;
     }
   }
 
