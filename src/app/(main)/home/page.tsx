@@ -2,7 +2,7 @@
 'use server';
 
 import { HomeClientPage } from "@/components/home/home-client-page";
-import { getDocs, collection, limit, query } from "firebase/firestore";
+import { getDocs, collection, limit, query } from "firebase-admin/firestore";
 import { initializeFirebase } from "@/firebase/server";
 import { Video } from "@/lib/types";
 
