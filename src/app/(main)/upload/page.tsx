@@ -23,9 +23,11 @@ import { useRouter } from "next/navigation";
 import { Loader2, UploadCloud } from "lucide-react";
 import { generateQuizzesFromNotes } from "@/ai/flows/generate-quizzes-from-notes";
 import { CreatableSelect } from "@/components/creatable-select";
-import { useFirestore, useCollection, useMemoFirebase, useUser } from "@/firebase";
+import { useFirestore, useCollection, useMemoFirebase, useUser, useStorage } from "@/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { type Curriculum, type Level, type Subject } from "@/lib/types";
+import { Progress } from "@/components/ui/progress";
 
 const formSchema = z.object({
   title: z.string().min(5, { message: "Title must be at least 5 characters." }),
@@ -54,7 +56,13 @@ export default function UploadPage() {
   const { toast } = useToast();
   const router = useRouter();
   const firestore = useFirestore();
+  const storage = useStorage();
   const { user } = useUser();
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState('');
+
 
   const curriculaQuery = useMemoFirebase(() => collection(firestore, 'curricula'), [firestore]);
   const levelsQuery = useMemoFirebase(() => collection(firestore, 'levels'), [firestore]);
@@ -74,18 +82,55 @@ export default function UploadPage() {
     },
   });
 
+  const uploadFile = (file: File, path: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const storageRef = ref(storage, path);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+        }, 
+        (error) => {
+          console.error("Upload failed:", error);
+          reject(error);
+        }, 
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!user) {
         toast({ variant: "destructive", title: "Not Authenticated", description: "You must be logged in to upload content." });
         return;
     }
     
-    toast({
-      title: "Processing Upload...",
-      description: "Your content is being uploaded and the AI quiz is being generated. This may take a moment.",
-    });
+    setIsUploading(true);
 
     try {
+        // --- 1. Upload Files ---
+        setUploadStatus("Uploading video...");
+        const videoFile = values.videoFile[0];
+        const videoPath = `videos/${user.uid}/${Date.now()}_${videoFile.name}`;
+        const videoUrl = await uploadFile(videoFile, videoPath);
+
+        let thumbnailUrl = '/placeholder.png';
+        if (values.thumbnailFile && values.thumbnailFile.length > 0) {
+            setUploadStatus("Uploading thumbnail...");
+            setUploadProgress(0);
+            const thumbnailFile = values.thumbnailFile[0];
+            const thumbnailPath = `thumbnails/${user.uid}/${Date.now()}_${thumbnailFile.name}`;
+            thumbnailUrl = await uploadFile(thumbnailFile, thumbnailPath);
+        }
+        
+        // --- 2. Process Notes & Generate Quiz ---
+        setUploadStatus("Generating AI quiz...");
         const notesFile = values.notesFile[0];
         let quizData = null;
         let notesText = '';
@@ -100,22 +145,33 @@ export default function UploadPage() {
             });
         }
         
-        // In a real app, you'd upload files to Firebase Storage and get URLs.
-        // For now, we'll use placeholder URLs.
+        // --- 3. Save to Firestore ---
+        setUploadStatus("Finalizing lesson...");
+        const videoDuration = await new Promise<number>(resolve => {
+            const videoElement = document.createElement('video');
+            videoElement.preload = 'metadata';
+            videoElement.onloadedmetadata = () => {
+                window.URL.revokeObjectURL(videoElement.src);
+                resolve(videoElement.duration);
+            }
+            videoElement.src = URL.createObjectURL(videoFile);
+        });
+
         const newVideoRef = await addDoc(collection(firestore, 'videos'), {
             title: values.title,
             description: values.description,
             shortSummary: values.shortSummary,
             uploaded_by: user.uid,
-            thumbnail_path: '/placeholder.png', // Placeholder
-            video_url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', // Placeholder
-            duration_seconds: Math.floor(Math.random() * 600) + 60,
+            thumbnail_path: thumbnailUrl,
+            video_url: videoUrl,
+            duration_seconds: videoDuration,
             views_count: 0,
             created_at: serverTimestamp(),
             curriculum: curricula?.find(c => c.id === values.curriculum)?.name,
             level: levels?.find(l => l.id === values.grade)?.name,
             subject: subjects?.find(s => s.id === values.subject)?.name,
             unit: values.unit || '',
+            privacy: 'public'
         });
 
         if (notesText) {
@@ -123,7 +179,7 @@ export default function UploadPage() {
                 textExtracted: notesText,
                 uploadedBy: user.uid,
                 createdAt: serverTimestamp(),
-                // other fields...
+                videoId: newVideoRef.id
              });
         }
         if (quizData) {
@@ -131,9 +187,9 @@ export default function UploadPage() {
                 questions: quizData.questions,
                 generatedBy: 'ai',
                 createdAt: serverTimestamp(),
+                videoId: newVideoRef.id
              });
         }
-
 
         toast({
             title: "Upload Successful!",
@@ -146,8 +202,12 @@ export default function UploadPage() {
         toast({
             variant: "destructive",
             title: "Upload Error",
-            description: "There was a problem uploading your content or generating the quiz.",
+            description: "There was a problem uploading your content. Please check the console and try again.",
         });
+    } finally {
+        setIsUploading(false);
+        setUploadProgress(0);
+        setUploadStatus('');
     }
   }
 
@@ -159,6 +219,14 @@ export default function UploadPage() {
           <CardDescription>Fill out the details below to add a new video lesson to your channel.</CardDescription>
         </CardHeader>
         <CardContent>
+            {isUploading ? (
+                 <div className="flex flex-col items-center justify-center gap-4 min-h-[400px]">
+                    <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                    <h3 className="text-xl font-semibold">{uploadStatus}</h3>
+                    <p className="text-muted-foreground">{Math.round(uploadProgress)}% complete</p>
+                    <Progress value={uploadProgress} className="w-full max-w-md" />
+                 </div>
+            ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -335,6 +403,7 @@ export default function UploadPage() {
               </div>
             </form>
           </Form>
+        )}
         </CardContent>
       </Card>
     </div>
