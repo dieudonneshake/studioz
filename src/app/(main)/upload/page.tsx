@@ -25,7 +25,7 @@ import { generateQuizzesFromNotes } from "@/ai/flows/generate-quizzes-from-notes
 import { CreatableSelect } from "@/components/creatable-select";
 import { useFirestore, useCollection, useMemoFirebase, useUser, useStorage } from "@/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL, UploadTask } from "firebase/storage";
 import { type Curriculum, type Level, type Subject } from "@/lib/types";
 import { Progress } from "@/components/ui/progress";
 
@@ -51,6 +51,39 @@ const readFileAsText = (file: File): Promise<string> => {
         reader.readAsText(file);
     });
 };
+
+const uploadFile = (
+  storage: any,
+  path: string,
+  file: File,
+  onProgress: (progress: number) => void
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const storageRef = ref(storage, path);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        onProgress(progress);
+      },
+      (error) => {
+        console.error("Upload failed:", error);
+        reject(error);
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        } catch (error) {
+          reject(error);
+        }
+      }
+    );
+  });
+};
+
 
 export default function UploadPage() {
   const { toast } = useToast();
@@ -82,29 +115,6 @@ export default function UploadPage() {
     },
   });
 
-  const uploadFile = (file: File, path: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const storageRef = ref(storage, path);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on('state_changed', 
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress(progress);
-        }, 
-        (error) => {
-          console.error("Upload failed:", error);
-          reject(error);
-        }, 
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL);
-          });
-        }
-      );
-    });
-  };
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!user) {
         toast({ variant: "destructive", title: "Not Authenticated", description: "You must be logged in to upload content." });
@@ -114,23 +124,26 @@ export default function UploadPage() {
     setIsUploading(true);
 
     try {
-        // --- 1. Upload Files ---
-        setUploadStatus("Uploading video...");
         const videoFile = values.videoFile[0];
+        const thumbnailFile = values.thumbnailFile?.[0];
+        
+        // --- 1. Upload Video ---
+        setUploadStatus("Uploading video...");
         const videoPath = `videos/${user.uid}/${Date.now()}_${videoFile.name}`;
-        const videoUrl = await uploadFile(videoFile, videoPath);
+        const videoUrl = await uploadFile(storage, videoPath, videoFile, setUploadProgress);
 
+        // --- 2. Upload Thumbnail (if provided) ---
         let thumbnailUrl = '/placeholder.png';
-        if (values.thumbnailFile && values.thumbnailFile.length > 0) {
+        if (thumbnailFile) {
             setUploadStatus("Uploading thumbnail...");
-            setUploadProgress(0);
-            const thumbnailFile = values.thumbnailFile[0];
+            setUploadProgress(0); // Reset for next upload
             const thumbnailPath = `thumbnails/${user.uid}/${Date.now()}_${thumbnailFile.name}`;
-            thumbnailUrl = await uploadFile(thumbnailFile, thumbnailPath);
+            thumbnailUrl = await uploadFile(storage, thumbnailPath, thumbnailFile, setUploadProgress);
         }
         
-        // --- 2. Process Notes & Generate Quiz ---
+        // --- 3. Process Notes & Generate Quiz ---
         setUploadStatus("Generating AI quiz...");
+        setUploadProgress(0);
         const notesFile = values.notesFile[0];
         let quizData = null;
         let notesText = '';
@@ -145,7 +158,7 @@ export default function UploadPage() {
             });
         }
         
-        // --- 3. Save to Firestore ---
+        // --- 4. Save to Firestore ---
         setUploadStatus("Finalizing lesson...");
         const videoDuration = await new Promise<number>(resolve => {
             const videoElement = document.createElement('video');
@@ -395,10 +408,10 @@ export default function UploadPage() {
               </div>
 
               <div className="flex justify-end pt-8">
-                <Button type="submit" size="lg" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                <Button type="submit" size="lg" disabled={isUploading}>
+                  {isUploading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                   <UploadCloud className="mr-2 h-5 w-5" />
-                  {form.formState.isSubmitting ? 'Uploading...' : 'Upload & Generate Quiz'}
+                  {isUploading ? 'Uploading...' : 'Upload & Generate Quiz'}
                 </Button>
               </div>
             </form>
@@ -409,3 +422,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    
