@@ -2,7 +2,6 @@
 'use server';
 
 import { HomeClientPage } from "@/components/home/home-client-page";
-import { getDocs } from "firebase-admin/firestore";
 import { initializeFirebase } from "@/firebase/server";
 import { Video } from "@/lib/types";
 
@@ -18,9 +17,9 @@ export default async function HomePage() {
   const recentQuery = videosCollection.limit(8); // Example, adjust as needed
 
   const [allVideosSnap, recommendedSnap, recentSnap] = await Promise.all([
-    getDocs(allVideosQuery),
-    getDocs(recommendedQuery),
-    getDocs(recentQuery)
+    allVideosQuery.get(),
+    recommendedQuery.get(),
+    recentQuery.get()
   ]);
   
   const allVideos = allVideosSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Video[];
