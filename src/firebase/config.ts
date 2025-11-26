@@ -3,6 +3,7 @@ export const firebaseConfig = {
   "appId": "1:258986924111:web:599139d13ecfe564dfb23a",
   "apiKey": "AIzaSyB3QJEyF-sahZ4eN5DFlfndNnmwvSs3Kyo",
   "authDomain": "impactflow-ewggi.firebaseapp.com",
+  "storageBucket": "impactflow-ewggi.appspot.com",
   "measurementId": "",
   "messagingSenderId": "258986924111"
 };
