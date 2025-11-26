@@ -209,7 +209,7 @@ service cloud.firestore {
     match /curricula/{curriculumId} {
       allow get: if resource.data.isPublic == true || isSignedIn();
       allow list: if isSignedIn();
-      allow create: if isSignedIn() && request.resource.data.createdBy == request.auth.uid;
+      allow create: if isSignedIn();
       allow update: if isExistingDoc() && isOwner(resource.data.createdBy) && request.resource.data.createdBy == resource.data.createdBy;
       allow delete: if isExistingDoc() && isOwner(resource.data.createdBy);
     }
@@ -322,5 +322,3 @@ service cloud.firestore {
     }
   }
 }
-
-    
